@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "Risaikuru",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}

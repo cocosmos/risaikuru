@@ -31,6 +31,35 @@
         :pin="true"
         :pin-formatter="pinFormatter"
       ></ion-range>
+      <ion-card color="secondary">
+        <ion-card-header>
+          <div>
+            <ion-row>
+              <ion-col>
+                <ion-item color="secondary" lines="none">
+                  <ion-avatar>
+                    <img
+                      alt="Silhouette of a person's head"
+                      src="https://ionicframework.com/docs/img/demos/avatar.svg"
+                    />
+                  </ion-avatar>
+                  <ion-label><b>Name</b></ion-label>
+                </ion-item></ion-col
+              >
+              <ion-col>
+                <ion-item color="secondary" lines="none">
+                  <ion-icon :icon="trophy" color="primary" />
+                  <ion-text color="primary"><b>5 CHF</b></ion-text>
+                </ion-item></ion-col
+              >
+            </ion-row>
+          </div>
+
+          <ion-card-subtitle>Date</ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content> Card Content </ion-card-content>
+      </ion-card>
     </ion-content>
   </ion-page>
 </template>
@@ -45,7 +74,7 @@ import {
   IonContent,
   IonRange,
 } from "@ionic/vue";
-import { search, locate } from "ionicons/icons";
+import { search, locate, trophy } from "ionicons/icons";
 
 export default defineComponent({
   name: "SearchTabs",
@@ -61,6 +90,8 @@ export default defineComponent({
     return {
       search,
       locate,
+      trophy,
+
       pinFormatter: (value: number) => `${value}km`,
     };
   },
@@ -70,13 +101,6 @@ export default defineComponent({
 <style scoped>
 ion-content {
   margin: 5px;
-}
-.searchbar {
-  border: 2px solid var(--ion-color-primary);
-  border-radius: 8px;
-}
-.item-native {
-  padding-inline-start: var(--ion-safe-area-left, 0px);
 }
 ion-icon {
   font-size: x-large;
@@ -99,15 +123,20 @@ ion-range {
   --bar-border-radius: 8px;
   --knob-background: var(--ion-color-primary-tint);
   --knob-size: 40px;
+
   padding-top: 5px;
 }
 ion-range::part(pin) {
   color: var(--ion-color-text);
   transform: scale(1.1);
-  top: 60px;
+  top: 55px;
+  background: transparent;
 }
 
 ion-range::part(pin)::before {
   content: none;
+}
+ion-item::part(native) {
+  padding: 0;
 }
 </style>

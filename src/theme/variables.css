@@ -1,6 +1,6 @@
 /* Ionic Variables and Theming. For more info, please see:
 http://ionicframework.com/docs/theming/ */
-
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 /** Ionic CSS Variables **/
 :root {
   --ion-color-primary: #636c3f;
@@ -58,6 +58,9 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #bebfba;
   --ion-color-light-tint: #dcddd7;
+
+  /* Set the font family of the entire app */
+  --ion-font-family: "Roboto", "Helvetica Neue", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -9,13 +9,14 @@
         </ion-tab-button>
 
         <ion-tab-button tab="add" href="/add">
-          <ion-icon :icon="add" />
+          <ion-icon :icon="addCircle" />
           <ion-label>Ajouter</ion-label>
         </ion-tab-button>
 
         <ion-tab-button tab="messages" href="/messages">
           <ion-icon :icon="mail" />
           <ion-label>Messages</ion-label>
+          <ion-badge color="danger">6</ion-badge>
         </ion-tab-button>
         <ion-tab-button tab="profil" href="/profil">
           <ion-icon :icon="person" />
@@ -45,6 +46,7 @@ import {
   search,
   mail,
   person,
+  addCircle,
 } from "ionicons/icons";
 
 export default defineComponent({
@@ -67,6 +69,7 @@ export default defineComponent({
       search,
       mail,
       person,
+      addCircle,
     };
   },
 });

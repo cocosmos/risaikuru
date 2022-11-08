@@ -61,14 +61,24 @@ http://ionicframework.com/docs/theming/ */
 
   /* Set the font family of the entire app */
   --ion-font-family: "Roboto", "Helvetica Neue", sans-serif;
+  --ion-color-text: #46483e;
 }
 
-@media (prefers-color-scheme: dark) {
+/*
+*Tabs
+*
+*/
+
+.tab-selected {
+  color: var(--ion-color-tertiary);
+}
+
+/* @media (prefers-color-scheme: dark) {
   /*
    * Dark Colors
    * -------------------------------------------
    */
-
+/*
   body {
     --ion-color-primary: #c1c4b2;
     --ion-color-primary-rgb: 193, 196, 178;
@@ -133,12 +143,12 @@ http://ionicframework.com/docs/theming/ */
     --ion-color-light-shade: #1e2023;
     --ion-color-light-tint: #383a3e;
   }
-
-  /*
+*/
+/*
    * iOS Dark Theme
    * -------------------------------------------
    */
-
+/*
   .ios body {
     --ion-background-color: #000000;
     --ion-background-color-rgb: 0, 0, 0;
@@ -176,12 +186,12 @@ http://ionicframework.com/docs/theming/ */
     --ion-toolbar-background: var(--ion-color-step-150);
     --ion-toolbar-border-color: var(--ion-color-step-250);
   }
-
-  /*
+*/
+/*
    * Material Design Dark Theme
    * -------------------------------------------
    */
-
+/*
   .md body {
     --ion-background-color: #121212;
     --ion-background-color-rgb: 18, 18, 18;
@@ -220,3 +230,4 @@ http://ionicframework.com/docs/theming/ */
     --ion-card-background: #1e1e1e;
   }
 }
+ */

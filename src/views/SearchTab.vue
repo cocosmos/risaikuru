@@ -1,10 +1,24 @@
 <script lang="ts" setup>
-import { IonRange } from "@ionic/vue";
-
+import {
+  IonPage,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonRange,
+} from "@ionic/vue";
 import { locate, trophy } from "ionicons/icons";
+import CardSearch from "../components/CardSearch.vue";
+import { Geolocation } from "@capacitor/geolocation";
 
 const pinFormatter = (value: number) => `${value}km`;
+const printCurrentPosition = async () => {
+  const coordinates = await Geolocation.getCurrentPosition();
+
+  console.log("Current position:", coordinates);
+};
 </script>
+
 <template>
   <ion-page>
     <ion-header>
@@ -20,52 +34,24 @@ const pinFormatter = (value: number) => `${value}km`;
               show-cancel-button="never"
               placeholder="Adresse"
               class="custom"
-            ></ion-searchbar
-          ></ion-col>
+            ></ion-searchbar>
+          </ion-col>
           <ion-col size="auto">
-            <ion-button shape="circle">
-              <ion-icon :icon="locate"></ion-icon> </ion-button
-          ></ion-col>
+            <ion-button shape="circle" @click="printCurrentPosition">
+              <ion-icon :icon="locate"></ion-icon>
+            </ion-button>
+          </ion-col>
         </ion-row>
       </ion-grid>
-      <ion-text>
-        <b>Rayon</b>
-      </ion-text>
+      <ion-text class="text__bold"> Rayon </ion-text>
       <ion-range
         :min="0"
         :max="20"
         :value="10"
         :pin="true"
-        :pin-formatter="{ pinFormatter }"
+        :pin-formatter="pinFormatter"
       ></ion-range>
-      <ion-card color="secondary">
-        <ion-card-header>
-          <div>
-            <ion-row>
-              <ion-col>
-                <ion-item color="secondary" lines="none">
-                  <ion-avatar>
-                    <img
-                      alt="Silhouette of a person's head"
-                      src="https://ionicframework.com/docs/img/demos/avatar.svg"
-                    />
-                  </ion-avatar>
-                  <ion-label class="text__bold">Name</ion-label>
-                </ion-item></ion-col
-              >
-              <ion-col>
-                <ion-item color="secondary" lines="none">
-                  <ion-icon :icon="trophy" color="primary" />
-                  <ion-text class="text__bold" color="primary">5 CHF</ion-text>
-                </ion-item></ion-col
-              >
-            </ion-row>
-          </div>
-          <ion-card-subtitle>Date</ion-card-subtitle>
-        </ion-card-header>
-
-        <ion-card-content> Card Content </ion-card-content>
-      </ion-card>
+      <card-search></card-search>
     </ion-content>
   </ion-page>
 </template>
@@ -74,20 +60,24 @@ const pinFormatter = (value: number) => `${value}km`;
 ion-content {
   margin: 5px;
 }
+
 ion-icon {
   font-size: x-large;
 }
+
 ion-button[shape="circle"] {
   --border-radius: 50%;
   width: 56px;
   height: 56px;
 }
+
 ion-searchbar.custom {
   --background: transparent;
   border: 2px solid var(--ion-color-primary);
   border-radius: 10px;
   --placeholder-color: var(--ion-color-primary);
 }
+
 ion-range {
   --bar-background: var(--ion-color-light);
   --bar-background-active: var(--ion-color-primary);
@@ -98,6 +88,7 @@ ion-range {
 
   padding-top: 5px;
 }
+
 ion-range::part(pin) {
   color: var(--ion-color-text);
   transform: scale(1.1);
@@ -108,6 +99,7 @@ ion-range::part(pin) {
 ion-range::part(pin)::before {
   content: none;
 }
+
 ion-item::part(native) {
   padding: 0;
 }

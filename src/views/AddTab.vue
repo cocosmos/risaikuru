@@ -5,13 +5,7 @@
         <ion-title>Ajouter</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Ajouter</ion-title>
-        </ion-toolbar>
-      </ion-header>
-    </ion-content>
+    <ion-content :fullscreen="true"> </ion-content>
   </ion-page>
 </template>
 
@@ -26,7 +20,7 @@ import {
 } from "@ionic/vue";
 
 export default defineComponent({
-  name: "AddTabs",
+  name: "AddTab",
   components: {
     IonHeader,
     IonToolbar,

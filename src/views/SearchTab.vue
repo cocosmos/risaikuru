@@ -7,9 +7,10 @@ import {
   IonContent,
   IonRange,
 } from "@ionic/vue";
-import { locate, trophy } from "ionicons/icons";
+import { locate } from "ionicons/icons";
 import CardSearch from "../components/CardSearch.vue";
 import { Geolocation } from "@capacitor/geolocation";
+import IconInfo from "../components/IconInfo.vue";
 
 const pinFormatter = (value: number) => `${value}km`;
 const printCurrentPosition = async () => {
@@ -26,7 +27,7 @@ const printCurrentPosition = async () => {
         <ion-title>Rechercher</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content :fullscreen="true">
+    <ion-content :fullscreen="true" class="ion-padding">
       <ion-grid>
         <ion-row>
           <ion-col>

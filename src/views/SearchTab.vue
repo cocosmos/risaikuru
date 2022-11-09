@@ -1,3 +1,10 @@
+<script lang="ts" setup>
+import { IonRange } from "@ionic/vue";
+
+import { locate, trophy } from "ionicons/icons";
+
+const pinFormatter = (value: number) => `${value}km`;
+</script>
 <template>
   <ion-page>
     <ion-header>
@@ -29,7 +36,7 @@
         :max="20"
         :value="10"
         :pin="true"
-        :pin-formatter="pinFormatter"
+        :pin-formatter="{ pinFormatter }"
       ></ion-range>
       <ion-card color="secondary">
         <ion-card-header>
@@ -43,18 +50,17 @@
                       src="https://ionicframework.com/docs/img/demos/avatar.svg"
                     />
                   </ion-avatar>
-                  <ion-label><b>Name</b></ion-label>
+                  <ion-label class="text__bold">Name</ion-label>
                 </ion-item></ion-col
               >
               <ion-col>
                 <ion-item color="secondary" lines="none">
                   <ion-icon :icon="trophy" color="primary" />
-                  <ion-text color="primary"><b>5 CHF</b></ion-text>
+                  <ion-text class="text__bold" color="primary">5 CHF</ion-text>
                 </ion-item></ion-col
               >
             </ion-row>
           </div>
-
           <ion-card-subtitle>Date</ion-card-subtitle>
         </ion-card-header>
 
@@ -63,40 +69,6 @@
     </ion-content>
   </ion-page>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-import {
-  IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonRange,
-} from "@ionic/vue";
-import { search, locate, trophy } from "ionicons/icons";
-
-export default defineComponent({
-  name: "SearchTabs",
-  components: {
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonPage,
-    IonRange,
-  },
-  setup() {
-    return {
-      search,
-      locate,
-      trophy,
-
-      pinFormatter: (value: number) => `${value}km`,
-    };
-  },
-});
-</script>
 
 <style scoped>
 ion-content {

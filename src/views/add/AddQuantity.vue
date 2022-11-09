@@ -10,6 +10,12 @@
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding relative">
       <h2 class="ion-text-center">Choisis la quantité de déchêts que tu dois débarrasser</h2>
+      <stack-list>
+        <quantity-stepper></quantity-stepper>
+        <quantity-stepper></quantity-stepper>
+        <quantity-stepper></quantity-stepper>
+        <quantity-stepper></quantity-stepper>
+      </stack-list>
       <fixed-bottom-container>
         <ion-button expand="block" @click="validate()">
           Choisir la date
@@ -35,6 +41,8 @@ import {
 import {chevronForwardOutline} from "ionicons/icons";
 import {useRouter} from "vue-router";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
+import QuantityStepper from '@/components/QuantityStepper.vue';
+import StackList from "@/components/StackList.vue";
 
 const router = useRouter();
 

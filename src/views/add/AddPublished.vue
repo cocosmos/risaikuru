@@ -7,8 +7,9 @@
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding relative">
       <h2 class="ion-text-center">Félicitations, ton annonce est publiée</h2>
+
       <fixed-bottom-container>
-        <ion-button expand="block">
+        <ion-button expand="block" router-link="/" router-direction="back">
           Retour à l'accueil
         </ion-button>
         <ion-button-secondary expand="block">
@@ -26,15 +27,11 @@ import {
   IonTitle,
   IonContent,
   IonButton,
-  IonIcon,
   IonPage
 } from "@ionic/vue";
-import {chevronForwardOutline} from "ionicons/icons";
-import {useRouter} from "vue-router";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
 import IonButtonSecondary from "@/components/IonButtonSecondary.vue";
 
-const router = useRouter();
 </script>
 
 <style>

@@ -11,6 +11,9 @@
         <ion-button expand="block">
           Retour à l'accueil
         </ion-button>
+        <ion-button-secondary expand="block">
+          Gérer mes annonces
+        </ion-button-secondary>
       </fixed-bottom-container>
     </ion-content>
   </ion-page>
@@ -29,6 +32,7 @@ import {
 import {chevronForwardOutline} from "ionicons/icons";
 import {useRouter} from "vue-router";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
+import IonButtonSecondary from "@/components/IonButtonSecondary.vue";
 
 const router = useRouter();
 </script>

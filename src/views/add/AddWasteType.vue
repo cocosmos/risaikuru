@@ -7,10 +7,12 @@
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding relative">
       <h2 class="ion-text-center">Selectionne les types de déchêts dont tu veux te débarrasser</h2>
-      <ion-button expand="block" class="btn-bottom" @click="validate()">
-        Choisir la quantité
-        <ion-icon slot="end" :icon="chevronForwardOutline"></ion-icon>
-      </ion-button>
+      <fixed-bottom-container>
+        <ion-button expand="block" @click="validate()">
+          Choisir la quantité
+          <ion-icon slot="end" :icon="chevronForwardOutline"></ion-icon>
+        </ion-button>
+      </fixed-bottom-container>
     </ion-content>
   </ion-page>
 </template>
@@ -27,6 +29,7 @@ import {
 } from "@ionic/vue";
 import {chevronForwardOutline} from "ionicons/icons";
 import {useRouter} from "vue-router";
+import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
 
 const router = useRouter();
 
@@ -36,9 +39,4 @@ const validate = () => {
 </script>
 
 <style>
-.btn-bottom {
-  position: absolute;
-  width: calc(100% - var(--padding-end) - var(--padding-start));
-  bottom: 67px;
-}
 </style>

@@ -20,16 +20,43 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/SearchTab.vue"),
       },
       {
-        path: "add",
-        component: () => import("@/views/Add.vue"),
-      },
-      {
         path: "messages",
         component: () => import("@/views/Messages.vue"),
       },
       {
         path: "profil",
         component: () => import("@/views/Profil.vue"),
+      },
+    ],
+  },
+  {
+    path: "/add",
+    redirect: "/add/type",
+    component: () => TabsPage,
+    children: [
+      {
+        path: "/add/type",
+        component: () => import("@/views/add/AddWasteType.vue"),
+      },
+      {
+        path: "/add/quantity",
+        component: () => import("@/views/add/AddQuantity.vue"),
+      },
+      {
+        path: "/add/moment",
+        component: () => import("@/views/add/AddMoment.vue"),
+      },
+      {
+        path: "/add/location",
+        component: () => import("@/views/add/AddLocation.vue"),
+      },
+      {
+        path: "/add/reward",
+        component: () => import("@/views/add/AddReward.vue"),
+      },
+      {
+        path: "/add/published",
+        component: () => import("@/views/add/AddPublished.vue"),
       },
     ],
   },

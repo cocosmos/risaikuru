@@ -1,17 +1,20 @@
+import { nanoid } from "nanoid";
+
 export type User = {
-  id: number;
-  name: string;
+  id: string;
+  fname: string;
+  lname: string;
   email: string;
-  profile: string;
+  profilePicture: string;
   totalMoney: number;
 };
 
-export const user = (
-  id: number,
-  name: string,
+export const createUser = (
+  fname: string,
+  lname: string,
   email: string,
-  profile = "https://ionicframework.com/docs/img/demos/avatar.svg",
-  totalMoney = 0
+  totalMoney = 0,
+  profilePicture = "https://ionicframework.com/docs/img/demos/avatar.svg"
 ): User => {
-  return { id, name, email, profile, totalMoney };
+  return { id: nanoid(), fname, lname, email, profilePicture, totalMoney };
 };

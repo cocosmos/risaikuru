@@ -11,6 +11,8 @@ import { locate } from "ionicons/icons";
 import CardSearch from "../components/CardSearch.vue";
 import { Geolocation } from "@capacitor/geolocation";
 import IconInfo from "../components/IconInfo.vue";
+import { createDemand, Demand } from "@/types/Demand";
+import { createUser } from "@/types/User";
 
 const pinFormatter = (value: number) => `${value}km`;
 const printCurrentPosition = async () => {
@@ -18,6 +20,32 @@ const printCurrentPosition = async () => {
 
   console.log("Current position:", coordinates);
 };
+const demands: Demand[] = [];
+demands.push(
+  createDemand(
+    ["alu", "papier"],
+    [{ id: "S", number: 3, description: "Small" }],
+    "chemin de la fontaine 3, 1000 Lausanne",
+    createUser("John", "Doe", "john.doe@example.com", 5),
+    5,
+    new Date(),
+    new Date()
+  ),
+  createDemand(
+    ["cafe", "piles", "compost"],
+    [
+      { id: "S", number: 3, description: "Small" },
+      { id: "M", number: 2, description: "Medium" },
+    ],
+    "chemin de la fontaine 3, 1000 Lausanne",
+    createUser("John", "Doe", "john.doe@example.com"),
+    15,
+    new Date(),
+    new Date()
+  )
+);
+
+console.log(demands);
 </script>
 
 <template>
@@ -52,7 +80,11 @@ const printCurrentPosition = async () => {
         :pin="true"
         :pin-formatter="pinFormatter"
       ></ion-range>
-      <card-search></card-search>
+      <card-search
+        v-for="demand in demands"
+        v-bind:key="demand.id"
+        :demand="demand"
+      ></card-search>
     </ion-content>
   </ion-page>
 </template>

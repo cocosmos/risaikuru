@@ -1,13 +1,13 @@
 <template>
   <div class="quantity-stepper" :class="{'quantity-stepper--selected': isSelected}">
     <div class="quantity-stepper__infos">
-      <span>S</span>
-      <ion-icon :icon="information" color="primary" size="large"></ion-icon>
+      <span>{{ props.size.toUpperCase() }}</span>
+      <ion-icon :icon="props.icon" color="primary" size="large"></ion-icon>
     </div>
     <div class="quantity-stepper__content">
-      <p class="quantity-stepper__label">Équivalent d'une boite à chaussures</p>
+      <p class="quantity-stepper__label">{{ props.description }}</p>
       <div class="quantity-stepper__stepper">
-        <ion-fab-button size="small" @click="decrement()">
+        <ion-fab-button size="small" @click="decrement()" :disabled="!isSelected">
           -
         </ion-fab-button>
         <ion-input placeholder="0" type="number" v-model="quantity"></ion-input>
@@ -21,10 +21,19 @@
 
 <script lang="ts" setup>
 import {IonFabButton, IonInput, IonIcon} from "@ionic/vue";
-import {information, addOutline, removeOutline} from "ionicons/icons";
-import {ref, computed} from "vue";
+import {information} from "ionicons/icons";
+import {ref, computed, defineEmits, defineProps, watch} from "vue";
 
-const quantity = ref(0);
+const props = defineProps<{
+  modelValue: number,
+  size: string,
+  icon: string,
+  description: string,
+}>();
+
+const emit = defineEmits(['update:modelValue']);
+
+const quantity = ref(props.modelValue);
 
 const increment = () => {
   quantity.value++;
@@ -39,6 +48,10 @@ const decrement = () => {
 const isSelected = computed((): boolean => {
   return quantity.value > 0;
 });
+
+watch([quantity], () => {
+  emit('update:modelValue', quantity.value);
+})
 </script>
 
 <style scoped lang="scss">
@@ -67,6 +80,10 @@ const isSelected = computed((): boolean => {
 
   &__label {
     margin-top: 0;
+  }
+
+  &__content {
+    flex-grow: 1;
   }
 
   &__stepper {

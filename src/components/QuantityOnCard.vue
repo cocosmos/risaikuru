@@ -12,16 +12,17 @@ const props = defineProps<{
 /**Template */
 
 <template>
-  <div class="quantity">
+  <div class="quantity__list-chip">
     <ion-text class="text__bold">{{ props.quantity.id }}</ion-text>
     <ion-text color="secondary"> {{ props.quantity.number }}</ion-text>
   </div>
 </template>
 
 <style scoped lang="scss">
-.quantity {
+.quantity__list-chip {
   display: flex;
   align-items: center;
+  margin-top: 0.5em;
   border-radius: 20px;
   border: 1px solid var(--ion-color-text);
   background: var(--ion-color-primary);

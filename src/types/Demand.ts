@@ -11,13 +11,14 @@ export type Waste =
   | "piles"
   | "verre";
 export type Status = "pending" | "accepted" | "rejected";
-export type Quantity = {
-  id: "S" | "M" | "L" | "XL";
+export type QuantityId = "S" | "M" | "L" | "XL";
+export interface Quantity {
+  id: QuantityId;
   number: number;
   description: string;
-};
+}
 
-export type Demand = {
+export interface Demand {
   id: string;
   waste: Waste[];
   quantity: Quantity[];
@@ -28,7 +29,8 @@ export type Demand = {
   dateBegin: Date;
   dateEnd: Date;
   dateCreated: Date;
-};
+}
+
 export const createDemand = (
   waste: Waste[],
   quantity: Quantity[],

@@ -10,6 +10,7 @@ const props = defineProps<{
   waste: Waste;
   border?: boolean;
   description?: boolean;
+  size: string;
 }>();
 
 let iconFinded = { path: "", name: "", description: "" };
@@ -23,20 +24,23 @@ icons.forEach((icon) => {
 
 <template>
   <span class="icon">
-    <ion-icon :src="iconFinded.path" color="primary"></ion-icon>
+    <ion-icon
+      :src="iconFinded.path"
+      color="primary"
+      :style="{ width: props.size, height: props.size }"
+    ></ion-icon>
     <ion-text>{{ iconFinded.description }}</ion-text>
   </span>
 </template>
 
 <style scoped lang="scss">
 ion-icon {
-  width: 50px;
-  height: 50px;
   border: 2px solid var(--ion-color-primary);
   border-radius: 10px;
+  background-color: var(--ion-color-primary-contrast);
 }
 ion-text {
-  font-size: 12px;
+  font-size: calc(0.5em + 0.5vw);
 }
 .icon {
   display: flex;

@@ -1,13 +1,13 @@
 import { nanoid } from "nanoid";
 
-export type User = {
+export interface User {
   id: string;
   fname: string;
   lname: string;
   email: string;
   profilePicture: string;
   totalMoney: number;
-};
+}
 
 export const createUser = (
   fname: string,

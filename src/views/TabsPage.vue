@@ -37,7 +37,7 @@ import {
   IonIcon,
   IonPage,
   IonRouterOutlet,
-  IonFooter,
+  IonBadge,
 } from "@ionic/vue";
 import {
   ellipse,
@@ -60,6 +60,7 @@ export default defineComponent({
     IonIcon,
     IonPage,
     IonRouterOutlet,
+    IonBadge
   },
   setup() {
     return {

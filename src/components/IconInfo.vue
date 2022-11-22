@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import {IonIcon, IonText} from "@ionic/vue";
 import {Waste} from "@/types/Demand";
 import {defineProps} from "vue";
 import {icons} from "../assets/icons/index";

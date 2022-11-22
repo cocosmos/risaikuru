@@ -5,7 +5,7 @@ http://ionicframework.com/docs/theming/ */
 :root {
   --ion-color-primary: #636c3f;
   --ion-color-primary-rgb: 99, 108, 63;
-  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast: #f2f3ee;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
   --ion-color-primary-shade: #575f37;
   --ion-color-primary-tint: #737b52;

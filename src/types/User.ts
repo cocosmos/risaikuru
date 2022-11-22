@@ -6,6 +6,7 @@ export interface User {
   lname: string;
   email: string;
   profilePicture: string;
+  iban?: string;
   totalMoney: number;
 }
 

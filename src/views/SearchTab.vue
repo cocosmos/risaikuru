@@ -8,7 +8,7 @@ import {
   IonRange,
 } from "@ionic/vue";
 import { locate } from "ionicons/icons";
-import CardSearch from "../components/CardSearch.vue";
+import CardSearch from "../components/Card/CardSearch.vue";
 import { Geolocation } from "@capacitor/geolocation";
 import { createDemand, Demand } from "@/types/Demand";
 import { createUser } from "@/types/User";

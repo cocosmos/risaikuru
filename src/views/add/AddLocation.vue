@@ -10,6 +10,7 @@
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding relative">
       <h2 class="ion-text-center">Choisis l'endroit un tu as veux qu'on vienne te débarrasser</h2>
+      <location-search></location-search>
       <fixed-bottom-container>
         <ion-button expand="block" @click="validate()">
           Choisir la récompense
@@ -30,11 +31,12 @@ import {
   IonButtons,
   IonBackButton,
   IonIcon,
-  IonPage
+  IonPage,
 } from "@ionic/vue";
 import {chevronForwardOutline} from "ionicons/icons";
 import {useRouter} from "vue-router";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
+import LocationSearch from '@/components/LocationSearch.vue';
 
 const router = useRouter();
 

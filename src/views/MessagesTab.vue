@@ -1,3 +1,13 @@
+<script lang="ts" setup>
+import {
+  IonPage,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+} from "@ionic/vue";
+</script>
+
 <template>
   <ion-page>
     <ion-header>
@@ -15,24 +25,4 @@
   </ion-page>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import {
-  IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-} from "@ionic/vue";
-
-export default defineComponent({
-  name: "MessagesTabs",
-  components: {
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonPage,
-  },
-});
-</script>
+<style lang="scss" scoped></style>

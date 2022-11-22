@@ -25,7 +25,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: "messages",
-        component: () => import("@/views/Messages.vue"),
+        component: () => import("@/views/MessagesTab.vue"),
       },
       {
         path: "profil",
@@ -33,17 +33,26 @@ const routes: Array<RouteRecordRaw> = [
       },
     ],
   },
-  /*   {
-    path: "/add",
-
-    component: TabsPage,
+  {
+    path: "/profil",
+    redirect: "/profil",
+    component: () => TabsPage,
     children: [
       {
-        path: "test",
-        component: () => import("@/views/test.vue"),
+        path: "/profil/ask-payment",
+        component: () => import("@/views/Profil/AskPayment.vue"),
+      },
+      {
+        path: "/profil/confirm-payment",
+        component: () => import("@/views/Profil/ConfirmPayment.vue"),
+      },
+      {
+        path: "/profil/my-demands",
+        component: () => import("@/views/Profil/MyDemands.vue"),
       },
     ],
-  }, */
+  },
+  { path: "/:catchAll(.*)", component: () => import("@/views/ErrorTab.vue") },
 ];
 
 const router = createRouter({

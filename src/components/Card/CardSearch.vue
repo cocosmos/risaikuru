@@ -1,19 +1,18 @@
 <script lang="ts" setup>
 import { trophy, chevronDown, chevronUp } from "ionicons/icons";
-import IconInfo from "./IconInfo.vue";
+import IconInfo from "../IconInfo.vue";
 import { defineProps, ref } from "vue";
 import {
   IonCard,
   IonCardHeader,
-  IonAvatar,
-  IonLabel,
   IonIcon,
   IonText,
   IonCardContent,
 } from "@ionic/vue";
 import { Demand } from "@/types/Demand";
-import { fDate } from "../utils/formatDate";
-import QuantityOnCard from "./QuantityOnCard.vue";
+import { fDate } from "../../utils/formatDate";
+import QuantityOnCard from "../QuantityOnCard.vue";
+import AvatarName from "../AvatarName.vue";
 const props = defineProps<{
   demand: Demand;
 }>();
@@ -32,17 +31,11 @@ const toggleOpen = () => {
   <ion-card color="light">
     <ion-card-header>
       <div class="card__header">
-        <div class="card__header-avatar">
-          <ion-avatar>
-            <img
-              alt="Silhouette of a person's head"
-              :src="props.demand.user.profilePicture"
-            />
-          </ion-avatar>
-          <ion-label class="text__bold">{{
-            props.demand.user.fname
-          }}</ion-label>
-        </div>
+        <avatar-name
+          :profilePicture="props.demand.user.profilePicture"
+          :fname="props.demand.user.fname"
+          size="small"
+        ></avatar-name>
         <div class="card__header-price">
           <ion-icon :icon="trophy" color="primary" size="medium" />
           <ion-text color="primary" class="text__bold"
@@ -96,18 +89,7 @@ ion-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  &-avatar {
-    display: flex;
-    align-items: center;
-    ion-label {
-      margin-left: 0.5rem;
-    }
 
-    ion-avatar {
-      width: 2rem;
-      height: 2rem;
-    }
-  }
   &-price {
     display: flex;
     align-items: center;

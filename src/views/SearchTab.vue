@@ -1,76 +1,4 @@
-<template>
-  <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Rechercher</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content :fullscreen="true">
-      <ion-grid>
-        <ion-row>
-          <ion-col>
-            <ion-searchbar
-                show-cancel-button="never"
-                placeholder="Adresse"
-                class="custom"
-            ></ion-searchbar
-            >
-          </ion-col>
-          <ion-col size="auto">
-            <ion-button shape="circle">
-              <ion-icon :icon="locate"></ion-icon>
-            </ion-button
-            >
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-      <ion-text>
-        <b>Rayon</b>
-      </ion-text>
-      <ion-range
-          :min="0"
-          :max="20"
-          :value="10"
-          :pin="true"
-          :pin-formatter="pinFormatter"
-      ></ion-range>
-      <ion-card color="secondary">
-        <ion-card-header>
-          <div>
-            <ion-row>
-              <ion-col>
-                <ion-item color="secondary" lines="none">
-                  <ion-avatar>
-                    <img
-                        alt="Silhouette of a person's head"
-                        src="https://ionicframework.com/docs/img/demos/avatar.svg"
-                    />
-                  </ion-avatar>
-                  <ion-label><b>Name</b></ion-label>
-                </ion-item>
-              </ion-col
-              >
-              <ion-col>
-                <ion-item color="secondary" lines="none">
-                  <ion-icon :icon="trophy" color="primary"/>
-                  <ion-text color="primary"><b>5 CHF</b></ion-text>
-                </ion-item>
-              </ion-col
-              >
-            </ion-row>
-          </div>
-
-          <ion-card-subtitle>Date</ion-card-subtitle>
-        </ion-card-header>
-
-        <ion-card-content> Card Content</ion-card-content>
-      </ion-card>
-    </ion-content>
-  </ion-page>
-</template>
-
 <script lang="ts" setup>
-import {defineComponent} from "vue";
 import {
   IonPage,
   IonHeader,
@@ -79,12 +7,102 @@ import {
   IonContent,
   IonRange,
 } from "@ionic/vue";
-import {search, locate, trophy} from "ionicons/icons";
+import { locate } from "ionicons/icons";
+import CardSearch from "../components/CardSearch.vue";
+import { Geolocation } from "@capacitor/geolocation";
+import { createDemand, Demand } from "@/types/Demand";
+import { createUser } from "@/types/User";
 
 const pinFormatter = (value: number) => `${value}km`;
+const printCurrentPosition = async () => {
+  const coordinates = await Geolocation.getCurrentPosition();
+
+  console.log("Current position:", coordinates);
+};
+const demands: Demand[] = [];
+demands.push(
+  createDemand(
+    ["alu", "papier"],
+    [{ id: "S", number: 3, description: "Small" }],
+    "chemin de la fontaine 3, 1000 Lausanne",
+    createUser("John", "Doe", "john.doe@example.com", 5),
+    5,
+    new Date(),
+    new Date()
+  ),
+  createDemand(
+    ["cafe", "piles", "compost", "papier", "alu", "verre", "lampes"],
+    [
+      { id: "S", number: 3, description: "Small" },
+      { id: "M", number: 2, description: "Medium" },
+      { id: "L", number: 1, description: "Large" },
+      { id: "XL", number: 1, description: "Extra Large" },
+    ],
+    "chemin de la fontaine 3, 1000 Lausanne",
+    createUser("John", "Doe", "john.doe@example.com"),
+    15,
+    new Date(),
+    new Date()
+  )
+);
+
+console.log(demands);
 </script>
 
-<style scoped>
+<template>
+  <ion-page>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Rechercher</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content :fullscreen="true" class="ion-padding">
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col class="margin-right">
+            <ion-searchbar
+              show-cancel-button="never"
+              placeholder="Adresse"
+              class="custom"
+            ></ion-searchbar>
+          </ion-col>
+          <ion-col size="auto">
+            <ion-button shape="circle" @click="printCurrentPosition">
+              <ion-icon :icon="locate"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <div class="range">
+        <ion-text class="text__bold"> Rayon </ion-text>
+        <ion-range
+          :min="0"
+          :max="20"
+          :value="10"
+          :pin="true"
+          :pin-formatter="pinFormatter"
+          class="ion-no-padding"
+        ></ion-range>
+      </div>
+
+      <div class="cards">
+        <card-search
+          v-for="demand in demands"
+          v-bind:key="demand.id"
+          :demand="demand"
+        ></card-search>
+      </div>
+    </ion-content>
+  </ion-page>
+</template>
+
+<style scoped lang="scss">
+.margin-right {
+  margin-right: 10px;
+}
+.range {
+  margin-top: 10px;
+}
 ion-content {
   margin: 5px;
 }
@@ -104,6 +122,7 @@ ion-searchbar.custom {
   border: 2px solid var(--ion-color-primary);
   border-radius: 10px;
   --placeholder-color: var(--ion-color-primary);
+  margin-right: 20px;
 }
 
 ion-range {
@@ -113,8 +132,6 @@ ion-range {
   --bar-border-radius: 8px;
   --knob-background: var(--ion-color-primary-tint);
   --knob-size: 40px;
-
-  padding-top: 5px;
 }
 
 ion-range::part(pin) {
@@ -130,5 +147,11 @@ ion-range::part(pin)::before {
 
 ion-item::part(native) {
   padding: 0;
+}
+.cards {
+  margin-top: 1.5em;
+  & > * {
+    margin-bottom: 1.5em;
+  }
 }
 </style>

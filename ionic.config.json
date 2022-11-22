@@ -4,5 +4,6 @@
     "capacitor": {}
   },
   "type": "vue",
-  "id": "c6ed086b"
+  "id": "c6ed086b",
+  "mode": "ios"
 }

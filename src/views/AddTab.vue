@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Profil</ion-title>
+        <ion-title>Ajouter</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true"> </ion-content>
@@ -20,7 +20,7 @@ import {
 } from "@ionic/vue";
 
 export default defineComponent({
-  name: "ProfilTabs",
+  name: "AddTab",
   components: {
     IonHeader,
     IonToolbar,

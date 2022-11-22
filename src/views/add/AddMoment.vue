@@ -12,12 +12,12 @@
       <h2 class="ion-text-center">Choisis le moment auquel tu es disponible pour qu'on vienne chercher tes
         déchêts</h2>
       <div class="moment-selection">
-        <ion-datetime presentation="date"></ion-datetime>
+        <ion-datetime presentation="date" v-model="state.rawDate"></ion-datetime>
         <div class="moment-selection__time">
           <ion-text>Entre</ion-text>
-          <ion-datetime presentation="time" minuteValues="0,15,30,45"></ion-datetime>
+          <ion-datetime presentation="time" minuteValues="0,15,30,45" v-model="state.rawStartTime"></ion-datetime>
           <ion-text>et</ion-text>
-          <ion-datetime presentation="time" minuteValues="0,15,30,45"></ion-datetime>
+          <ion-datetime presentation="time" minuteValues="0,15,30,45" v-model="state.rawEndTime"></ion-datetime>
         </div>
       </div>
 
@@ -48,11 +48,30 @@ import {
 import {chevronForwardOutline} from "ionicons/icons";
 import {useRouter} from "vue-router";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
+import {computed, reactive} from "vue";
 
 const router = useRouter();
 
+const state = reactive({
+  rawDate: new Date().toISOString(),
+  rawStartTime: new Date().toISOString(),
+  rawEndTime: new Date().toISOString(),
+});
+
+const dateBegin = computed(() => {
+  const date = new Date(state.rawDate).toDateString();
+  const time = new Date(state.rawStartTime).toTimeString();
+  return new Date(`${date} ${time}`);
+});
+
+const dateEnd = computed(() => {
+  const date = new Date(state.rawDate).toDateString();
+  const time = new Date(state.rawEndTime).toTimeString();
+  return new Date(`${date} ${time}`);
+})
+
 const validate = () => {
-  router.push('/add/location')
+  router.push('/add/location');
 }
 </script>
 

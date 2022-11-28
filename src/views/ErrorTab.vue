@@ -4,7 +4,7 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Demande de paiement</ion-title>
+        <ion-title>Erreur 404</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding">

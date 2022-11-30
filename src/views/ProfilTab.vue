@@ -8,7 +8,7 @@ import {
 } from "@ionic/vue";
 import AvatarName from "@/components/AvatarName.vue";
 import CardPot from "@/components/Card/CardPot.vue";
-import { cardOutline, albumsOutline } from "ionicons/icons";
+import { cardOutline, fileTrayFullOutline } from "ionicons/icons";
 import { useRouter } from "vue-router";
 
 const user = {
@@ -40,17 +40,21 @@ const useLocation = (link: string) => {
         ></avatar-name>
 
         <card-pot :balance="10"></card-pot>
-        <ion-button @click="useLocation('/profil/ask-payment')"
+        <ion-button @click="useLocation('/profil/paiement')"
           >Demande de paiement</ion-button
         >
         <div class="profil__line"></div>
 
         <div class="profil__menu">
           <ion-item button @click="useLocation('/profil/mes-annonces')">
-            <ion-icon :icon="albumsOutline"></ion-icon>
+            <ion-icon :icon="fileTrayFullOutline"></ion-icon>
             <ion-label>Mes annonces</ion-label>
           </ion-item>
-          <ion-item button lines="none" @click="useLocation('/profil/payment')">
+          <ion-item
+            button
+            lines="none"
+            @click="useLocation('/profil/paiement')"
+          >
             <ion-icon :icon="cardOutline"></ion-icon>
             <ion-label>Informations de paiement</ion-label>
           </ion-item>

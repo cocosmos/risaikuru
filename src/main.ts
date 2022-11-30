@@ -3,6 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 
 import {
+  IonBackButton,
   IonBadge,
   IonButton,
   IonCard,
@@ -61,4 +62,5 @@ app
   .component("ion-card-header", IonCardHeader)
   .component("ion-card-title", IonCardTitle)
   .component("ion-card-subtitle", IonCardSubtitle)
+  .component("ion-back-button", IonBackButton)
   .component("ion-card-content", IonCardContent);

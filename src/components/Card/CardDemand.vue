@@ -8,13 +8,16 @@ import {
   IonIcon,
   IonText,
   IonCardContent,
+  IonButton,
 } from "@ionic/vue";
 import { Demand } from "@/types/Demand";
 import { fDate } from "../../utils/formatDate";
 import QuantityOnCard from "../QuantityOnCard.vue";
 import AvatarName from "../AvatarName.vue";
+import router from "@/router";
 const props = defineProps<{
   demand: Demand;
+  cardOfCurrentUser: boolean;
 }>();
 
 const dateBegin = new Date(props.demand.dateBegin);
@@ -26,16 +29,24 @@ const isOpen = ref(false);
 const toggleOpen = () => {
   isOpen.value = !isOpen.value;
 };
+const route = (id: string) => {
+  router.push(`/profil/mes-annonces/${id}`);
+};
 </script>
 <template>
-  <ion-card color="light">
+  <ion-card
+    color="light"
+    @click="cardOfCurrentUser ? route(props.demand.id) : null"
+  >
     <ion-card-header>
       <div class="card__header">
         <avatar-name
           :profilePicture="props.demand.user.profilePicture"
           :fname="props.demand.user.fname"
           size="small"
+          v-if="!props.cardOfCurrentUser"
         ></avatar-name>
+        <ion-text v-if="props.cardOfCurrentUser">{{ dateFormatted }} </ion-text>
         <div class="card__header-price">
           <ion-icon :icon="trophy" color="primary" size="medium" />
           <ion-text color="primary" class="text__bold"
@@ -46,7 +57,9 @@ const toggleOpen = () => {
     </ion-card-header>
 
     <ion-card-content>
-      <ion-text>{{ dateFormatted }} </ion-text>
+      <ion-text class="card__date" v-if="!props.cardOfCurrentUser"
+        >{{ dateFormatted }}
+      </ion-text>
       <div class="icon__list">
         <icon-info
           v-for="waste in props.demand.waste"
@@ -66,7 +79,7 @@ const toggleOpen = () => {
         </div>
       </div>
 
-      <div class="buttons">
+      <div class="buttons" v-if="!props.cardOfCurrentUser">
         <ion-button fill="clear" @click="toggleOpen">
           <ion-icon
             :icon="isOpen ? chevronUp : chevronDown"
@@ -84,6 +97,12 @@ const toggleOpen = () => {
 ion-card {
   margin: 0;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+}
+ion-card-content {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
 }
 .card__header {
   display: flex;
@@ -105,11 +124,10 @@ ion-card {
   flex-direction: row;
   align-items: center;
   gap: 5px;
-  margin-top: 20px;
+
   flex-wrap: wrap;
 }
 .quantity {
-  margin-top: 15px;
   &__list {
     display: flex;
     flex-direction: row;
@@ -123,7 +141,6 @@ ion-card {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-top: 1em;
   :first-child::part(native) {
     padding: 0;
   }

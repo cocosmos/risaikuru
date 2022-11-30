@@ -39,16 +39,22 @@ const routes: Array<RouteRecordRaw> = [
     component: () => TabsPage,
     children: [
       {
-        path: "/profil/ask-payment",
-        component: () => import("@/views/Profil/AskPayment.vue"),
-      },
-      {
-        path: "/profil/confirm-payment",
-        component: () => import("@/views/Profil/ConfirmPayment.vue"),
-      },
-      {
-        path: "/profil/my-demands",
+        path: "/profil/mes-annonces",
         component: () => import("@/views/Profil/MyDemands.vue"),
+      },
+
+      {
+        path: "/profil/mes-annonces/:id",
+        component: () => import("@/views/Profil/MyDemand.vue"),
+      },
+
+      {
+        path: "/profil/paiement",
+        component: () => import("@/views/Profil/PaymentAskOrVerify.vue"),
+      },
+      {
+        path: "/profil/paiement-confirmé",
+        component: () => import("@/views/Profil/PaymentConfirmed.vue"),
       },
     ],
   },

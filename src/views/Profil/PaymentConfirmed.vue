@@ -20,19 +20,10 @@ const validate = () => {
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Demande de paiement</ion-title>
+        <ion-title>Paiement confirmez</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content :fullscreen="true" class="ion-padding">
-      <h2 class="ion-text-center">
-        Choisis l'endroit un tu as veux qu'on vienne te débarrasser
-      </h2>
-
-      <ion-button expand="block" @click="validate()">
-        Choisir le lieu
-        <ion-icon slot="end" :icon="chevronForwardOutline"></ion-icon>
-      </ion-button>
-    </ion-content>
+    <ion-content :fullscreen="true" class="ion-padding"> </ion-content>
   </ion-page>
 </template>
 

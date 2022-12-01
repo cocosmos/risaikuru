@@ -68,7 +68,7 @@ const updateValue = () => {
   &__input {
     display: inline;
     min-width: 0;
-    max-width: 50px;
+    max-width: 30px;
     background: none;
     border: none;
     padding: 0;

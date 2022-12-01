@@ -1,6 +1,7 @@
 <template>
   <div class="reward-custom" :class="{'reward-custom--selected': isSelected}" @click="focusInput">
-    <input type="number" class="reward-custom__input" :value="displayValue" ref="input"
+    <label class="reward-custom__label" for="reward_custom">Personnalisé</label>
+    <input type="number" class="reward-custom__input" :value="displayValue" ref="input" id="reward_custom"
            @focusout="unselect" placeholder="-"/>
     <span>CHF</span>
   </div>
@@ -54,6 +55,7 @@ const updateValue = () => {
 <style lang="scss" scoped>
 
 .reward-custom {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,6 +77,14 @@ const updateValue = () => {
       border: none;
       outline: none;
     }
+  }
+
+  &__label {
+    position: absolute;
+    font-size: .75rem;
+    top: -5px;
+    left: 50%;
+    transform: translate(-50%, -100%);
   }
 
   &--selected {

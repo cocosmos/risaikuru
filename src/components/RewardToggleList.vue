@@ -6,8 +6,6 @@
     <reward-custom :selected="isCustomRewardValue" :model-value="customReward"
                    @update:modelValue="(value) => {updateReward(value)}"></reward-custom>
   </div>
-  <!-- To remove : for testing purpose -->
-  <h1>{{ props.modelValue }}</h1>
 </template>
 
 <script lang="ts" setup>
@@ -53,6 +51,6 @@ const updateReward = (newValue: number) => {
 .reward-toggle-list {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 1rem;
+  gap: 1.5rem 1rem;
 }
 </style>

@@ -11,6 +11,7 @@
     <ion-content :fullscreen="true" class="ion-padding relative">
       <h2 class="ion-text-center">Choisis le montant de la récompense pour le trieur</h2>
       <reward-toggle-list v-model="rewardAmount"></reward-toggle-list>
+      <h1>{{ rewardAmount }}</h1>
       <fixed-bottom-container>
         <ion-button expand="block" @click="validate()">
           Poster mon annonce

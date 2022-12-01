@@ -11,13 +11,17 @@
     <ion-content :fullscreen="true" class="ion-padding relative">
       <h2 class="ion-text-center">Choisis la quantité de déchêts que tu dois débarrasser</h2>
       <stack-list>
-        <quantity-stepper v-model="quantity.s" size="s" :icon="cube" description="Équivalent d'une boite à chaussures"></quantity-stepper>
-        <quantity-stepper v-model="quantity.m" size="m" :icon="bag" description="Équivalent d'un sac de courses"></quantity-stepper>
-        <quantity-stepper v-model="quantity.l" size="l" :icon="logoDropbox" description="Équivalent d'un carton de déménagement"></quantity-stepper>
-        <quantity-stepper v-model="quantity.xl" size="xl" :icon="car" description="Environ 200 litres"></quantity-stepper>
+        <quantity-stepper v-model="quantities.s" size="s" :icon="cube"
+                          description="Équivalent d'une boite à chaussures"></quantity-stepper>
+        <quantity-stepper v-model="quantities.m" size="m" :icon="bag"
+                          description="Équivalent d'un sac de courses"></quantity-stepper>
+        <quantity-stepper v-model="quantities.l" size="l" :icon="logoDropbox"
+                          description="Équivalent d'un carton de déménagement"></quantity-stepper>
+        <quantity-stepper v-model="quantities.xl" size="xl" :icon="car"
+                          description="Environ 200 litres"></quantity-stepper>
       </stack-list>
       <fixed-bottom-container>
-        <ion-button expand="block" @click="validate()">
+        <ion-button expand="block" @click="validate()" :disabled="!valid">
           Choisir la date
           <ion-icon slot="end" :icon="chevronForwardOutline"></ion-icon>
         </ion-button>
@@ -40,7 +44,7 @@ import {
 } from "@ionic/vue";
 import {chevronForwardOutline} from "ionicons/icons";
 import {useRouter} from "vue-router";
-import {reactive} from "vue";
+import {computed, reactive} from "vue";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
 import QuantityStepper from '@/components/QuantityStepper.vue';
 import StackList from "@/components/StackList.vue";
@@ -48,15 +52,19 @@ import {cube, logoDropbox, bag, car} from "ionicons/icons"
 
 const router = useRouter();
 
-const quantity = reactive({
+const quantities = reactive({
   s: 0,
   m: 0,
   l: 0,
   xl: 0
 });
 
+const valid = computed(() => {
+  return quantities.s > 0 || quantities.m > 0 || quantities.l > 0 || quantities.xl > 0;
+});
+
 const validate = () => {
-  router.push('/add/moment');
+  if (valid.value) router.push('/add/moment');
 }
 </script>
 

@@ -12,7 +12,7 @@
                      :key="wasteType.waste"></WasteSwitch>
       </div>
       <fixed-bottom-container>
-        <ion-button expand="block" @click="validate()">
+        <ion-button expand="block" @click="validate()" :disabled="!valid">
           Choisir la quantité
           <ion-icon slot="end" :icon="chevronForwardOutline"></ion-icon>
         </ion-button>
@@ -49,17 +49,22 @@ onBeforeMount(() => {
   });
 });
 
-const validate = () => {
-  router.push('/add/quantity');
-}
-
-const selectedWaste: ComputedRef<Waste[]> = computed(() => {
+const selectedWaste = computed<Waste[]>(() => {
   let wastes: Waste[] = [];
   wasteTypes.value.forEach((wasteType) => {
     if (wasteType.selected) wastes.push(wasteType.waste);
   });
   return wastes;
-})
+});
+
+const valid = computed(() => {
+  return selectedWaste.value.length > 0;
+});
+
+const validate = () => {
+  if (valid.value) router.push('/add/quantity');
+}
+
 </script>
 
 <style lang="scss">

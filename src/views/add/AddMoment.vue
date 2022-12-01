@@ -22,7 +22,7 @@
       </div>
 
       <fixed-bottom-container>
-        <ion-button expand="block" @click="validate()">
+        <ion-button expand="block" @click="validate()" :disabled="!valid">
           Choisir le lieu
           <ion-icon slot="end" :icon="chevronForwardOutline"></ion-icon>
         </ion-button>
@@ -49,29 +49,34 @@ import {chevronForwardOutline} from "ionicons/icons";
 import {useRouter} from "vue-router";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
 import {computed, reactive} from "vue";
+import moment from "moment";
 
 const router = useRouter();
 
 const state = reactive({
-  rawDate: new Date().toISOString(),
-  rawStartTime: new Date().toISOString(),
-  rawEndTime: new Date().toISOString(),
+  rawDate: moment().format(),
+  rawStartTime: moment().startOf('hour').format(),
+  rawEndTime: moment().startOf('hour').format(),
 });
 
 const dateBegin = computed(() => {
-  const date = new Date(state.rawDate).toDateString();
-  const time = new Date(state.rawStartTime).toTimeString();
+  const date = moment(state.rawDate).format("YYYY-MM-DD");
+  const time = moment(state.rawStartTime).format("hh:mm:ss");
   return new Date(`${date} ${time}`);
 });
 
 const dateEnd = computed(() => {
-  const date = new Date(state.rawDate).toDateString();
-  const time = new Date(state.rawEndTime).toTimeString();
+  const date = moment(state.rawDate).format("YYYY-MM-DD");
+  const time = moment(state.rawEndTime).format("hh:mm:ss");
   return new Date(`${date} ${time}`);
+});
+
+const valid = computed(() => {
+  return dateBegin.value < dateEnd.value;
 })
 
 const validate = () => {
-  router.push('/add/location');
+  if (valid.value) router.push('/add/location');
 }
 </script>
 

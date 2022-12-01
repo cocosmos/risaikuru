@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import {defineProps, defineEmits, ref, computed} from 'vue';
+import {defineProps, defineEmits, ref, computed, onMounted} from 'vue';
 
 import RewardToggle from '@/components/RewardToggle.vue';
 import RewardCustom from '@/components/RewardCustom.vue';
@@ -31,13 +31,16 @@ const rewards = ref([
 ]);
 const customReward = ref(0);
 
+onMounted(() => {
+  updateReward(props.modelValue);
+})
+
 const isCustomRewardValue = computed(() => {
   const selectedRewardIndex = rewards.value.findIndex((reward) => reward.selected);
   return selectedRewardIndex === -1;
 });
 
 const updateReward = (newValue: number) => {
-  console.log(newValue);
   rewards.value = rewards.value.map((reward) => {
     return {value: reward.value, selected: reward.value === newValue};
   });

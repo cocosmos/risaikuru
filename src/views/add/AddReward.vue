@@ -10,6 +10,7 @@
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding relative">
       <h2 class="ion-text-center">Choisis le montant de la récompense pour le trieur</h2>
+      <reward-toggle-list v-model="rewardAmount"></reward-toggle-list>
       <fixed-bottom-container>
         <ion-button expand="block" @click="validate()">
           Poster mon annonce
@@ -30,11 +31,15 @@ import {
   IonBackButton,
   IonPage
 } from "@ionic/vue";
-import {chevronForwardOutline} from "ionicons/icons";
 import {useRouter} from "vue-router";
+import {ref} from "vue";
+
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
+import RewardToggleList from '@/components/RewardToggleList.vue';
 
 const router = useRouter();
+
+const rewardAmount = ref(0);
 
 const validate = () => {
   router.push('/add/published');

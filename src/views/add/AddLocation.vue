@@ -9,7 +9,7 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding relative">
-      <h2 class="ion-text-center">Choisis l'endroit un tu as veux qu'on vienne te débarrasser</h2>
+      <h2 class="ion-text-center">Choisis l'endroit ou tu veux qu'on vienne te débarrasser</h2>
       <location-search @locationUpdated="saveLocation"></location-search>
       <fixed-bottom-container>
         <ion-button expand="block" @click="validate()" :disabled="!valid">

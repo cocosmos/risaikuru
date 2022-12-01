@@ -28,32 +28,32 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/MessagesTab.vue"),
       },
       {
-        path: "profil",
+        path: "profile",
         component: () => import("@/views/ProfilTab.vue"),
       },
     ],
   },
   {
-    path: "/profil",
-    redirect: "/profil",
+    path: "/profile",
+    redirect: "/profile",
     component: () => TabsPage,
     children: [
       {
-        path: "/profil/mes-annonces",
+        path: "/profile/my-demands",
         component: () => import("@/views/Profil/MyDemands.vue"),
       },
 
       {
-        path: "/profil/mes-annonces/:id",
+        path: "/profile/my-demands/:id",
         component: () => import("@/views/Profil/MyDemand.vue"),
       },
 
       {
-        path: "/profil/paiement",
+        path: "/profile/payment",
         component: () => import("@/views/Profil/PaymentAskOrVerify.vue"),
       },
       {
-        path: "/profil/paiement-confirmé",
+        path: "/profile/payment/confirmed",
         component: () => import("@/views/Profil/PaymentConfirmed.vue"),
       },
     ],

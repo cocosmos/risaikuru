@@ -1,11 +1,13 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
+import Maska from "maska";
 
 import {
   IonBackButton,
   IonBadge,
   IonButton,
+  IonButtons,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -15,11 +17,14 @@ import {
   IonGrid,
   IonIcon,
   IonicVue,
+  IonInput,
   IonItem,
   IonLabel,
+  IonNote,
   IonRow,
   IonSearchbar,
   IonText,
+  IonTextarea,
 } from "@ionic/vue";
 
 /* Core CSS required for Ionic components to work properly */
@@ -42,12 +47,14 @@ import "@ionic/vue/css/display.css";
 import "./theme/variables.css";
 
 const app = createApp(App).use(IonicVue, { mode: "ios" }).use(router);
+
 router.isReady().then(() => {
   app.mount("#app");
 });
 
 /* Add your global components here to avoid the warn in console */
 app
+  .use(Maska)
   .component("ion-icon", IonIcon)
   .component("ion-badge", IonBadge)
   .component("ion-grid", IonGrid)
@@ -63,4 +70,8 @@ app
   .component("ion-card-title", IonCardTitle)
   .component("ion-card-subtitle", IonCardSubtitle)
   .component("ion-back-button", IonBackButton)
+  .component("ion-input", IonInput)
+  .component("ion-textarea", IonTextarea)
+  .component("ion-buttons", IonButtons)
+  .component("ion-note", IonNote)
   .component("ion-card-content", IonCardContent);

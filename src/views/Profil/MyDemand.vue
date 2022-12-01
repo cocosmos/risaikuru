@@ -21,7 +21,7 @@ const demand = demands.find((demand) => demand.id === route.params.id);
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button defaultHref="/profil/mes-annonces"></ion-back-button>
+          <ion-back-button defaultHref="/profile/my-demands"></ion-back-button>
         </ion-buttons>
         <ion-title>Votre annonce</ion-title>
       </ion-toolbar>

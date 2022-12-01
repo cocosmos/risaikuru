@@ -19,7 +19,7 @@ const demands = store.demands;
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button defaultHref="/profil"></ion-back-button>
+          <ion-back-button defaultHref="/profile"></ion-back-button>
         </ion-buttons>
         <ion-title>Mes annonces</ion-title>
       </ion-toolbar>

@@ -5,6 +5,7 @@ export interface User {
   fname: string;
   lname: string;
   email: string;
+  adress?: string;
   profilePicture: string;
   iban?: string;
   totalMoney: number;
@@ -17,5 +18,12 @@ export const createUser = (
   totalMoney = 0,
   profilePicture = "https://ionicframework.com/docs/img/demos/avatar.svg"
 ): User => {
-  return { id: nanoid(), fname, lname, email, profilePicture, totalMoney };
+  return {
+    id: nanoid(),
+    fname,
+    lname,
+    email,
+    profilePicture,
+    totalMoney,
+  };
 };

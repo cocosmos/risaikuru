@@ -10,13 +10,10 @@ import AvatarName from "@/components/AvatarName.vue";
 import CardPot from "@/components/Card/CardPot.vue";
 import { cardOutline, fileTrayFullOutline } from "ionicons/icons";
 import { useRouter } from "vue-router";
+import { store } from "@/data/store";
 
-const user = {
-  fname: "Jean",
-  lname: "de Florette",
-  email: "",
-  profilePicture: "https://ionicframework.com/docs/img/demos/avatar.svg",
-};
+const currentUser = store.currentUser;
+
 const router = useRouter();
 const useLocation = (link: string) => {
   router.push(link);
@@ -31,29 +28,32 @@ const useLocation = (link: string) => {
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding">
-      <div class="profil">
+      <div class="profile">
         <avatar-name
-          :profilePicture="user.profilePicture"
-          :fname="user.fname"
-          :lname="user.lname"
+          :profilePicture="currentUser.profilePicture"
+          :fname="currentUser.fname"
+          :lname="currentUser.lname"
           size="large"
         ></avatar-name>
 
-        <card-pot :balance="10"></card-pot>
-        <ion-button @click="useLocation('/profil/paiement')"
-          >Demande de paiement</ion-button
+        <card-pot :balance="currentUser.totalMoney"></card-pot>
+        <ion-button
+          @click="useLocation('/profile/payment')"
+          :disabled="currentUser.totalMoney <= 20"
         >
-        <div class="profil__line"></div>
+          Demande de paiement</ion-button
+        >
+        <div class="profile__line"></div>
 
-        <div class="profil__menu">
-          <ion-item button @click="useLocation('/profil/mes-annonces')">
+        <div class="profile__menu">
+          <ion-item button @click="useLocation('/profile/my-demands')">
             <ion-icon :icon="fileTrayFullOutline"></ion-icon>
             <ion-label>Mes annonces</ion-label>
           </ion-item>
           <ion-item
             button
             lines="none"
-            @click="useLocation('/profil/paiement')"
+            @click="useLocation('/profile/payment')"
           >
             <ion-icon :icon="cardOutline"></ion-icon>
             <ion-label>Informations de paiement</ion-label>
@@ -65,7 +65,7 @@ const useLocation = (link: string) => {
 </template>
 
 <style lang="scss" scoped>
-.profil {
+.profile {
   display: flex;
   flex-direction: column;
   height: 100%;

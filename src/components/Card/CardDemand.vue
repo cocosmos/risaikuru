@@ -30,7 +30,7 @@ const toggleOpen = () => {
   isOpen.value = !isOpen.value;
 };
 const route = (id: string) => {
-  router.push(`/profil/mes-annonces/${id}`);
+  router.push(`/profile/my-demands/${id}`);
 };
 </script>
 <template>

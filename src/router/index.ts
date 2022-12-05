@@ -31,8 +31,21 @@ const routes: Array<RouteRecordRaw> = [
         path: "profile",
         component: () => import("@/views/ProfilTab.vue"),
       },
+      {
+        path: "login",
+        component: () => import("@/views/Auth/LoginTab.vue"),
+      },
+      {
+        path: "signup",
+        component: () => import("@/views/Auth/SignupTab.vue"),
+      },
+      {
+        path: "password-reset",
+        component: () => import("@/views/Auth/ForgetPassword.vue"),
+      },
     ],
   },
+
   {
     path: "/profile",
     redirect: "/profile",
@@ -58,6 +71,7 @@ const routes: Array<RouteRecordRaw> = [
       },
     ],
   },
+
   { path: "/:catchAll(.*)", component: () => import("@/views/ErrorTab.vue") },
 ];
 

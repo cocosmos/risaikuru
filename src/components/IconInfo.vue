@@ -17,7 +17,7 @@ const props = defineProps<{
 
 let iconFinded = {path: "", name: "", description: ""};
 icons.forEach((icon) => {
-  if (icon.name === props.waste.toString()) {
+  if (icon.name === props.waste) {
     iconFinded = icon;
   }
 });

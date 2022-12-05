@@ -7,7 +7,28 @@
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding relative">
       <h2 class="ion-text-center">Félicitations, ton annonce est publiée</h2>
-      
+      <div class="wastes">
+        <IconInfo v-for="wasteType in newDemand.wasteTypes.value" :waste="wasteType" :key="wasteType"
+                  size="50px"></IconInfo>
+      </div>
+      <div class="infos">
+        <p class="infos__volume">Volume</p>
+        <div class="infos__line">
+          <ion-icon :icon="Icons.calendarOutline" color="primary"></ion-icon>
+          <span>{{ momentStr }}</span>
+        </div>
+        <div class="infos__line">
+          <ion-icon :icon="Icons.location" color="primary"></ion-icon>
+          <span>{{ newDemand.location.value.name }}</span>
+        </div>
+        <div class="infos__line">
+          <ion-icon :icon="Icons.trophy" color="primary"></ion-icon>
+          <span class="infos__reward">
+            {{ newDemand.reward.value }} CHF
+            <span class="infos__reward__fees">+ {{ fees }} CHF (frais)</span>
+          </span>
+        </div>
+      </div>
       <fixed-bottom-container>
         <ion-button expand="block" router-link="/" router-direction="back">
           Retour à l'accueil
@@ -27,19 +48,84 @@ import {
   IonTitle,
   IonContent,
   IonButton,
-  IonPage
+  IonPage,
+  IonIcon
 } from "@ionic/vue";
+import * as Icons from "ionicons/icons";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
 import IonButtonSecondary from "@/components/IonButtonSecondary.vue";
+import IconInfo from "@/components/IconInfo.vue";
 import {useNewDemand} from "@/composables/newDemand";
-import {onMounted} from "vue";
+import {computed, onMounted} from "vue";
+import moment from "moment";
 
 const newDemand = useNewDemand();
 
 onMounted(() => {
   newDemand.published.value = true;
+});
+
+const momentStr = computed(() => {
+  moment.locale("fr");
+  return moment(newDemand.dateBegin.value).format("dddd D MMMM [entre] HH:mm [et] ") + moment(newDemand.dateEnd.value).format("HH:mm");
+});
+
+const fees = computed(() => {
+  return newDemand.reward.value * .25;
 })
+
 </script>
 
-<style>
+<style lang="scss" scoped>
+.wastes {
+  margin-top: 2rem;
+  max-width: 100%;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  justify-content: start;
+  align-items: start;
+}
+
+.infos {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+  margin-top: 1rem;
+
+  &__volume {
+    font-weight: bold;
+  }
+
+  &__line {
+    display: flex;
+    gap: 1rem;
+    font-weight: bold;
+    align-items: center;
+
+    ion-icon {
+      font-size: 50px;
+    }
+
+    span {
+      max-width: 150px;
+    }
+  }
+
+  &__reward {
+    position: relative;
+    color: var(--ion-color-primary);
+    font-size: 1.5rem;
+    font-weight: bold;
+
+    &__fees {
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 0;
+      font-size: .75rem;
+      color: var(--ion-color-text);
+    }
+  }
+}
 </style>

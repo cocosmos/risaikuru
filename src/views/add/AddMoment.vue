@@ -63,13 +63,13 @@ const state = reactive({
 
 const dateBegin = computed(() => {
   const date = moment(state.rawDate).format("YYYY-MM-DD");
-  const time = moment(state.rawStartTime).format("hh:mm:ss");
+  const time = moment(state.rawStartTime).format("HH:mm:ss");
   return new Date(`${date} ${time}`);
 });
 
 const dateEnd = computed(() => {
   const date = moment(state.rawDate).format("YYYY-MM-DD");
-  const time = moment(state.rawEndTime).format("hh:mm:ss");
+  const time = moment(state.rawEndTime).format("HH:mm:ss");
   return new Date(`${date} ${time}`);
 });
 

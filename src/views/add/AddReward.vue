@@ -63,6 +63,7 @@ const newDemand = useNewDemand();
 
 const rewardAmount = ref(5);
 
+// TODO: Mettre ça dans le composable pour povoir le réutiliser dans l'écran de résumé
 const fees = computed(() => {
   return rewardAmount.value * .25;
 });

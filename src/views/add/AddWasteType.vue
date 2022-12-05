@@ -49,6 +49,7 @@ onBeforeMount(() => {
   icons.forEach((icon) => {
     wasteTypes.value.push({waste: icon.name, selected: false});
   });
+  newDemand.published.value = false;
 });
 
 const selectedWaste = computed<Waste[]>(() => {
@@ -64,7 +65,10 @@ const valid = computed(() => {
 });
 
 const validate = () => {
+  console.log(newDemand.wasteTypes.value);
   newDemand.wasteTypes.value = selectedWaste.value;
+  console.log(selectedWaste.value)
+  console.log(newDemand.wasteTypes.value);
   if (valid.value) router.push('/add/quantity');
 }
 

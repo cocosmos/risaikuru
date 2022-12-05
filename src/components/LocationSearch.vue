@@ -36,7 +36,7 @@ import {IonGrid, IonCol, IonRow, IonSearchbar, IonButton, IonIcon} from "@ionic/
 import {locate} from "ionicons/icons";
 import {Geolocation, Position} from "@capacitor/geolocation";
 import axios from "axios";
-import GeocodingClient from "@/services/geocoding"
+import {geocodingClient} from "@/services/mapbox"
 import Location from "@/types/Location";
 import MapboxFeature from "@/types/MapboxFeature";
 
@@ -56,7 +56,7 @@ watchEffect(() => {
 
 const getCurrentLocation = () => {
   Geolocation.getCurrentPosition().then((position) => {
-    GeocodingClient.get(`/${position.coords.longitude},${position.coords.latitude}.json`).then(result => {
+    geocodingClient.get(`/${position.coords.longitude},${position.coords.latitude}.json`).then(result => {
       address.value = result.data.features[0].place_name;
       location.value = {
         lat: position.coords.latitude,
@@ -71,7 +71,7 @@ const getCurrentLocation = () => {
 const searchAdress = () => {
   results.value = [];
   if (address.value !== "" && address.value !== location.value.name) {
-    GeocodingClient.get(`/${address.value}.json`).then(result => {
+    geocodingClient.get(`/${address.value}.json`).then(result => {
       searching.value = true;
       result.data.features.forEach((feature: MapboxFeature) => {
         results.value.push({
@@ -81,6 +81,8 @@ const searchAdress = () => {
         });
       });
     });
+  } else {
+    searching.value = false;
   }
 }
 
@@ -102,6 +104,7 @@ const selectAdress = (newLocation: Location) => {
     border-radius: 10px;
     --placeholder-color: var(--ion-color-primary);
     margin-right: 20px;
+    z-index: 2;
   }
 
   &__searchbar-container {
@@ -117,9 +120,10 @@ const selectAdress = (newLocation: Location) => {
     padding: 0 10px;
     border: 2px solid var(--ion-color-primary);
     border-top: none;
-    border-radius: 10px;
-    z-index: -1;
+    border-radius: 0 0 10px 10px;
+    z-index: 1;
     font-size: .9rem;
+    width: 100%;
 
     & > * {
       padding: 5px 0;

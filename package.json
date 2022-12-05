@@ -22,6 +22,7 @@
     "axios": "^1.2.0",
     "core-js": "^3.6.5",
     "ionicons": "^6.0.3",
+    "mapbox-gl": "^2.11.0",
     "moment": "^2.29.4",
     "nanoid": "^4.0.0",
     "vue": "^3.2.21",
@@ -30,6 +31,7 @@
   "devDependencies": {
     "@capacitor/cli": "4.4.0",
     "@types/jest": "^27.0.2",
+    "@types/mapbox-gl": "^2.7.10",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
     "@vue/cli-plugin-babel": "~5.0.0-rc.1",

@@ -43,10 +43,28 @@ const routes: Array<RouteRecordRaw> = [
         path: "password-reset",
         component: () => import("@/views/Auth/ForgetPassword.vue"),
       },
+      {
+        path: "/profile/my-demands",
+        component: () => import("@/views/Profil/MyDemands.vue"),
+      },
+
+      {
+        path: "/profile/my-demands/:id",
+        component: () => import("@/views/Profil/MyDemand.vue"),
+      },
+
+      {
+        path: "/profile/payment",
+        component: () => import("@/views/Profil/PaymentAskOrVerify.vue"),
+      },
+      {
+        path: "/profile/payment/confirmed",
+        component: () => import("@/views/Profil/PaymentConfirmed.vue"),
+      },
     ],
   },
 
-  {
+  /*   {
     path: "/profile",
     redirect: "/profile",
     component: () => TabsPage,
@@ -70,7 +88,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/Profil/PaymentConfirmed.vue"),
       },
     ],
-  },
+  }, */
 
   { path: "/:catchAll(.*)", component: () => import("@/views/ErrorTab.vue") },
 ];

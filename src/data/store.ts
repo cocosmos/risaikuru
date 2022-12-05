@@ -1,5 +1,6 @@
 import { createDemand } from "@/types/Demand";
-import { createUser } from "@/types/User";
+import { createUser, UserType } from "@/types/User";
+import { Session, User } from "@supabase/supabase-js";
 import { reactive } from "vue";
 
 export const store = reactive({
@@ -57,16 +58,8 @@ export const store = reactive({
       new Date()
     ),
   ],
+  user: {} as UserType,
+  session: {} as Session | null,
 
-  currentUser: createUser(
-    "Jean",
-    "Dupont",
-    "jean.dupont@example.com",
-
-    25
-  ),
-  update() {
-    this.currentUser.iban = "CH12 3456 7890 1234 5678 9";
-    this.currentUser.adress = "chemin de la fontaine 3, 1000 Lausanne";
-  },
+  currentUser: {} as User,
 });

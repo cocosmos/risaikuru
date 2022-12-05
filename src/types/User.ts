@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
 
-export interface User {
+export interface UserType {
   id: string;
   fname: string;
   lname: string;
@@ -8,22 +8,22 @@ export interface User {
   adress?: string;
   profilePicture: string;
   iban?: string;
-  totalMoney: number;
+  balance: number;
 }
 
 export const createUser = (
   fname: string,
   lname: string,
   email: string,
-  totalMoney = 0,
-  profilePicture = "https://ionicframework.com/docs/img/demos/avatar.svg"
-): User => {
+  balance = 0,
+  profilePicture = "../assets/avatar.svg"
+): UserType => {
   return {
     id: nanoid(),
     fname,
     lname,
     email,
     profilePicture,
-    totalMoney,
+    balance,
   };
 };

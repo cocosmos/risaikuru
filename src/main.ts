@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import Maska from "maska";
+import { defineCustomElements } from "@ionic/pwa-elements/loader";
 
 import {
   IonBackButton,
@@ -75,3 +76,5 @@ app
   .component("ion-buttons", IonButtons)
   .component("ion-note", IonNote)
   .component("ion-card-content", IonCardContent);
+
+defineCustomElements(window);

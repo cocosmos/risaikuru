@@ -1,4 +1,4 @@
-import { User } from "./User";
+import { UserType } from "./User";
 import { nanoid } from "nanoid";
 
 export type Waste =
@@ -24,7 +24,7 @@ export interface Demand {
   quantity: Quantity[];
   adress: string;
   status: Status;
-  user: User;
+  user: UserType;
   reward: number;
   dateBegin: Date;
   dateEnd: Date;
@@ -35,7 +35,7 @@ export const createDemand = (
   waste: Waste[],
   quantity: Quantity[],
   adress: string,
-  user: User,
+  user: UserType,
   reward: number,
   dateBegin: Date,
   dateEnd: Date

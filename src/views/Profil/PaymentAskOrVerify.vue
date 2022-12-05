@@ -15,8 +15,7 @@ import { regexCheckIban } from "@/utils/helper";
 const isIbanValid = ref<null | boolean>(null);
 const ibanValue = ref("");
 
-store.update();
-const currentUser = store.currentUser;
+const currentUser = store.user;
 const router = useRouter();
 
 const texts = [

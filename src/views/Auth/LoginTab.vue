@@ -61,16 +61,6 @@ const handleLogin = async () => {
           :is-error="false"
         >
         </text-field>
-        <ion-item fill="outline" mode="md" class="ion-margin-bottom">
-          <ion-label position="floating">Email</ion-label>
-          <ion-input
-            v-model="email"
-            name="email"
-            autocomplete="email"
-            type="email"
-            required
-          ></ion-input>
-        </ion-item>
         <password-show-hide
           v-model="password"
           :error="'Mot de passe incorrect'"

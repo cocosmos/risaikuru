@@ -38,8 +38,10 @@ import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
 import {icons} from "../../assets/icons/index";
 import {Waste} from "@/types/Demand";
 import {computed, ComputedRef, onBeforeMount, reactive, ref} from "vue";
+import {useNewDemand} from "@/composables/newDemand";
 
 const router = useRouter();
+const newDemand = useNewDemand();
 
 const wasteTypes = ref<{ waste: Waste, selected: boolean }[]>([]);
 
@@ -62,6 +64,7 @@ const valid = computed(() => {
 });
 
 const validate = () => {
+  newDemand.wasteTypes.value = selectedWaste.value;
   if (valid.value) router.push('/add/quantity');
 }
 

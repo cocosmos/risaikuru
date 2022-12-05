@@ -7,7 +7,7 @@
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding relative">
       <h2 class="ion-text-center">Félicitations, ton annonce est publiée</h2>
-
+      
       <fixed-bottom-container>
         <ion-button expand="block" router-link="/" router-direction="back">
           Retour à l'accueil
@@ -31,7 +31,14 @@ import {
 } from "@ionic/vue";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
 import IonButtonSecondary from "@/components/IonButtonSecondary.vue";
+import {useNewDemand} from "@/composables/newDemand";
+import {onMounted} from "vue";
 
+const newDemand = useNewDemand();
+
+onMounted(() => {
+  newDemand.published.value = true;
+})
 </script>
 
 <style>

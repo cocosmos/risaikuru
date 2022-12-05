@@ -49,8 +49,10 @@ import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
 import QuantityStepper from '@/components/QuantityStepper.vue';
 import StackList from "@/components/StackList.vue";
 import {cube, logoDropbox, bag, car} from "ionicons/icons"
+import {useNewDemand} from "@/composables/newDemand";
 
 const router = useRouter();
+const newDemand = useNewDemand();
 
 const quantities = reactive({
   s: 0,
@@ -64,6 +66,7 @@ const valid = computed(() => {
 });
 
 const validate = () => {
+  newDemand.quantities.value = quantities;
   if (valid.value) router.push('/add/moment');
 }
 </script>

@@ -43,8 +43,10 @@ import Location from "@/types/Location";
 import {ACCESS_TOKEN} from "@/services/mapbox";
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import {useNewDemand} from "@/composables/newDemand";
 
 const router = useRouter();
+const newDemand = useNewDemand();
 
 mapboxgl.accessToken = ACCESS_TOKEN;
 let map: mapboxgl.Map | undefined;
@@ -61,7 +63,7 @@ onMounted(() => {
     zoom: 9, // starting zoom
   });
 
-  map.on('load', function () {
+  map.on('load', () => {
     map.resize();
   });
 });
@@ -88,6 +90,7 @@ const saveLocation = (value: Location) => {
 }
 
 const validate = () => {
+  newDemand.location.value = location.value;
   if (valid.value) router.push('/add/reward')
 }
 </script>

@@ -56,8 +56,10 @@ import {computed, ref} from "vue";
 
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
 import RewardToggleList from '@/components/RewardToggleList.vue';
+import {useNewDemand} from "@/composables/newDemand";
 
 const router = useRouter();
+const newDemand = useNewDemand();
 
 const rewardAmount = ref(5);
 
@@ -70,6 +72,7 @@ const total = computed(() => {
 })
 
 const validate = () => {
+  newDemand.reward.value = rewardAmount.value;
   router.push('/add/published');
 }
 </script>

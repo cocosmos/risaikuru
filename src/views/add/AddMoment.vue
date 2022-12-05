@@ -50,8 +50,10 @@ import {useRouter} from "vue-router";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
 import {computed, reactive} from "vue";
 import moment from "moment";
+import {useNewDemand} from "@/composables/newDemand";
 
 const router = useRouter();
+const newDemand = useNewDemand();
 
 const state = reactive({
   rawDate: moment().format(),
@@ -76,6 +78,8 @@ const valid = computed(() => {
 })
 
 const validate = () => {
+  newDemand.dateBegin.value = dateBegin.value;
+  newDemand.dateEnd.value = dateEnd.value;
   if (valid.value) router.push('/add/location');
 }
 </script>

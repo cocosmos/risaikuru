@@ -13,7 +13,7 @@
           >
           </ion-searchbar>
           <div class="location-search__results" v-if="searching">
-            <span v-for="result in results" :key="result">{{ result.name }}</span>
+            <span v-for="result in results" :key="result" @click="selectAdress(result)">{{ result.name }}</span>
           </div>
         </div>
       </ion-col>
@@ -31,47 +31,63 @@
 * TODO: Emettre la localisation quand une adresse est selectionnée... Pour l'instant le composant n'emmet la localisation que quand le bouton de localisation est cliqué
 * */
 
-import {defineEmits, ref} from 'vue';
+import {defineEmits, ref, watchEffect} from 'vue';
 import {IonGrid, IonCol, IonRow, IonSearchbar, IonButton, IonIcon} from "@ionic/vue";
 import {locate} from "ionicons/icons";
 import {Geolocation, Position} from "@capacitor/geolocation";
 import axios from "axios";
 import GeocodingClient from "@/services/geocoding"
 import Location from "@/types/Location";
+import MapboxFeature from "@/types/MapboxFeature";
 
 const emit = defineEmits<{
-  (e: 'locationUpdated', value: { lat: number, long: number }): void
+  (e: 'locationUpdated', value: Location): void
 }>();
 
 const searching = ref(false);
 const address = ref("");
 const results = ref<Location[]>([]);
+const location = ref<Location>({lat: 0, long: 0, name: ""});
+
+
+watchEffect(() => {
+  emit('locationUpdated', location.value);
+});
 
 const getCurrentLocation = () => {
   Geolocation.getCurrentPosition().then((position) => {
     GeocodingClient.get(`/${position.coords.longitude},${position.coords.latitude}.json`).then(result => {
       address.value = result.data.features[0].place_name;
+      location.value = {
+        lat: position.coords.latitude,
+        long: position.coords.longitude,
+        name: result.data.features[0].place_name
+      }
     })
-    emit('locationUpdated', {lat: position.coords.latitude, long: position.coords.longitude})
+    searching.value = false;
   });
 }
 
 const searchAdress = () => {
   results.value = [];
-  if (address.value !== "") {
+  if (address.value !== "" && address.value !== location.value.name) {
     GeocodingClient.get(`/${address.value}.json`).then(result => {
       searching.value = true;
-      // TODO : Enlever ce type dégeulasse
-      result.data.features.forEach((feature: { place_name: string; geometry: { coordinates: number[]; }; }) => {
+      result.data.features.forEach((feature: MapboxFeature) => {
         results.value.push({
           name: feature.place_name,
           lat: feature.geometry.coordinates[1],
           long: feature.geometry.coordinates[0]
         });
       });
-      console.log(results.value);
     });
   }
+}
+
+const selectAdress = (newLocation: Location) => {
+  address.value = newLocation.name;
+  location.value = newLocation;
+  searching.value = false;
 }
 </script>
 

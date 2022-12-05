@@ -38,12 +38,13 @@ import {useRouter} from "vue-router";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
 import LocationSearch from '@/components/LocationSearch.vue';
 import {computed, ref} from "vue";
+import Location from "@/types/Location";
 
 const router = useRouter();
 
-const location = ref<{ lat: number, long: number }>({lat: 0, long: 0});
+const location = ref<Location>({lat: 0, long: 0, name: ""});
 
-const saveLocation = (value: { lat: number, long: number }) => {
+const saveLocation = (value: Location) => {
   location.value = value;
 }
 

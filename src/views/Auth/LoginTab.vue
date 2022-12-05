@@ -5,9 +5,6 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-  IonItem,
-  IonLabel,
-  IonInput,
   IonButton,
   loadingController,
 } from "@ionic/vue";

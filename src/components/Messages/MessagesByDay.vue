@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { defineProps } from "vue";
-
+import { fDay } from "@/utils/format";
 import MessageCard from "@/components/Messages/MessageCard.vue";
 import { Day } from "@/types/Message";
-import { fDay } from "@/utils/format";
+import { IonText } from "@ionic/vue";
 defineProps<{
   day: Day;
 }>();
@@ -11,7 +11,9 @@ defineProps<{
 
 <template>
   <ion-text
-    ><p class="conversation__date">{{ fDay(day.date) }}</p></ion-text
+    ><p class="conversation__date">
+      {{ fDay(new Date(day.date)) }}
+    </p></ion-text
   >
   <message-card
     v-for="message in day.messages"

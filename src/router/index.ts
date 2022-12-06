@@ -25,6 +25,10 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: "messages",
+        component: () => import("@/views/MessagesTab.vue"),
+      },
+      {
+        path: "messages/:id",
         component: () => import("@/views/Conversation/ConversationTab.vue"),
       },
       {

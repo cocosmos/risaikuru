@@ -7,6 +7,7 @@ export interface Message {
   user: UserType;
   content: string;
   createdAt: Date;
+  isRead: boolean;
 }
 
 export interface Conversation {
@@ -14,10 +15,10 @@ export interface Conversation {
   sender: UserType;
   receiver: UserType;
   demand: Demand;
-  days: Day[];
+  messages: Message[];
 }
 
 export interface Day {
-  date: Date;
+  date: string;
   messages: Message[];
 }

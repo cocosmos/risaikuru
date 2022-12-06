@@ -25,7 +25,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: "messages",
-        component: () => import("@/views/MessagesTab.vue"),
+        component: () => import("@/views/Conversation/ConversationTab.vue"),
       },
       {
         path: "profile",

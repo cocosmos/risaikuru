@@ -64,7 +64,7 @@ const labels: Label[] = [
   },
 ];
 
-let label = ref(labels[0]);
+let label = ref({} as Label);
 label.value = labels.find(
   (l) => props.demand.status === l.status && isAsker.value === l.isAsker
 ) as Label;
@@ -92,26 +92,25 @@ switch (label.value.status) {
   <ion-card class="ion-no-margin">
     <ion-card-header :color="colorHeader">
       <ion-card-subtitle>{{ fDay(demand.dateBegin) }}</ion-card-subtitle>
+      <ion-text v-if="label.isAsker && label.status === 'pending'">
+        {{ formatMoney(props.demand.reward + props.demand.fees) }}
+        <span class="price__fees"> (Frais inclus)</span>
+      </ion-text>
     </ion-card-header>
 
     <ion-card-content>
-      <ion-text
+      <ion-text class="text__label"
         ><p>{{ label.text }}</p></ion-text
       >
-      <ion-text v-if="label.isAsker && label.status === 'pending'">
-        <p>
-          {{ formatMoney(props.demand.reward + props.demand.fees)
-          }}<span> (Frais inclus)</span>
-        </p>
-      </ion-text>
-      <ion-button
-        shape="round"
-        expand="full"
-        :color="label.colorButton"
-        v-if="label.button"
-      >
+
+      <ion-button shape="round" :color="label.colorButton" v-if="label.button">
         <ion-icon slot="start" :icon="label.icon"></ion-icon>
-        {{ label.button }}
+        <ion-text>
+          {{ label.button + " " }}
+          <ion-text v-if="label.isAsker && label.status === 'pending'">
+            {{ formatMoney(props.demand.reward + props.demand.fees) }}
+          </ion-text>
+        </ion-text>
       </ion-button>
     </ion-card-content>
   </ion-card>
@@ -124,11 +123,11 @@ ion-card {
   &-header {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     text-align: center;
-    padding: 1em;
+    padding: 0.8em;
     ion-card-subtitle {
-      font-size: 1.2em;
+      font-size: 1em;
       text-transform: lowercase;
       font-weight: normal;
     }
@@ -139,18 +138,18 @@ ion-card {
     border-radius: 1.5em;
   }
   &-content {
-    padding-top: 5%;
-    ion-text {
+    padding: 1%;
+    padding-top: 3%;
+    text-align: center;
+    .text__label {
       color: var(--ion-color-text);
-      text-align: center;
-      p {
-        font-size: 1em;
-        font-weight: 500;
-      }
-      span {
-        font-size: 0.7em;
-        font-weight: 300;
-      }
+    }
+  }
+
+  .price {
+    &__fees {
+      font-size: 0.7em;
+      font-weight: 300;
     }
   }
 }

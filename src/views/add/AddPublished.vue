@@ -12,7 +12,13 @@
                   size="50px"></IconInfo>
       </div>
       <div class="infos">
-        <p class="infos__volume">Volume</p>
+        <div class="infos__volume">
+          <p>Volume</p>
+          <div class="infos__quantities">
+            <quantity-on-card v-for="quantity in newDemand.quantities.value" :quantity="quantity"
+                              :key="quantity.id"></quantity-on-card>
+          </div>
+        </div>
         <div class="infos__line">
           <ion-icon :icon="Icons.calendarOutline" color="primary"></ion-icon>
           <span>{{ momentStr }}</span>
@@ -55,6 +61,7 @@ import * as Icons from "ionicons/icons";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
 import IonButtonSecondary from "@/components/IonButtonSecondary.vue";
 import IconInfo from "@/components/IconInfo.vue";
+import QuantityOnCard from "@/components/QuantityOnCard.vue";
 import {useNewDemand} from "@/composables/newDemand";
 import {computed, onMounted} from "vue";
 import moment from "moment";
@@ -80,11 +87,11 @@ const fees = computed(() => {
 .wastes {
   margin-top: 2rem;
   max-width: 100%;
-  display: grid;
+  display: flex;
   gap: 1rem;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  justify-content: start;
-  align-items: start;
+  justify-content: center;
+  align-items: center;
 }
 
 .infos {
@@ -96,6 +103,17 @@ const fees = computed(() => {
 
   &__volume {
     font-weight: bold;
+    margin-bottom: 1rem;
+
+    p {
+      text-align: center;
+      margin-bottom: 0;
+    }
+  }
+
+  &__quantities {
+    display: flex;
+    gap: .5rem;
   }
 
   &__line {

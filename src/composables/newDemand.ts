@@ -36,7 +36,7 @@ const published = ref(false);
 export const useNewDemand = () => {
   const router = useRouter();
 
-  onMounted(() => {
+  onBeforeMount(() => {
     if (wasteTypes.value.length <= 0) {
       router.replace("/add/type");
     } else if (!hasQuantity.value) {

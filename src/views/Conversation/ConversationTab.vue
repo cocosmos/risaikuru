@@ -9,95 +9,78 @@ import {
   IonBackButton,
   IonButton,
   IonIcon,
+  IonInput,
+  IonItem,
+  IonLabel,
 } from "@ionic/vue";
 import { onMounted, ref } from "vue";
 import { createUser } from "../../types/User";
 import MessagesByDay from "@/components/Messages/MessagesByDay.vue";
-import { Conversation } from "@/types/Message";
+import { Conversation, Day } from "@/types/Message";
 import { send } from "ionicons/icons";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
-import FixedTopContainer from "@/components/FixedTopContainer.vue";
-import TextField from "@/components/Input/TextField.vue";
 import CardConversation from "@/components/Card/CardConversation.vue";
 import { store } from "@/data/store";
+import { returnMessagesByDay } from "@/utils/helper";
 const sender = ref(createUser("John", "Doe", "example@example.com"));
 const receiver = ref(createUser("Jack", "Doe", "example@example.com"));
+
 const conversation = ref<Conversation>({
   id: "1",
   sender: sender.value,
   demand: store.demands[0],
   receiver: receiver.value,
-  days: [
+  messages: [
     {
-      date: new Date(),
-      messages: [
-        {
-          id: "1",
-          isSender: true,
-          user: sender.value,
-          content: "Hello",
-          createdAt: new Date(),
-        },
-        {
-          id: "2",
-          isSender: false,
-          user: receiver.value,
-          content: "Hi",
-          createdAt: new Date(),
-        },
-        {
-          id: "3",
-          isSender: false,
-          user: receiver.value,
-          content:
-            "Bonjour, je peux venir vers 15h pour chercher vos déchets, pouvez vous les mettre devant votre porte ?",
-          createdAt: new Date(),
-        },
-      ],
+      id: "1",
+      isSender: true,
+      user: store.users[0],
+      content: "Hello",
+      createdAt: new Date(),
+      isRead: false,
     },
     {
-      date: new Date(),
-      messages: [
-        {
-          id: "1",
-          isSender: true,
-          user: sender.value,
-          content: "Hello",
-          createdAt: new Date(),
-        },
-        {
-          id: "2",
-          isSender: false,
-          user: receiver.value,
-          content: "Hi",
-          createdAt: new Date(),
-        },
-        {
-          id: "3",
-          isSender: false,
-          user: receiver.value,
-          content:
-            "Bonjour, je peux venir vers 15h pour chercher vos déchets, pouvez vous les mettre devant votre porte ?",
-          createdAt: new Date(),
-        },
-      ],
+      id: "2",
+      isSender: false,
+      user: store.users[0],
+      content: "Hi",
+      createdAt: new Date(),
+      isRead: false,
+    },
+    {
+      id: "3",
+      isSender: false,
+      user: store.users[0],
+      content:
+        "Bonjour, je peux venir vers 15h pour chercher vos déchets, pouvez vous les mettre devant votre porte ?",
+      createdAt: new Date(99999999),
+      isRead: false,
     },
   ],
 });
+
+const days = ref<Day[]>(returnMessagesByDay(conversation.value.messages));
+
 const content = ref();
 const scrollBottom = () => {
   content.value.$el.scrollToBottom();
 };
 
 const message = ref("");
+
 const handleMessage = () => {
-  conversation.value.days[1].messages.push({
+  if (message.value === "") return;
+  conversation.value.messages.push({
     id: "4",
     isSender: true,
     user: sender.value,
     content: message.value,
     createdAt: new Date(),
+    isRead: false,
   });
+  message.value = "";
+
+  days.value = returnMessagesByDay(conversation.value.messages);
   scrollBottom();
 };
 onMounted(() => {
@@ -118,32 +101,33 @@ onMounted(() => {
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding" ref="content">
       <div class="conversation">
-        <fixed-top-container>
+        <div class="conversation__fixed">
           <card-conversation
             :demand="conversation.demand"
             :is-asker="true"
           ></card-conversation>
-        </fixed-top-container>
+        </div>
 
         <div class="conversation__messages">
-          <messages-by-day
-            v-for="day in conversation.days"
-            :key="day.date.toISOString"
-            :day="day"
-          />
+          <messages-by-day v-for="day in days" :key="day.date" :day="day" />
         </div>
+
         <fixed-bottom-container>
           <div class="conversation__input">
             <form @submit.prevent="handleMessage">
-              <text-field
-                :isError="false"
-                label="Votre Message"
-                name="message"
-                :isMargin="true"
-                v-model="message"
-                ><ion-button slot="end" fill="clear" type="submit">
-                  <ion-icon :icon="send" /> </ion-button
-              ></text-field>
+              <ion-item fill="outline" mode="md">
+                <ion-label position="floating">Votre Message</ion-label>
+                <ion-input
+                  :name="message"
+                  type="text"
+                  required
+                  :maxlength="80"
+                  v-model="message"
+                ></ion-input>
+                <ion-button slot="end" fill="clear" type="submit">
+                  <ion-icon :icon="send" />
+                </ion-button>
+              </ion-item>
             </form>
           </div>
         </fixed-bottom-container>
@@ -154,8 +138,18 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .conversation {
+  &__fixed {
+    position: fixed;
+    top: 50px;
+    left: var(--padding-start);
+    width: calc(100% - var(--padding-end) - var(--padding-start));
+  }
+  &__messages {
+    margin-top: 140px;
+  }
   &__input {
     position: relative;
+
     &::before {
       content: "";
       position: absolute;

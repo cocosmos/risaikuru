@@ -12,5 +12,10 @@ export interface Conversation {
   id: string;
   sender: UserType;
   receiver: UserType;
+  days: Day[];
+}
+
+export interface Day {
+  date: Date;
   messages: Message[];
 }

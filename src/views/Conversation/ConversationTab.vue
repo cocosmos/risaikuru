@@ -10,8 +10,9 @@ import {
 } from "@ionic/vue";
 import { ref } from "vue";
 import { createUser } from "../../types/User";
-import MessageCard from "@/components/Messages/MessageCard.vue";
+import MessagesByDay from "@/components/Messages/MessagesByDay.vue";
 import { Conversation } from "@/types/Message";
+import { send } from "ionicons/icons";
 
 const sender = ref(createUser("John", "Doe", "example@example.com"));
 const receiver = ref(createUser("Jack", "Doe", "example@example.com"));
@@ -19,20 +20,60 @@ const conversation = ref<Conversation>({
   id: "1",
   sender: sender.value,
   receiver: receiver.value,
-  messages: [
+  days: [
     {
-      id: "1",
-      isSender: true,
-      user: sender.value,
-      content: "Hello",
-      createdAt: new Date(),
+      date: new Date(),
+      messages: [
+        {
+          id: "1",
+          isSender: true,
+          user: sender.value,
+          content: "Hello",
+          createdAt: new Date(),
+        },
+        {
+          id: "2",
+          isSender: false,
+          user: receiver.value,
+          content: "Hi",
+          createdAt: new Date(),
+        },
+        {
+          id: "3",
+          isSender: false,
+          user: receiver.value,
+          content:
+            "Bonjour, je peux venir vers 15h pour chercher vos déchets, pouvez vous les mettre devant votre porte ?",
+          createdAt: new Date(),
+        },
+      ],
     },
     {
-      id: "2",
-      isSender: false,
-      user: receiver.value,
-      content: "Hi",
-      createdAt: new Date(),
+      date: new Date(),
+      messages: [
+        {
+          id: "1",
+          isSender: true,
+          user: sender.value,
+          content: "Hello",
+          createdAt: new Date(),
+        },
+        {
+          id: "2",
+          isSender: false,
+          user: receiver.value,
+          content: "Hi",
+          createdAt: new Date(),
+        },
+        {
+          id: "3",
+          isSender: false,
+          user: receiver.value,
+          content:
+            "Bonjour, je peux venir vers 15h pour chercher vos déchets, pouvez vous les mettre devant votre porte ?",
+          createdAt: new Date(),
+        },
+      ],
     },
   ],
 });
@@ -50,11 +91,23 @@ const conversation = ref<Conversation>({
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding">
-      <message-card
-        v-for="message in conversation.messages"
-        :key="message.id"
-        :message="message"
-      ></message-card>
+      <div class="conversation">
+        <div class="conversation__messages">
+          <messages-by-day
+            v-for="day in conversation.days"
+            :key="day.date.toISOString"
+            :day="day"
+          />
+        </div>
+        <div class="conversation__input">
+          <ion-item>
+            <ion-input placeholder="Votre message"></ion-input>
+            <ion-button slot="end" fill="clear">
+              <ion-icon :icon="send" />
+            </ion-button>
+          </ion-item>
+        </div>
+      </div>
     </ion-content>
   </ion-page>
 </template>

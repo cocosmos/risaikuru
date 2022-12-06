@@ -5,7 +5,7 @@
         <ion-title>Nouvelle demande</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content :fullscreen="true" class="ion-padding relative">
+    <ion-content :fullscreen="true" class="ion-padding relative background">
       <h2 class="ion-text-center">Félicitations, ton annonce est publiée</h2>
       <div class="wastes">
         <IconInfo v-for="wasteType in newDemand.wasteTypes.value" :waste="wasteType" :key="wasteType"
@@ -90,6 +90,12 @@ const fees = computed(() => {
 </script>
 
 <style lang="scss" scoped>
+.background {
+  --background: none;
+  background: white url("../../assets/summary-background.png") center 105% no-repeat;
+  background-size: 125%;
+}
+
 .wastes {
   margin-top: 2rem;
   max-width: 100%;

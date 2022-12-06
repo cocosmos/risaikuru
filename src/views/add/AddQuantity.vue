@@ -11,6 +11,10 @@
     <ion-content :fullscreen="true" class="ion-padding relative">
       <h2 class="ion-text-center">Choisis la quantité de déchêts que tu dois débarrasser</h2>
       <stack-list>
+        <quantity-stepper v-for="quantity in newDemand.quantities.value" v-model="quantity.number" :size="quantity.id"
+                          :icon="cube" :key="quantity.id"
+                          :description="quantity.description"></quantity-stepper>
+        <!--
         <quantity-stepper v-model="quantities.s" size="s" :icon="cube"
                           description="Équivalent d'une boite à chaussures"></quantity-stepper>
         <quantity-stepper v-model="quantities.m" size="m" :icon="bag"
@@ -19,6 +23,7 @@
                           description="Équivalent d'un carton de déménagement"></quantity-stepper>
         <quantity-stepper v-model="quantities.xl" size="xl" :icon="car"
                           description="Environ 200 litres"></quantity-stepper>
+                          -->
       </stack-list>
       <fixed-bottom-container>
         <ion-button expand="block" @click="validate()" :disabled="!valid">
@@ -44,7 +49,7 @@ import {
 } from "@ionic/vue";
 import {chevronForwardOutline} from "ionicons/icons";
 import {useRouter} from "vue-router";
-import {computed, reactive} from "vue";
+import {computed} from "vue";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
 import QuantityStepper from '@/components/QuantityStepper.vue';
 import StackList from "@/components/StackList.vue";
@@ -54,19 +59,11 @@ import {useNewDemand} from "@/composables/newDemand";
 const router = useRouter();
 const newDemand = useNewDemand();
 
-const quantities = reactive({
-  s: 0,
-  m: 0,
-  l: 0,
-  xl: 0
-});
-
 const valid = computed(() => {
-  return quantities.s > 0 || quantities.m > 0 || quantities.l > 0 || quantities.xl > 0;
+  return newDemand.hasQuantity.value;
 });
 
 const validate = () => {
-  newDemand.quantities.value = quantities;
   if (valid.value) router.push('/add/moment');
 }
 </script>

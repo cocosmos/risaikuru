@@ -1,15 +1,32 @@
 import { computed, onBeforeMount, onMounted, reactive, ref } from "vue";
 import { Waste } from "@/types/Demand";
 import Location from "@/types/Location";
+import { Quantity } from "@/types/Demand";
 import { useRouter } from "vue-router";
 
 const wasteTypes = ref<Waste[]>([]);
-const quantities = ref({
-  s: 0,
-  m: 0,
-  l: 0,
-  xl: 0,
-});
+const quantities = ref<Quantity[]>([
+  {
+    id: "S",
+    number: 0,
+    description: "Équivalent d'une boite à chaussures",
+  },
+  {
+    id: "M",
+    number: 0,
+    description: "Équivalent d'un sac de courses",
+  },
+  {
+    id: "L",
+    number: 0,
+    description: "Équivalent d'un carton de déménagement",
+  },
+  {
+    id: "XL",
+    number: 0,
+    description: "Environ 200 litres",
+  },
+]);
 const dateBegin = ref<Date>();
 const dateEnd = ref<Date>();
 const location = ref<Location>();
@@ -34,12 +51,10 @@ export const useNewDemand = () => {
   });
 
   const hasQuantity = computed(() => {
-    return (
-      quantities.value.s > 0 ||
-      quantities.value.m > 0 ||
-      quantities.value.l > 0 ||
-      quantities.value.xl > 0
-    );
+    for (const quantity of quantities.value) {
+      if (quantity.number > 0) return true;
+    }
+    return false;
   });
 
   return {
@@ -50,5 +65,6 @@ export const useNewDemand = () => {
     location,
     reward,
     published,
+    hasQuantity,
   };
 };

@@ -15,7 +15,7 @@
         <div class="infos__volume">
           <p>Volume</p>
           <div class="infos__quantities">
-            <quantity-on-card v-for="quantity in newDemand.quantities.value" :quantity="quantity"
+            <quantity-on-card v-for="quantity in quantities" :quantity="quantity"
                               :key="quantity.id"></quantity-on-card>
           </div>
         </div>
@@ -70,6 +70,12 @@ const newDemand = useNewDemand();
 
 onMounted(() => {
   newDemand.published.value = true;
+});
+
+const quantities = computed(() => {
+  return newDemand.quantities.value.filter((quantity) => {
+    return quantity.number > 0;
+  })
 });
 
 const momentStr = computed(() => {

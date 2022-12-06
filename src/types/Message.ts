@@ -2,13 +2,15 @@ import { UserType } from "./User";
 
 export interface Message {
   id: string;
+  isSender: boolean;
+  user: UserType;
   content: string;
-  sended: Date;
+  createdAt: Date;
 }
 
 export interface Conversation {
   id: string;
-  messages: Message[];
   sender: UserType;
   receiver: UserType;
+  messages: Message[];
 }

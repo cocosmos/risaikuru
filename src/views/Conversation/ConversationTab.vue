@@ -10,10 +10,12 @@ import {
 } from "@ionic/vue";
 import { ref } from "vue";
 import { createUser } from "../../types/User";
+import MessageCard from "@/components/Messages/MessageCard.vue";
+import { Conversation } from "@/types/Message";
 
 const sender = ref(createUser("John", "Doe", "example@example.com"));
 const receiver = ref(createUser("Jack", "Doe", "example@example.com"));
-const conversation = ref({
+const conversation = ref<Conversation>({
   id: "1",
   sender: sender.value,
   receiver: receiver.value,
@@ -48,14 +50,11 @@ const conversation = ref({
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding">
-      <ion-list>
-        <div v-for="message in conversation.messages" :key="message.id">
-          <ion-label>
-            <h2>{{ message.user.fname }} {{ message.user.lname }}</h2>
-            <p>{{ message.content }}</p>
-          </ion-label>
-        </div>
-      </ion-list>
+      <message-card
+        v-for="message in conversation.messages"
+        :key="message.id"
+        :message="message"
+      ></message-card>
     </ion-content>
   </ion-page>
 </template>

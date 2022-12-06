@@ -76,6 +76,7 @@ onMounted(() => {
   newDemand.saveDemand();
 });
 
+// TODO: mettre cette propriété computed dans le composable pour pouvoir envoyer le resultat de celle-ci à supabase
 const quantities = computed(() => {
   return newDemand.quantities.value.filter((quantity) => {
     return quantity.number > 0;

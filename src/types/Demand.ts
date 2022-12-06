@@ -1,5 +1,6 @@
 import { UserType } from "./User";
 import { nanoid } from "nanoid";
+import Location from "@/types/Location";
 
 export type Waste =
   | "alu"
@@ -12,6 +13,7 @@ export type Waste =
   | "verre";
 export type Status = "pending" | "accepted" | "rejected";
 export type QuantityId = "S" | "M" | "L" | "XL";
+
 export interface Quantity {
   id: QuantityId;
   number: number;
@@ -22,7 +24,7 @@ export interface Demand {
   id: string;
   waste: Waste[];
   quantity: Quantity[];
-  adress: string;
+  location: Location;
   status: Status;
   user: UserType;
   reward: number;
@@ -34,7 +36,7 @@ export interface Demand {
 export const createDemand = (
   waste: Waste[],
   quantity: Quantity[],
-  adress: string,
+  location: Location,
   user: UserType,
   reward: number,
   dateBegin: Date,
@@ -44,7 +46,7 @@ export const createDemand = (
     id: nanoid(),
     waste,
     quantity,
-    adress,
+    location,
     status: "pending",
     user,
     dateBegin,

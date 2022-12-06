@@ -7,18 +7,49 @@ import {
   IonContent,
   IonRange,
 } from "@ionic/vue";
-import { locate } from "ionicons/icons";
+import {locate} from "ionicons/icons";
 import CardDemand from "../components/Card/CardDemand.vue";
-import { Geolocation } from "@capacitor/geolocation";
-import { store } from "@/data/store";
+import {Geolocation} from "@capacitor/geolocation";
+import {store} from "@/data/store";
 import LocationSearch from "@/components/LocationSearch.vue";
+import {onMounted, ref} from "vue";
+import {createDemand, Demand} from "@/types/Demand";
+import {supabase} from "@/data/supabase";
+import {createUser} from "@/types/User";
 
 const pinFormatter = (value: number) => `${value}km`;
 const printPosition = async (coordinates: any) => {
   console.log("Position:", coordinates);
 };
 
-const demands = store.demands;
+const demands = ref<Demand[]>([]);
+
+onMounted(getDemands);
+
+// TODO : trier dans le bon ordre
+// TODO : afficher que ce qui correspond au rayon décidé
+// TODO : Pagination (infinite scroll)
+function getDemands() {
+  demands.value = [];
+  supabase.from("demands").select("*, user(*)").then(({data}) => {
+    data?.forEach((demand) => {
+      const location = {lat: demand.lat, long: demand.long, name: demand.address};
+      const dateBegin = new Date(demand.dateBegin);
+      const dateEnd = new Date(demand.dateEnd);
+      const user = {
+        id: demand.user.id,
+        fname: demand.user.fname,
+        lname: demand.user.lname,
+        email: demand.user.email,
+        adress: demand.user.adress,
+        profilePicture: demand.user.avatar,
+        iban: undefined,
+        balance: 0
+      }
+      demands.value.push(createDemand(demand.wastes, demand.quantity, location, user, demand.reward, dateBegin, dateEnd));
+    })
+  });
+}
 </script>
 
 <template>
@@ -33,21 +64,21 @@ const demands = store.demands;
       <div class="range">
         <ion-text class="text__bold"> Rayon</ion-text>
         <ion-range
-          :min="0"
-          :max="20"
-          :value="10"
-          :pin="true"
-          :pin-formatter="pinFormatter"
-          class="ion-no-padding"
+            :min="0"
+            :max="20"
+            :value="10"
+            :pin="true"
+            :pin-formatter="pinFormatter"
+            class="ion-no-padding"
         ></ion-range>
       </div>
 
       <div class="cards">
         <card-demand
-          v-for="demand in demands"
-          v-bind:key="demand.id"
-          :demand="demand"
-          :card-of-current-user="false"
+            v-for="demand in demands"
+            v-bind:key="demand.id"
+            :demand="demand"
+            :card-of-current-user="false"
         ></card-demand>
       </div>
     </ion-content>

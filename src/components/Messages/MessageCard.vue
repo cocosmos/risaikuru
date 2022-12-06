@@ -2,7 +2,7 @@
 import { Message } from "@/types/Message";
 import { defineProps } from "vue";
 import AvatarName from "../AvatarName.vue";
-import { fHour } from "@/utils/formatDate";
+import { fHour } from "@/utils/format";
 
 const props = defineProps<{
   message: Message;
@@ -33,7 +33,8 @@ const props = defineProps<{
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin: 0.5rem 0;
+  z-index: -1;
+  margin: 1rem 0;
   &__header {
     display: flex;
     align-items: center;
@@ -57,12 +58,11 @@ const props = defineProps<{
 }
 .receiver {
   position: relative;
-  margin-bottom: 15%;
+
   .message__content {
     border-top-left-radius: 0;
-    position: absolute;
-    left: 20px;
-    top: 32px;
+    margin-top: -15px;
+    margin-left: 20px;
     z-index: -1;
   }
 }
@@ -72,7 +72,7 @@ const props = defineProps<{
     border-bottom-right-radius: 0;
 
     background-color: var(--ion-color-primary);
-    color: #fff;
+    color: var(--ion-color-primary-contrast);
   }
 }
 </style>

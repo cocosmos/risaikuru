@@ -11,7 +11,7 @@ import {
   IonButton,
 } from "@ionic/vue";
 import { Demand } from "@/types/Demand";
-import { fDate } from "../../utils/formatDate";
+import { fDate } from "../../utils/format";
 import QuantityOnCard from "../QuantityOnCard.vue";
 import AvatarName from "../AvatarName.vue";
 import router from "@/router";

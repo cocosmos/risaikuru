@@ -7,18 +7,25 @@ import {
   IonContent,
   IonButtons,
   IonBackButton,
+  IonButton,
+  IonIcon,
 } from "@ionic/vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { createUser } from "../../types/User";
 import MessagesByDay from "@/components/Messages/MessagesByDay.vue";
 import { Conversation } from "@/types/Message";
 import { send } from "ionicons/icons";
-
+import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
+import FixedTopContainer from "@/components/FixedTopContainer.vue";
+import TextField from "@/components/Input/TextField.vue";
+import CardConversation from "@/components/Card/CardConversation.vue";
+import { store } from "@/data/store";
 const sender = ref(createUser("John", "Doe", "example@example.com"));
 const receiver = ref(createUser("Jack", "Doe", "example@example.com"));
 const conversation = ref<Conversation>({
   id: "1",
   sender: sender.value,
+  demand: store.demands[0],
   receiver: receiver.value,
   days: [
     {
@@ -77,6 +84,25 @@ const conversation = ref<Conversation>({
     },
   ],
 });
+const content = ref();
+const scrollBottom = () => {
+  content.value.$el.scrollToBottom();
+};
+
+const message = ref("");
+const handleMessage = () => {
+  conversation.value.days[1].messages.push({
+    id: "4",
+    isSender: true,
+    user: sender.value,
+    content: message.value,
+    createdAt: new Date(),
+  });
+  scrollBottom();
+};
+onMounted(() => {
+  scrollBottom();
+});
 </script>
 <template>
   <ion-page>
@@ -90,8 +116,15 @@ const conversation = ref<Conversation>({
         >
       </ion-toolbar>
     </ion-header>
-    <ion-content :fullscreen="true" class="ion-padding">
+    <ion-content :fullscreen="true" class="ion-padding" ref="content">
       <div class="conversation">
+        <fixed-top-container>
+          <card-conversation
+            :demand="conversation.demand"
+            :is-asker="true"
+          ></card-conversation>
+        </fixed-top-container>
+
         <div class="conversation__messages">
           <messages-by-day
             v-for="day in conversation.days"
@@ -99,15 +132,40 @@ const conversation = ref<Conversation>({
             :day="day"
           />
         </div>
-        <div class="conversation__input">
-          <ion-item>
-            <ion-input placeholder="Votre message"></ion-input>
-            <ion-button slot="end" fill="clear">
-              <ion-icon :icon="send" />
-            </ion-button>
-          </ion-item>
-        </div>
+        <fixed-bottom-container>
+          <div class="conversation__input">
+            <form @submit.prevent="handleMessage">
+              <text-field
+                :isError="false"
+                label="Votre Message"
+                name="message"
+                :isMargin="true"
+                v-model="message"
+                ><ion-button slot="end" fill="clear" type="submit">
+                  <ion-icon :icon="send" /> </ion-button
+              ></text-field>
+            </form>
+          </div>
+        </fixed-bottom-container>
       </div>
     </ion-content>
   </ion-page>
 </template>
+
+<style lang="scss" scoped>
+.conversation {
+  &__input {
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100px;
+      background-color: white;
+      opacity: 0.8;
+    }
+  }
+}
+</style>

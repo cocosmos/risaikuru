@@ -26,6 +26,7 @@ export interface Demand {
   status: Status;
   user: UserType;
   reward: number;
+  fees: number;
   dateBegin: Date;
   dateEnd: Date;
   dateCreated: Date;
@@ -40,6 +41,7 @@ export const createDemand = (
   dateBegin: Date,
   dateEnd: Date
 ): Demand => {
+  const fees = (reward * 20) / 100;
   return {
     id: nanoid(),
     waste,
@@ -50,6 +52,7 @@ export const createDemand = (
     dateBegin,
     dateEnd,
     reward,
+    fees,
     dateCreated: new Date(),
   };
 };

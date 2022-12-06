@@ -9,6 +9,7 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-primary-contrast-rgb: 255, 255, 255;
   --ion-color-primary-shade: #575f37;
   --ion-color-primary-tint: #737b52;
+  --ion-color-primary-light: #f2f3ee;
 
   --ion-color-secondary: #fdf9e2;
   --ion-color-secondary-rgb: 253, 249, 226;
@@ -73,7 +74,7 @@ http://ionicframework.com/docs/theming/ */
 }
 
 .tab-selected {
-    color: var(--ion-color-tertiary);
+  color: var(--ion-color-tertiary);
 }
 
 /* @media (prefers-color-scheme: dark) {

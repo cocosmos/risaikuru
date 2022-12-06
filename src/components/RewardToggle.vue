@@ -1,24 +1,28 @@
 <template>
-  <button @click="toggle" :class="{'reward-toggle--selected': props.modelValue}" class="reward-toggle">
+  <button
+    @click="toggle"
+    :class="{ 'reward-toggle--selected': props.modelValue }"
+    class="reward-toggle"
+  >
     {{ props.amount }} CHF
   </button>
 </template>
 
 <script lang="ts" setup>
-import {defineProps, defineEmits} from 'vue';
+import { defineProps, defineEmits } from "vue";
 
 const props = defineProps<{
-  modelValue: boolean,
-  amount: number
+  modelValue: boolean;
+  amount: number;
 }>();
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void
-}>()
+  (e: "update:modelValue", value: boolean): void;
+}>();
 
 const toggle = () => {
-  emit('update:modelValue', !props.modelValue);
-}
+  emit("update:modelValue", !props.modelValue);
+};
 </script>
 
 <style lang="scss" scoped>
@@ -27,6 +31,7 @@ const toggle = () => {
   padding: 24px 10px;
   border-radius: 10px;
   border: 2px solid transparent;
+  color: var(--ion-color-text);
   background: var(--ion-color-primary-light);
 
   &--selected {

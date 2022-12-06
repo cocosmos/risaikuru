@@ -11,6 +11,7 @@ import { locate } from "ionicons/icons";
 import CardDemand from "../components/Card/CardDemand.vue";
 import { Geolocation } from "@capacitor/geolocation";
 import { store } from "@/data/store";
+import LocationSearch from "@/components/LocationSearch.vue";
 
 const pinFormatter = (value: number) => `${value}km`;
 const printPosition = async (coordinates: any) => {
@@ -32,12 +33,12 @@ const demands = store.demands;
       <div class="range">
         <ion-text class="text__bold"> Rayon</ion-text>
         <ion-range
-            :min="0"
-            :max="20"
-            :value="10"
-            :pin="true"
-            :pin-formatter="pinFormatter"
-            class="ion-no-padding"
+          :min="0"
+          :max="20"
+          :value="10"
+          :pin="true"
+          :pin-formatter="pinFormatter"
+          class="ion-no-padding"
         ></ion-range>
       </div>
 

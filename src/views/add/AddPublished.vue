@@ -69,7 +69,7 @@ import moment from "moment";
 const newDemand = useNewDemand();
 
 onMounted(() => {
-  newDemand.published.value = true;
+  newDemand.saveDemand();
 });
 
 const quantities = computed(() => {

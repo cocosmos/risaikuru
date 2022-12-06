@@ -4,6 +4,7 @@ import router from "./router";
 import Maska from "maska";
 import { defineCustomElements } from "@ionic/pwa-elements/loader";
 
+import "./registerServiceWorker";
 import {
   IonBackButton,
   IonBadge,

@@ -1,4 +1,12 @@
-export const icons = [
+import { Waste } from "@/types/Demand";
+
+interface Icon {
+  name: Waste;
+  path: string;
+  description: string;
+}
+
+export const icons: Icon[] = [
   {
     name: "cafe",
     path: require("./cafe.svg"),

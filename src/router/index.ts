@@ -1,20 +1,20 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
-import TabsPage from "../views/TabsPage.vue";
+import TabsPage from "@/views/TabsPage.vue";
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     redirect: "/search",
   },
   {
+    path: "/add",
+    redirect: "/add/type",
+  },
+  {
     path: "/",
     component: TabsPage,
     children: [
-      {
-        path: "",
-        redirect: "/search",
-      },
-
       {
         path: "search",
         component: () => import("@/views/SearchTab.vue"),
@@ -65,9 +65,32 @@ const routes: Array<RouteRecordRaw> = [
         path: "/profile/payment/confirmed",
         component: () => import("@/views/Profil/PaymentConfirmed.vue"),
       },
+      {
+        path: "/add/type",
+        component: () => import("@/views/add/AddWasteType.vue"),
+      },
+      {
+        path: "/add/quantity",
+        component: () => import("@/views/add/AddQuantity.vue"),
+      },
+      {
+        path: "/add/moment",
+        component: () => import("@/views/add/AddMoment.vue"),
+      },
+      {
+        path: "/add/location",
+        component: () => import("@/views/add/AddLocation.vue"),
+      },
+      {
+        path: "/add/reward",
+        component: () => import("@/views/add/AddReward.vue"),
+      },
+      {
+        path: "/add/published",
+        component: () => import("@/views/add/AddPublished.vue"),
+      },
     ],
   },
-
   { path: "/:catchAll(.*)", component: () => import("@/views/ErrorTab.vue") },
 ];
 

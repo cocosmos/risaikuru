@@ -11,12 +11,11 @@ import { locate } from "ionicons/icons";
 import CardDemand from "../components/Card/CardDemand.vue";
 import { Geolocation } from "@capacitor/geolocation";
 import { store } from "@/data/store";
+import LocationSearch from "@/components/LocationSearch.vue";
 
 const pinFormatter = (value: number) => `${value}km`;
-const printCurrentPosition = async () => {
-  const coordinates = await Geolocation.getCurrentPosition();
-
-  console.log("Current position:", coordinates);
+const printPosition = async (coordinates: any) => {
+  console.log("Position:", coordinates);
 };
 
 const demands = store.demands;
@@ -30,24 +29,9 @@ const demands = store.demands;
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding">
-      <ion-grid class="ion-no-padding">
-        <ion-row>
-          <ion-col class="margin-right">
-            <ion-searchbar
-              show-cancel-button="never"
-              placeholder="Adresse"
-              class="custom"
-            ></ion-searchbar>
-          </ion-col>
-          <ion-col size="auto">
-            <ion-button shape="circle" @click="printCurrentPosition">
-              <ion-icon :icon="locate"></ion-icon>
-            </ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+      <location-search @locationUpdated="printPosition"></location-search>
       <div class="range">
-        <ion-text class="text__bold"> Rayon </ion-text>
+        <ion-text class="text__bold"> Rayon</ion-text>
         <ion-range
           :min="0"
           :max="20"
@@ -74,29 +58,13 @@ const demands = store.demands;
 .margin-right {
   margin-right: 10px;
 }
+
 .range {
   margin-top: 10px;
 }
+
 ion-content {
   margin: 5px;
-}
-
-ion-icon {
-  font-size: x-large;
-}
-
-ion-button[shape="circle"] {
-  --border-radius: 50%;
-  width: 56px;
-  height: 56px;
-}
-
-ion-searchbar.custom {
-  --background: transparent;
-  border: 2px solid var(--ion-color-primary);
-  border-radius: 10px;
-  --placeholder-color: var(--ion-color-primary);
-  margin-right: 20px;
 }
 
 ion-range {
@@ -122,8 +90,10 @@ ion-range::part(pin)::before {
 ion-item::part(native) {
   padding: 0;
 }
+
 .cards {
   margin-top: 1.5em;
+
   & > * {
     margin-bottom: 1.5em;
   }

@@ -2,6 +2,7 @@
   "name": "risaikuru",
   "version": "0.0.1",
   "private": true,
+  "description": "An Ionic project",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -23,22 +24,28 @@
     "@ionic/pwa-elements": "^3.1.1",
     "@ionic/vue": "^6.0.0",
     "@ionic/vue-router": "^6.0.0",
+    "axios": "^1.2.0",
+    "mapbox-gl": "^2.11.0",
+    "moment": "^2.29.4",
     "@supabase/supabase-js": "^2.1.1",
     "core-js": "^3.6.5",
     "ionicons": "^6.0.3",
     "maska": "^1.5.1",
     "nanoid": "^4.0.0",
+    "register-service-worker": "^1.7.2",
     "vue": "^3.2.21",
     "vue-router": "^4.0.12"
   },
   "devDependencies": {
     "@capacitor/cli": "4.4.0",
     "@types/jest": "^27.0.2",
+    "@types/mapbox-gl": "^2.7.10",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
     "@vue/cli-plugin-babel": "~5.0.0-rc.1",
     "@vue/cli-plugin-e2e-cypress": "~5.0.0-rc.1",
     "@vue/cli-plugin-eslint": "~5.0.0-rc.1",
+    "@vue/cli-plugin-pwa": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.0-rc.1",
     "@vue/cli-plugin-typescript": "~5.0.0-rc.1",
     "@vue/cli-plugin-unit-jest": "~5.0.0-rc.1",
@@ -55,6 +62,5 @@
     "sass-loader": "^13.1.0",
     "ts-jest": "^27.0.7",
     "typescript": "^4.3.5"
-  },
-  "description": "An Ionic project"
+  }
 }

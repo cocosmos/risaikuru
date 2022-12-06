@@ -1,0 +1,8 @@
+{
+  "name": "Risaikuru",
+  "description": "Une application qui aide à la gestion de ses déchets",
+  "short_name": "Risaikuru",
+  "theme_color": "#636c3f",
+  "background_color": "#ffffff",
+  "orientation": "portrait"
+}

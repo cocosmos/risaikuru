@@ -28,6 +28,5 @@ onMounted(() => {
   width: 0;
   overflow: hidden;
   padding-top: 1rem;
-  height: calc(100% - 5000px);
 }
 </style>

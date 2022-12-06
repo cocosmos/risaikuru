@@ -41,8 +41,8 @@ const route = (id: string) => {
     <ion-card-header>
       <div class="card__header">
         <avatar-name
-          :profilePicture="props.demand.user.profilePicture"
-          :fname="props.demand.user.fname"
+          :user="props.demand.user"
+          :showLname="false"
           size="small"
           v-if="!props.cardOfCurrentUser"
         ></avatar-name>

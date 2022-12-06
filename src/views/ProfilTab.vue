@@ -77,9 +77,7 @@ watch(
       <div class="profile">
         <avatar-name
           :user="store.user"
-          :profilePicture="store.user.profilePicture"
-          :fname="store.user.fname"
-          :lname="store.user.lname"
+          :showLname="true"
           :add="true"
           size="large"
         ></avatar-name>

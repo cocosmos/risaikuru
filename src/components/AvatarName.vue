@@ -7,14 +7,12 @@ import { Camera, CameraResultType } from "@capacitor/camera";
 import { UserType } from "@/types/User";
 const props = defineProps<{
   user: UserType;
-  profilePicture: string | null;
-  fname: string;
-  lname?: string;
   size: "small" | "medium" | "large";
+  showLname: boolean;
   add?: boolean;
 }>();
 
-const { profilePicture, fname, lname, size, user } = toRefs(props);
+const { size, user, showLname } = toRefs(props);
 
 const sizeClass = () => {
   switch (size.value) {
@@ -78,8 +76,8 @@ const uploadAvatar = async () => {
     console.log(error);
   }
 };
-watch(profilePicture, () => {
-  if (profilePicture.value) downloadImage(profilePicture.value);
+watch(user.value, () => {
+  if (user.value.profilePicture) downloadImage(user.value.profilePicture);
 });
 </script>
 <template>
@@ -92,8 +90,8 @@ watch(profilePicture, () => {
       />
     </ion-avatar>
     <ion-label class="text__bold avatar__name">
-      {{ fname }} {{ lname }}</ion-label
-    >
+      {{ user.fname }} {{ showLname ? user.lname : "" }}
+    </ion-label>
   </div>
 </template>
 

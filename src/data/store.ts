@@ -62,4 +62,9 @@ export const store = reactive({
   session: {} as Session | null,
 
   currentUser: {} as User,
+
+  signOut: () => {
+    store.session = null;
+    store.currentUser = {} as User;
+  },
 });

@@ -67,7 +67,7 @@ const handleLogin = async () => {
           color="tertiary"
           fill="clear"
           expand="block"
-          href="/login"
+          @click="route('login')"
           class="ion-margin-top"
         >
           Retour à la connexion

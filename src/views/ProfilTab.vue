@@ -111,6 +111,9 @@ watch(
             <ion-label>Paramètre du profil</ion-label>
           </ion-item>
         </div>
+        <ion-button @click="store.signOut()" fill="outline"
+          >Déconnexion</ion-button
+        >
       </div>
     </ion-content>
   </ion-page>

@@ -22,6 +22,10 @@ const email = ref("");
 const password = ref("");
 const passwordConfirm = ref("");
 
+const route = (id: string) => {
+  router.push(id);
+};
+
 const handleSignup = async () => {
   const loader = await loadingController.create({});
   if (password.value !== passwordConfirm.value) {
@@ -51,7 +55,7 @@ const handleSignup = async () => {
 
       if (error) throw error;
       else {
-        router.push("/profile");
+        route("/profile");
         store.session = data.session;
       }
     } catch (error: any) {
@@ -118,7 +122,7 @@ const handleSignup = async () => {
           color="tertiary"
           fill="clear"
           expand="block"
-          href="/login"
+          @click="route('/login')"
           class="ion-margin-top"
         >
           Vous avez déjà un compte? Connectez-vous

@@ -17,6 +17,10 @@ import router from "@/router";
 const email = ref("");
 const password = ref("");
 
+const route = (id: string) => {
+  router.push(id);
+};
+
 const handleLogin = async () => {
   const loader = await loadingController.create({});
   try {
@@ -68,7 +72,7 @@ const handleLogin = async () => {
           color="tertiary"
           fill="clear"
           expand="block"
-          href="/password-reset"
+          @click="route('forget-password')"
           class="ion-margin-top"
         >
           Mot de passe oublié ?
@@ -80,7 +84,7 @@ const handleLogin = async () => {
           color="tertiary"
           fill="clear"
           expand="block"
-          href="/signup"
+          @click="route('signup')"
           class="ion-margin-top"
         >
           Pas encore de compte ? Inscrivez-vous

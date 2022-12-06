@@ -27,3 +27,12 @@ export function fDate(dateBegin: Date, dateEnd: Date) {
     "h"
   );
 }
+
+export function fHour(date: Date) {
+  const dateLocal = new Date(date);
+  return (
+    ("0" + dateLocal.getHours()).slice(-2) +
+    ":" +
+    ("0" + dateLocal.getMinutes()).slice(-2)
+  );
+}

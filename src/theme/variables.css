@@ -3,66 +3,65 @@ http://ionicframework.com/docs/theming/ */
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 /** Ionic CSS Variables **/
 :root {
-    --ion-color-primary: #636c3f;
-    --ion-color-primary-rgb: 99, 108, 63;
-    --ion-color-primary-contrast: #ffffff;
-    --ion-color-primary-contrast-rgb: 255, 255, 255;
-    --ion-color-primary-shade: #575f37;
-    --ion-color-primary-tint: #737b52;
-    --ion-color-primary-light: #F2F3EE;
+  --ion-color-primary: #636c3f;
+  --ion-color-primary-rgb: 99, 108, 63;
+  --ion-color-primary-contrast: #f2f3ee;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #575f37;
+  --ion-color-primary-tint: #737b52;
 
-    --ion-color-secondary: #fdf9e2;
-    --ion-color-secondary-rgb: 253, 249, 226;
-    --ion-color-secondary-contrast: #000000;
-    --ion-color-secondary-contrast-rgb: 0, 0, 0;
-    --ion-color-secondary-shade: #dfdbc7;
-    --ion-color-secondary-tint: #fdfae5;
+  --ion-color-secondary: #fdf9e2;
+  --ion-color-secondary-rgb: 253, 249, 226;
+  --ion-color-secondary-contrast: #000000;
+  --ion-color-secondary-contrast-rgb: 0, 0, 0;
+  --ion-color-secondary-shade: #dfdbc7;
+  --ion-color-secondary-tint: #fdfae5;
 
-    --ion-color-tertiary: #a9823e;
-    --ion-color-tertiary-rgb: 169, 130, 62;
-    --ion-color-tertiary-contrast: #000000;
-    --ion-color-tertiary-contrast-rgb: 0, 0, 0;
-    --ion-color-tertiary-shade: #957237;
-    --ion-color-tertiary-tint: #b28f51;
+  --ion-color-tertiary: #a9823e;
+  --ion-color-tertiary-rgb: 169, 130, 62;
+  --ion-color-tertiary-contrast: #000000;
+  --ion-color-tertiary-contrast-rgb: 0, 0, 0;
+  --ion-color-tertiary-shade: #957237;
+  --ion-color-tertiary-tint: #b28f51;
 
-    --ion-color-success: #b3cd4a;
-    --ion-color-success-rgb: 179, 205, 74;
-    --ion-color-success-contrast: #000000;
-    --ion-color-success-contrast-rgb: 0, 0, 0;
-    --ion-color-success-shade: #9eb441;
-    --ion-color-success-tint: #bbd25c;
+  --ion-color-success: #b3cd4a;
+  --ion-color-success-rgb: 179, 205, 74;
+  --ion-color-success-contrast: #000000;
+  --ion-color-success-contrast-rgb: 0, 0, 0;
+  --ion-color-success-shade: #9eb441;
+  --ion-color-success-tint: #bbd25c;
 
-    --ion-color-warning: #cdb84a;
-    --ion-color-warning-rgb: 205, 184, 74;
-    --ion-color-warning-contrast: #000000;
-    --ion-color-warning-contrast-rgb: 0, 0, 0;
-    --ion-color-warning-shade: #b4a241;
-    --ion-color-warning-tint: #d2bf5c;
+  --ion-color-warning: #cdb84a;
+  --ion-color-warning-rgb: 205, 184, 74;
+  --ion-color-warning-contrast: #000000;
+  --ion-color-warning-contrast-rgb: 0, 0, 0;
+  --ion-color-warning-shade: #b4a241;
+  --ion-color-warning-tint: #d2bf5c;
 
-    --ion-color-danger: #cd624a;
-    --ion-color-danger-rgb: 205, 98, 74;
-    --ion-color-danger-contrast: #ffffff;
-    --ion-color-danger-contrast-rgb: 255, 255, 255;
-    --ion-color-danger-shade: #b45641;
-    --ion-color-danger-tint: #d2725c;
+  --ion-color-danger: #cd624a;
+  --ion-color-danger-rgb: 205, 98, 74;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #b45641;
+  --ion-color-danger-tint: #d2725c;
 
-    --ion-color-medium: #7e816e;
-    --ion-color-medium-rgb: 126, 129, 110;
-    --ion-color-medium-contrast: #ffffff;
-    --ion-color-medium-contrast-rgb: 255, 255, 255;
-    --ion-color-medium-shade: #6f7261;
-    --ion-color-medium-tint: #8b8e7d;
+  --ion-color-medium: #7e816e;
+  --ion-color-medium-rgb: 126, 129, 110;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #6f7261;
+  --ion-color-medium-tint: #8b8e7d;
 
-    --ion-color-light: #d8d9d3;
-    --ion-color-light-rgb: 216, 217, 211;
-    --ion-color-light-contrast: #000000;
-    --ion-color-light-contrast-rgb: 0, 0, 0;
-    --ion-color-light-shade: #bebfba;
-    --ion-color-light-tint: #dcddd7;
+  --ion-color-light: #d8d9d3;
+  --ion-color-light-rgb: 216, 217, 211;
+  --ion-color-light-contrast: #000000;
+  --ion-color-light-contrast-rgb: 0, 0, 0;
+  --ion-color-light-shade: #bebfba;
+  --ion-color-light-tint: #dcddd7;
 
-    /* Set the font family of the entire app */
-    --ion-font-family: "Roboto", "Helvetica Neue", sans-serif;
-    --ion-color-text: #46483e;
+  /* Set the font family of the entire app */
+  --ion-font-family: "Roboto", "Helvetica Neue", sans-serif;
+  --ion-color-text: #46483e;
 }
 
 /*

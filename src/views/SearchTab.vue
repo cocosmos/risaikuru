@@ -7,45 +7,17 @@ import {
   IonContent,
   IonRange,
 } from "@ionic/vue";
-import {locate} from "ionicons/icons";
-import CardSearch from "@/components/CardSearch.vue";
-import LocationSearch from '@/components/LocationSearch.vue';
-import {Geolocation} from "@capacitor/geolocation";
-import {createDemand, Demand} from "@/types/Demand";
-import {createUser} from "@/types/User";
+import { locate } from "ionicons/icons";
+import CardDemand from "../components/Card/CardDemand.vue";
+import { Geolocation } from "@capacitor/geolocation";
+import { store } from "@/data/store";
 
 const pinFormatter = (value: number) => `${value}km`;
 const printPosition = async (coordinates: any) => {
   console.log("Position:", coordinates);
 };
-const demands: Demand[] = [];
-demands.push(
-    createDemand(
-        ["alu", "papier"],
-        [{id: "S", number: 3, description: "Small"}],
-        "chemin de la fontaine 3, 1000 Lausanne",
-        createUser("John", "Doe", "john.doe@example.com", 5),
-        5,
-        new Date(),
-        new Date()
-    ),
-    createDemand(
-        ["cafe", "piles", "compost", "papier", "alu", "verre", "lampes"],
-        [
-          {id: "S", number: 3, description: "Small"},
-          {id: "M", number: 2, description: "Medium"},
-          {id: "L", number: 1, description: "Large"},
-          {id: "XL", number: 1, description: "Extra Large"},
-        ],
-        "chemin de la fontaine 3, 1000 Lausanne",
-        createUser("John", "Doe", "john.doe@example.com"),
-        15,
-        new Date(),
-        new Date()
-    )
-);
 
-console.log(demands);
+const demands = store.demands;
 </script>
 
 <template>
@@ -70,11 +42,12 @@ console.log(demands);
       </div>
 
       <div class="cards">
-        <card-search
-            v-for="demand in demands"
-            v-bind:key="demand.id"
-            :demand="demand"
-        ></card-search>
+        <card-demand
+          v-for="demand in demands"
+          v-bind:key="demand.id"
+          :demand="demand"
+          :card-of-current-user="false"
+        ></card-demand>
       </div>
     </ion-content>
   </ion-page>

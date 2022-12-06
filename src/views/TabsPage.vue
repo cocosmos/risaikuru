@@ -18,8 +18,8 @@
           <ion-label>Messages</ion-label>
           <ion-badge color="danger">6</ion-badge>
         </ion-tab-button>
-        <ion-tab-button tab="profil" href="/profil">
-          <ion-icon :icon="person"/>
+        <ion-tab-button tab="profil" href="/profile">
+          <ion-icon :icon="person" />
           <ion-label>Profil</ion-label>
         </ion-tab-button>
       </ion-tab-bar>

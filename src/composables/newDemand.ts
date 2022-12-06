@@ -133,6 +133,8 @@ export const useNewDemand = () => {
     reward,
     published,
     hasQuantity,
+    hasMoment,
+    hasLocation,
     saveDemand,
   };
 };

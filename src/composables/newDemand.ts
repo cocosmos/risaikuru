@@ -1,9 +1,19 @@
-import { computed, onBeforeMount, onMounted, reactive, ref } from "vue";
+import {
+  computed,
+  onActivated,
+  onBeforeMount,
+  onBeforeUnmount,
+  onBeforeUpdate,
+  onMounted,
+  reactive,
+  ref,
+} from "vue";
 import { Waste } from "@/types/Demand";
 import Location from "@/types/Location";
 import { Quantity } from "@/types/Demand";
-import { useRouter } from "vue-router";
+import { onBeforeRouteLeave, useRouter } from "vue-router";
 import { supabase } from "@/data/supabase";
+import { onIonViewDidEnter } from "@ionic/vue";
 
 const wasteTypes = ref<Waste[]>([]);
 const quantities = ref<Quantity[]>([
@@ -37,17 +47,21 @@ const published = ref(false);
 export const useNewDemand = () => {
   const router = useRouter();
 
-  onBeforeMount(() => {
+  onIonViewDidEnter(() => {
     if (!hasWasteTypes.value) {
       router.replace("/add/type");
-    } else if (!hasQuantity.value) {
-      router.replace("/add/quantity");
-    } else if (!hasMoment.value) {
-      router.replace("/add/moment");
-    } else if (!hasLocation.value) {
-      router.replace("/add/location");
-    } else if (!hasReward.value) {
-      router.replace("/add/reward");
+    }
+  });
+
+  onBeforeRouteLeave((to) => {
+    if (published.value) {
+      published.value = false;
+      wasteTypes.value = [];
+      quantities.value.map((quantity) => (quantity.number = 0));
+      dateBegin.value = undefined;
+      dateEnd.value = undefined;
+      location.value = undefined;
+      reward.value = 0;
     }
   });
 
@@ -63,7 +77,7 @@ export const useNewDemand = () => {
   });
 
   const hasMoment = computed(() => {
-    return dateBegin.value !== undefined || dateEnd.value !== undefined;
+    return dateBegin.value !== undefined && dateEnd.value !== undefined;
   });
 
   const hasLocation = computed(() => {

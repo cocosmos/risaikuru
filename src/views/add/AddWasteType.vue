@@ -29,7 +29,7 @@ import {
   IonContent,
   IonButton,
   IonIcon,
-  IonPage
+  IonPage, onIonViewDidEnter, onIonViewWillEnter
 } from "@ionic/vue";
 import {chevronForwardOutline} from "ionicons/icons";
 import {useRouter} from "vue-router";
@@ -37,7 +37,7 @@ import WasteSwitch from '@/components/WasteSwitch.vue';
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
 import {icons} from "../../assets/icons/index";
 import {Waste} from "@/types/Demand";
-import {computed, ComputedRef, onBeforeMount, reactive, ref} from "vue";
+import {computed, onBeforeMount, onMounted, ref} from "vue";
 import {useNewDemand} from "@/composables/newDemand";
 
 const router = useRouter();
@@ -45,11 +45,18 @@ const newDemand = useNewDemand();
 
 const wasteTypes = ref<{ waste: Waste, selected: boolean }[]>([]);
 
-onBeforeMount(() => {
+onMounted(() => {
+  wasteTypes.value = [];
   icons.forEach((icon) => {
     wasteTypes.value.push({waste: icon.name, selected: false});
   });
   newDemand.published.value = false;
+});
+
+onIonViewWillEnter(() => {
+  if (newDemand.wasteTypes.value.length <= 0) {
+    wasteTypes.value.map((wasteType) => wasteType.selected = false);
+  }
 });
 
 const selectedWaste = computed<Waste[]>(() => {

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import {trophy, chevronDown, chevronUp} from "ionicons/icons";
+import { trophy, chevronDown, chevronUp } from "ionicons/icons";
 import IconInfo from "../IconInfo.vue";
-import {defineProps, ref} from "vue";
+import { defineProps, ref } from "vue";
 import {
   IonCard,
   IonCardHeader,
@@ -10,14 +10,14 @@ import {
   IonCardContent,
   IonButton,
 } from "@ionic/vue";
-import {Demand} from "@/types/Demand";
-import {fDate} from "../../utils/formatDate";
+import { Demand } from "@/types/Demand";
+import { fDate } from "../../utils/format";
 import QuantityOnCard from "../QuantityOnCard.vue";
 import AvatarName from "../AvatarName.vue";
 import router from "@/router";
 import mapboxgl from "mapbox-gl";
-import 'mapbox-gl/dist/mapbox-gl.css';
-import {ACCESS_TOKEN} from "@/services/mapbox";
+import "mapbox-gl/dist/mapbox-gl.css";
+import { ACCESS_TOKEN } from "@/services/mapbox";
 
 const props = defineProps<{
   demand: Demand;
@@ -46,27 +46,27 @@ const showMap = () => {
 
     map = new mapboxgl.Map({
       container: `map-${props.demand.id}`, // container ID
-      style: 'mapbox://styles/mapbox/streets-v12', // style URL
+      style: "mapbox://styles/mapbox/streets-v12", // style URL
       center: [props.demand.location.long, props.demand.location.lat], // starting position [lng, lat]
       zoom: 14, // starting zoom
-      interactive: false
+      interactive: false,
     });
 
-    map.on('load', () => {
+    map.on("load", () => {
       map.resize();
       showMarker();
     });
   }
-}
+};
 
 const showMarker = () => {
   if (marker === undefined && map !== undefined) {
     marker = new mapboxgl.Marker()
-        .setLngLat([props.demand.location.long, props.demand.location.lat])
-        .addTo(map);
-    console.log(marker)
+      .setLngLat([props.demand.location.long, props.demand.location.lat])
+      .addTo(map);
+    console.log(marker);
   }
-}
+};
 
 const route = (id: string) => {
   router.push(`/profile/my-demands/${id}`);
@@ -74,47 +74,46 @@ const route = (id: string) => {
 </script>
 <template>
   <ion-card
-      color="light"
-      @click="cardOfCurrentUser ? route(props.demand.id) : null"
+    color="light"
+    @click="cardOfCurrentUser ? route(props.demand.id) : null"
   >
     <ion-card-header>
       <div class="card__header">
         <avatar-name
-            :user="props.demand.user"
-            :showLname="false"
-            size="small"
-            v-if="!props.cardOfCurrentUser"
+          :user="props.demand.user"
+          :showLname="false"
+          size="small"
+          v-if="!props.cardOfCurrentUser"
         ></avatar-name>
         <ion-text v-if="props.cardOfCurrentUser">{{ dateFormatted }}</ion-text>
         <div class="card__header-price">
-          <ion-icon :icon="trophy" color="primary" size="medium"/>
+          <ion-icon :icon="trophy" color="primary" size="medium" />
           <ion-text color="primary" class="text__bold"
-          >{{ props.demand.reward }} CHF
-          </ion-text
-          >
+            >{{ props.demand.reward }} CHF
+          </ion-text>
         </div>
       </div>
     </ion-card-header>
 
     <ion-card-content>
       <ion-text class="card__date" v-if="!props.cardOfCurrentUser"
-      >{{ dateFormatted }}
+        >{{ dateFormatted }}
       </ion-text>
       <div class="icon__list">
         <icon-info
-            v-for="waste in props.demand.waste"
-            v-bind:key="waste"
-            :waste="waste"
-            :size="'40px'"
+          v-for="waste in props.demand.waste"
+          v-bind:key="waste"
+          :waste="waste"
+          :size="'40px'"
         ></icon-info>
       </div>
       <div class="quantity">
         <ion-text class="text__bold">Quantité</ion-text>
         <div class="quantity__list">
           <quantity-on-card
-              v-for="quantity in props.demand.quantity"
-              v-bind:key="quantity.id"
-              :quantity="quantity"
+            v-for="quantity in props.demand.quantity"
+            v-bind:key="quantity.id"
+            :quantity="quantity"
           ></quantity-on-card>
         </div>
       </div>
@@ -122,15 +121,18 @@ const route = (id: string) => {
       <div class="buttons" v-if="!props.cardOfCurrentUser">
         <ion-button fill="clear" @click="toggleOpen">
           <ion-icon
-              :icon="isOpen ? chevronUp : chevronDown"
-              size="large"
+            :icon="isOpen ? chevronUp : chevronDown"
+            size="large"
           ></ion-icon>
-        </ion-button
-        >
+        </ion-button>
         <ion-button>Contacter</ion-button>
       </div>
 
-      <div :id="`map-${demand.id}`" class="map" :class="{ 'map--closed': !isOpen }"></div>
+      <div
+        :id="`map-${demand.id}`"
+        class="map"
+        :class="{ 'map--closed': !isOpen }"
+      ></div>
     </ion-card-content>
   </ion-card>
 </template>
@@ -199,7 +201,6 @@ ion-card-content {
   height: 200px;
   max-height: 200px;
   transition: 0.5s ease-in;
-
 
   &--closed {
     max-height: 0;

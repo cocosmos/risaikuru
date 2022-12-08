@@ -25,6 +25,10 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: "messages",
+        component: () => import("@/views/MessagesTab.vue"),
+      },
+      {
+        path: "messages/:id",
         component: () => import("@/views/Conversation/ConversationTab.vue"),
       },
       {
@@ -89,9 +93,12 @@ const routes: Array<RouteRecordRaw> = [
         path: "/add/published",
         component: () => import("@/views/add/AddPublished.vue"),
       },
+      {
+        path: "/:catchAll(.*)",
+        component: () => import("@/views/ErrorTab.vue"),
+      },
     ],
   },
-  { path: "/:catchAll(.*)", component: () => import("@/views/ErrorTab.vue") },
 ];
 
 const router = createRouter({

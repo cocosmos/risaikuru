@@ -6,6 +6,7 @@ const props = defineProps<{
   label?: string;
   isError: boolean;
   name: string;
+  isMargin?: boolean;
 }>();
 </script>
 
@@ -13,9 +14,9 @@ const props = defineProps<{
   <ion-item
     fill="outline"
     mode="md"
-    class="ion-margin-bottom"
     :class="{
       'ion-invalid': props.isError,
+      'ion-margin-bottom': !props.isMargin,
     }"
   >
     <ion-label position="floating">{{ props.label }}</ion-label>
@@ -25,6 +26,7 @@ const props = defineProps<{
       required
       @input="$emit('update:modelValue', $event.target.value)"
     ></ion-input>
+    <slot></slot>
     <ion-note slot="error">{{ props.error }}</ion-note>
   </ion-item>
 </template>

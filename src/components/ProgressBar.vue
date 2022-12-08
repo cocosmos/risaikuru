@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { formatPercent } from "@/utils/helper";
+import { formatPercent } from "@/utils/format";
 import { IonText } from "@ionic/vue";
 import { computed, defineProps } from "vue";
 

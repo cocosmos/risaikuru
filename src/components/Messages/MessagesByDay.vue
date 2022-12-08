@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { defineProps } from "vue";
 import { fDay } from "@/utils/format";
-import MessageCard from "@/components/Messages/MessageCard.vue";
+import MessageCard from "@/components/Messages/MessageChat.vue";
 import { Day } from "@/types/Message";
 import { IonText } from "@ionic/vue";
 defineProps<{

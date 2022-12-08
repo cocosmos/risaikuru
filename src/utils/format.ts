@@ -15,9 +15,23 @@ const months = [
 
 const days = ["Lun.", "Mar.", "Mer.", "Jeu.", "Ven.", "Sam.", "Dim."];
 
-export function fDate(dateBegin: Date, dateEnd: Date) {
+export function fDate(dateBegin: Date, dateEnd: Date, simple = false) {
   const dateLocalB = new Date(dateBegin);
   const dateLocalE = new Date(dateEnd);
+
+  if (simple) {
+    return (
+      ("0" + dateLocalB.getDate()).slice(-2) +
+      "/" +
+      ("0" + dateLocalB.getMonth()).slice(-2) +
+      "/" +
+      dateLocalB.getFullYear() +
+      dateLocalB.getHours() +
+      "h-" +
+      dateLocalE.getHours() +
+      "h"
+    );
+  }
 
   return (
     ("0" + dateLocalB.getDate()).slice(-2) +

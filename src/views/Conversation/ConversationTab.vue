@@ -13,7 +13,7 @@ import {
   IonItem,
   IonLabel,
 } from "@ionic/vue";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, defineProps } from "vue";
 import { createUser } from "../../types/User";
 import MessagesByDay from "@/components/Messages/MessagesByDay.vue";
 import { Conversation, Day } from "@/types/Message";
@@ -24,6 +24,10 @@ import { store } from "@/data/store";
 import { returnMessagesByDay } from "@/utils/helper";
 const sender = ref(createUser("John", "Doe", "example@example.com"));
 const receiver = ref(createUser("Jack", "Doe", "example@example.com"));
+
+defineProps<{
+  conversation: Conversation;
+}>();
 
 const conversation = ref<Conversation>({
   id: "1",

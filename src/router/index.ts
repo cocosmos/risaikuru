@@ -93,9 +93,12 @@ const routes: Array<RouteRecordRaw> = [
         path: "/add/published",
         component: () => import("@/views/add/AddPublished.vue"),
       },
+      {
+        path: "/:catchAll(.*)",
+        component: () => import("@/views/ErrorTab.vue"),
+      },
     ],
   },
-  { path: "/:catchAll(.*)", component: () => import("@/views/ErrorTab.vue") },
 ];
 
 const router = createRouter({

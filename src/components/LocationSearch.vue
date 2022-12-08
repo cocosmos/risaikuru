@@ -31,7 +31,7 @@
 * TODO: Emettre la localisation quand une adresse est selectionnée... Pour l'instant le composant n'emmet la localisation que quand le bouton de localisation est cliqué
 * */
 
-import {defineEmits, ref, watchEffect} from 'vue';
+import {defineEmits, defineProps, onMounted, ref, watchEffect} from 'vue';
 import {IonGrid, IonCol, IonRow, IonSearchbar, IonButton, IonIcon} from "@ionic/vue";
 import {locate} from "ionicons/icons";
 import {Geolocation, Position} from "@capacitor/geolocation";
@@ -39,6 +39,10 @@ import axios from "axios";
 import {geocodingClient} from "@/services/mapbox"
 import Location from "@/types/Location";
 import MapboxFeature from "@/types/MapboxFeature";
+
+const props = defineProps<{
+  getInitialLocation: boolean,
+}>();
 
 const emit = defineEmits<{
   (e: 'locationUpdated', value: Location): void
@@ -49,15 +53,22 @@ const address = ref("");
 const results = ref<Location[]>([]);
 const location = ref<Location>({lat: 0, long: 0, name: ""});
 
+onMounted(() => {
+  if (props.getInitialLocation) {
+    getCurrentLocation().catch(() => {
+      location.value = {long: 6.14569, lat: 46.20222, name: "Genève"}
+    });
+  }
+})
 
 watchEffect(() => {
+  address.value = location.value.name;
   emit('locationUpdated', location.value);
 });
 
 const getCurrentLocation = () => {
-  Geolocation.getCurrentPosition().then((position) => {
+  return Geolocation.getCurrentPosition().then((position) => {
     geocodingClient.get(`/${position.coords.longitude},${position.coords.latitude}.json`).then(result => {
-      address.value = result.data.features[0].place_name;
       location.value = {
         lat: position.coords.latitude,
         long: position.coords.longitude,

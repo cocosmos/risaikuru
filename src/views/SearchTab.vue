@@ -12,24 +12,32 @@ import CardDemand from "../components/Card/CardDemand.vue";
 import {Geolocation} from "@capacitor/geolocation";
 import {store} from "@/data/store";
 import LocationSearch from "@/components/LocationSearch.vue";
-import {computed, onMounted, reactive, ref} from "vue";
+import {computed, onMounted, reactive, ref, watch, watchEffect} from "vue";
 import {createDemand, Demand} from "@/types/Demand";
 import {supabase} from "@/data/supabase";
 import {createUser} from "@/types/User";
 import CardDemandSkeleton from "@/components/Card/CardDemandSkeleton.vue";
+import Location from "@/types/Location";
+import {LngLatBounds, MercatorCoordinate} from "mapbox-gl";
 
 const PAGE_SIZE = 5;
 
-const pinFormatter = (value: number) => `${value}km`;
-const printPosition = async (coordinates: any) => {
-  console.log("Position:", coordinates);
-};
-
-const loading = ref(true);
+const loading = ref(false);
 const hasMoreResults = ref(true);
 const demands = ref<Demand[]>([]);
 const page = ref(1);
 const scrollTriggerElement = ref<HTMLElement>();
+const location = ref<Location>({long: 0, lat: 0, name: ""});
+const range = ref(10);
+
+
+onIonViewWillEnter(() => {
+  resetDemandsList();
+});
+
+watch([location, range], () => {
+  resetDemandsList();
+})
 
 const nextResultsMin = computed(() => {
   return (page.value - 1) * PAGE_SIZE;
@@ -39,18 +47,40 @@ const nextResultsMax = computed(() => {
   return page.value * PAGE_SIZE - 1;
 });
 
-onIonViewWillEnter(() => {
-  demands.value = [];
-  page.value = 1;
-  loading.value = true;
-  getDemands();
-})
+const searchBoundsCoordinates = computed((): LngLatBounds => {
+  const mercatorLocation = MercatorCoordinate.fromLngLat({lng: location.value.long, lat: location.value.lat}, 0);
+  const rangeInMeters = range.value * 1000;
+  const offsetInMercator = rangeInMeters * mercatorLocation.meterInMercatorCoordinateUnits();
+  const swBound = new MercatorCoordinate(mercatorLocation.x - offsetInMercator, mercatorLocation.y - offsetInMercator, 0).toLngLat();
+  const neBound = new MercatorCoordinate(mercatorLocation.x + offsetInMercator, mercatorLocation.y + offsetInMercator, 0).toLngLat();
+  return new LngLatBounds(swBound, neBound);
+});
 
-// TODO : afficher que ce qui correspond au rayon décidé
+const pinFormatter = (value: number) => `${value}km`;
+const updatePosition = (newLocation: Location) => {
+  location.value = newLocation;
+};
+
+const resetDemandsList = () => {
+  if (location.value.name !== "") {
+    demands.value = [];
+    page.value = 1;
+    if (!loading.value) {
+      loading.value = true;
+      getDemands();
+    }
+  }
+}
+
 function getDemands() {
+  searchBoundsCoordinates.value;
   supabase.from("demands")
       .select("*, user(*)")
       .filter('dateEnd', 'not.lt', new Date().toISOString())
+      .gt('long', searchBoundsCoordinates.value.getWest())
+      .lt('long', searchBoundsCoordinates.value.getEast())
+      .gt('lat', searchBoundsCoordinates.value.getNorth())
+      .lt('lat', searchBoundsCoordinates.value.getSouth())
       .order('dateBegin')
       .range(nextResultsMin.value, nextResultsMax.value)
       .then(({data}) => {
@@ -96,7 +126,7 @@ const handleScroll = (event: CustomEvent) => {
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding" :scroll-events="true" @ion-scroll="handleScroll">
-      <location-search @locationUpdated="printPosition"></location-search>
+      <location-search @locationUpdated="updatePosition" get-initial-location></location-search>
       <div class="range">
         <ion-text class="text__bold"> Rayon</ion-text>
         <ion-range
@@ -105,6 +135,7 @@ const handleScroll = (event: CustomEvent) => {
             :value="10"
             :pin="true"
             :pin-formatter="pinFormatter"
+            v-model="range"
             class="ion-no-padding"
         ></ion-range>
       </div>

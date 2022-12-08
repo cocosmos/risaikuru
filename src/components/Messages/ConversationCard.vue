@@ -48,7 +48,7 @@ onMounted(() => {
 
     <ion-label>
       <ion-label class="conversation__info">
-        <ion-text color="danger" class="conversation__info-type">
+        <ion-text color="warning" class="conversation__info-type">
           <ion-icon v-if="isAsked" :icon="readerOutline" /><ion-icon
             v-if="!isAsked"
             :icon="handRightOutline"
@@ -85,13 +85,17 @@ ion-item {
     height: 2.5em;
   }
   .conversation__info {
-    font-size: 0.7em;
+    font-size: 0.75rem;
     &-type {
-      margin-right: 0.3em;
+      margin-right: 0.4em;
+      // font-size: 1em;
     }
   }
   .conversation__name {
     font-size: 0.8em;
+  }
+  .conversation__date {
+    color: #8f8f8f;
   }
 }
 </style>

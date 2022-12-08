@@ -5,7 +5,7 @@ import {
   IonToolbar,
   IonTitle,
   IonContent,
-  IonRange,
+  IonRange, onIonViewWillEnter,
 } from "@ionic/vue";
 import {locate} from "ionicons/icons";
 import CardDemand from "../components/Card/CardDemand.vue";
@@ -41,6 +41,13 @@ const nextResultsMax = computed(() => {
 onMounted(() => {
   getDemands();
 });
+
+onIonViewWillEnter(() => {
+  demands.value = [];
+  page.value = 1;
+  loading.value = true;
+  getDemands();
+})
 
 // TODO : afficher que ce qui correspond au rayon décidé
 function getDemands() {

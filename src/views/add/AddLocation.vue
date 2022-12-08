@@ -32,7 +32,7 @@ import {
   IonButtons,
   IonBackButton,
   IonIcon,
-  IonPage,
+  IonPage, onIonViewWillEnter,
 } from "@ionic/vue";
 import {chevronForwardOutline} from "ionicons/icons";
 import {useRouter} from "vue-router";
@@ -56,6 +56,7 @@ const location = ref<Location>({lat: 0, long: 0, name: ""});
 
 onMounted(() => {
   mapboxgl.accessToken = ACCESS_TOKEN;
+
   map = new mapboxgl.Map({
     container: 'map', // container ID
     style: 'mapbox://styles/mapbox/streets-v12', // style URL
@@ -68,6 +69,12 @@ onMounted(() => {
   });
 });
 
+onIonViewWillEnter(() => {
+  if (!newDemand.hasLocation.value && valid.value) {
+    location.value = {lat: 0, long: 0, name: ""};
+  }
+});
+
 watchEffect(() => {
   if (marker) {
     marker.remove()
@@ -75,9 +82,12 @@ watchEffect(() => {
   marker = new mapboxgl.Marker()
       .setLngLat([location.value.long, location.value.lat])
       .addTo(map);
-  if (map) {
+  if (map && valid.value) {
     map.setCenter({lat: location.value.lat, lon: location.value.long})
     map.zoomTo(16)
+  } else if (map) {
+    map.setCenter({lon: 6.14569, lat: 46.20222})
+    map.zoomTo(9)
   }
 })
 

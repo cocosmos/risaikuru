@@ -43,7 +43,7 @@ import {
   IonIcon,
   IonPage,
   IonDatetime,
-  IonText
+  IonText, onIonViewWillEnter
 } from "@ionic/vue";
 import {chevronForwardOutline} from "ionicons/icons";
 import {useRouter} from "vue-router";
@@ -59,6 +59,14 @@ const state = reactive({
   rawDate: moment().format(),
   rawStartTime: moment().startOf('hour').format(),
   rawEndTime: moment().startOf('hour').format(),
+});
+
+onIonViewWillEnter(() => {
+  if (!newDemand.hasMoment.value) {
+    state.rawDate = moment().format();
+    state.rawStartTime = moment().startOf('hour').format();
+    state.rawEndTime = moment().startOf('hour').format();
+  }
 });
 
 const dateBegin = computed(() => {

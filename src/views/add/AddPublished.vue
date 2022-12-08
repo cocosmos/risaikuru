@@ -6,35 +6,37 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding relative background">
-      <h2 class="ion-text-center">Félicitations, ton annonce est publiée</h2>
-      <div class="wastes">
-        <IconInfo v-for="wasteType in newDemand.wasteTypes.value" :waste="wasteType" :key="wasteType"
-                  size="50px"></IconInfo>
-      </div>
-      <div class="infos">
-        <div class="infos__volume">
-          <p>Volume</p>
-          <div class="infos__quantities">
-            <quantity-on-card v-for="quantity in quantities" :quantity="quantity"
-                              :key="quantity.id"></quantity-on-card>
+      <template v-if="newDemand.published">
+        <h2 class="ion-text-center">Félicitations, ton annonce est publiée</h2>
+        <div class="wastes">
+          <IconInfo v-for="wasteType in newDemand.wasteTypes.value" :waste="wasteType" :key="wasteType"
+                    size="50px"></IconInfo>
+        </div>
+        <div class="infos">
+          <div class="infos__volume">
+            <p>Volume</p>
+            <div class="infos__quantities">
+              <quantity-on-card v-for="quantity in quantities" :quantity="quantity"
+                                :key="quantity.id"></quantity-on-card>
+            </div>
           </div>
-        </div>
-        <div class="infos__line">
-          <ion-icon :icon="Icons.calendarOutline" color="primary"></ion-icon>
-          <span>{{ momentStr }}</span>
-        </div>
-        <div class="infos__line">
-          <ion-icon :icon="Icons.location" color="primary"></ion-icon>
-          <span>{{ newDemand.location.value.name }}</span>
-        </div>
-        <div class="infos__line">
-          <ion-icon :icon="Icons.trophy" color="primary"></ion-icon>
-          <span class="infos__reward">
+          <div class="infos__line">
+            <ion-icon :icon="Icons.calendarOutline" color="primary"></ion-icon>
+            <span>{{ momentStr }}</span>
+          </div>
+          <div class="infos__line">
+            <ion-icon :icon="Icons.location" color="primary"></ion-icon>
+            <span>{{ newDemand.location.value !== undefined ? newDemand.location.value.name : "" }}</span>
+          </div>
+          <div class="infos__line">
+            <ion-icon :icon="Icons.trophy" color="primary"></ion-icon>
+            <span class="infos__reward">
             {{ newDemand.reward.value }} CHF
             <span class="infos__reward__fees">+ {{ fees }} CHF (frais)</span>
           </span>
+          </div>
         </div>
-      </div>
+      </template>
       <fixed-bottom-container>
         <ion-button expand="block" router-link="/" router-direction="back">
           Retour à l'accueil
@@ -63,15 +65,18 @@ import IonButtonSecondary from "@/components/IonButtonSecondary.vue";
 import IconInfo from "@/components/IconInfo.vue";
 import QuantityOnCard from "@/components/QuantityOnCard.vue";
 import {useNewDemand} from "@/composables/newDemand";
-import {computed, onMounted} from "vue";
+import {computed, onMounted, watchEffect} from "vue";
 import moment from "moment";
+import {useRouter} from "vue-router";
 
+const router = useRouter();
 const newDemand = useNewDemand();
 
 onMounted(() => {
-  newDemand.published.value = true;
+  newDemand.saveDemand();
 });
 
+// TODO: mettre cette propriété computed dans le composable pour pouvoir envoyer le resultat de celle-ci à supabase
 const quantities = computed(() => {
   return newDemand.quantities.value.filter((quantity) => {
     return quantity.number > 0;
@@ -85,7 +90,7 @@ const momentStr = computed(() => {
 
 const fees = computed(() => {
   return newDemand.reward.value * .25;
-})
+});
 
 </script>
 
@@ -104,6 +109,7 @@ const fees = computed(() => {
   grid-template-columns: 1fr 1fr 1fr 1fr;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .infos {

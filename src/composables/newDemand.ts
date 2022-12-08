@@ -1,8 +1,19 @@
-import { computed, onBeforeMount, onMounted, reactive, ref } from "vue";
+import {
+  computed,
+  onActivated,
+  onBeforeMount,
+  onBeforeUnmount,
+  onBeforeUpdate,
+  onMounted,
+  reactive,
+  ref,
+} from "vue";
 import { Waste } from "@/types/Demand";
 import Location from "@/types/Location";
 import { Quantity } from "@/types/Demand";
-import { useRouter } from "vue-router";
+import { onBeforeRouteLeave, useRouter } from "vue-router";
+import { supabase } from "@/data/supabase";
+import { onIonViewDidEnter } from "@ionic/vue";
 
 const wasteTypes = ref<Waste[]>([]);
 const quantities = ref<Quantity[]>([
@@ -36,18 +47,26 @@ const published = ref(false);
 export const useNewDemand = () => {
   const router = useRouter();
 
-  onBeforeMount(() => {
-    if (wasteTypes.value.length <= 0) {
+  onIonViewDidEnter(() => {
+    if (!hasWasteTypes.value) {
       router.replace("/add/type");
-    } else if (!hasQuantity.value) {
-      router.replace("/add/quantity");
-    } else if (dateBegin.value === undefined || dateEnd.value === undefined) {
-      router.replace("/add/moment");
-    } else if (location.value === undefined) {
-      router.replace("/add/location");
-    } else if (reward.value === 0) {
-      router.replace("/add/reward");
     }
+  });
+
+  onBeforeRouteLeave((to) => {
+    if (published.value) {
+      published.value = false;
+      wasteTypes.value = [];
+      quantities.value.map((quantity) => (quantity.number = 0));
+      dateBegin.value = undefined;
+      dateEnd.value = undefined;
+      location.value = undefined;
+      reward.value = 0;
+    }
+  });
+
+  const hasWasteTypes = computed(() => {
+    return wasteTypes.value.length > 0;
   });
 
   const hasQuantity = computed(() => {
@@ -56,6 +75,54 @@ export const useNewDemand = () => {
     }
     return false;
   });
+
+  const hasMoment = computed(() => {
+    return dateBegin.value !== undefined && dateEnd.value !== undefined;
+  });
+
+  const hasLocation = computed(() => {
+    return location.value !== undefined;
+  });
+
+  const hasReward = computed(() => {
+    return reward.value > 0;
+  });
+
+  const saveDemand = () => {
+    if (
+      hasWasteTypes.value &&
+      hasQuantity.value &&
+      hasMoment.value &&
+      hasLocation.value &&
+      hasReward.value
+    ) {
+      console.log("saving demand");
+      supabase
+        .from("demands")
+        .insert({
+          // TODO : change hard-coded user
+          // TODO : add a loading to the confirmation page
+          user: "7c8d5bd1-4e85-4424-918b-7a14cf316654",
+          wastes: wasteTypes.value,
+          address: location.value?.name,
+          lat: location.value?.lat,
+          long: location.value?.long,
+          reward: reward.value,
+          dateBegin: dateBegin.value,
+          dateEnd: dateEnd.value,
+          quantity: quantities.value,
+        })
+        .select()
+        .then(({ data, error }) => {
+          if (error === null) {
+            console.log("published", data);
+            published.value = true;
+          } else {
+            console.log("error while publishing demand", error);
+          }
+        });
+    }
+  };
 
   return {
     wasteTypes,
@@ -66,5 +133,8 @@ export const useNewDemand = () => {
     reward,
     published,
     hasQuantity,
+    hasMoment,
+    hasLocation,
+    saveDemand,
   };
 };

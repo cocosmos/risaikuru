@@ -10,7 +10,7 @@
         <ion-fab-button size="small" @click="decrement()" :disabled="!isSelected">
           -
         </ion-fab-button>
-        <ion-input placeholder="0" type="number" v-model="quantity"></ion-input>
+        <span>{{ props.modelValue }}</span>
         <ion-fab-button size="small" @click="increment()">
           +
         </ion-fab-button>
@@ -21,8 +21,7 @@
 
 <script lang="ts" setup>
 import {IonFabButton, IonInput, IonIcon} from "@ionic/vue";
-import {information} from "ionicons/icons";
-import {ref, computed, defineEmits, defineProps, watch} from "vue";
+import {computed, defineEmits, defineProps} from "vue";
 
 const props = defineProps<{
   modelValue: number,
@@ -33,25 +32,19 @@ const props = defineProps<{
 
 const emit = defineEmits(['update:modelValue']);
 
-const quantity = ref(props.modelValue);
-
 const increment = () => {
-  quantity.value++;
+  emit('update:modelValue', props.modelValue + 1);
 }
 
 const decrement = () => {
-  if (quantity.value > 0) {
-    quantity.value--;
+  if (props.modelValue > 0) {
+    emit('update:modelValue', props.modelValue - 1);
   }
 }
 
 const isSelected = computed((): boolean => {
-  return quantity.value > 0;
+  return props.modelValue > 0;
 });
-
-watch([quantity], () => {
-  emit('update:modelValue', quantity.value);
-})
 </script>
 
 <style scoped lang="scss">

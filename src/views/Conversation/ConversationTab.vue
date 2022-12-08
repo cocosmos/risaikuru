@@ -13,21 +13,17 @@ import {
   IonItem,
   IonLabel,
 } from "@ionic/vue";
-import { onMounted, ref, defineProps } from "vue";
+import { onMounted, ref } from "vue";
 import { createUser } from "../../types/User";
 import MessagesByDay from "@/components/Messages/MessagesByDay.vue";
 import { Conversation, Day } from "@/types/Message";
 import { send } from "ionicons/icons";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
-import CardConversation from "@/components/Card/CardConversation.vue";
+import CardStatus from "@/components/Card/CardStatus.vue";
 import { store } from "@/data/store";
 import { returnMessagesByDay } from "@/utils/helper";
 const sender = ref(createUser("John", "Doe", "example@example.com"));
 const receiver = ref(createUser("Jack", "Doe", "example@example.com"));
-
-defineProps<{
-  conversation: Conversation;
-}>();
 
 const conversation = ref<Conversation>({
   id: "1",
@@ -106,10 +102,10 @@ onMounted(() => {
     <ion-content :fullscreen="true" class="ion-padding" ref="content">
       <div class="conversation">
         <div class="conversation__fixed">
-          <card-conversation
+          <card-status
             :demand="conversation.demand"
             :is-asker="true"
-          ></card-conversation>
+          ></card-status>
         </div>
 
         <div class="conversation__messages">

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Demand, Status } from "@/types/Demand";
-import { defineProps, ref, toRefs } from "vue";
+import { defineProps, ref } from "vue";
 import { fDay, formatMoney } from "@/utils/format";
 import { checkmarkCircleOutline, closeCircleOutline } from "ionicons/icons";
 import {
@@ -13,9 +13,9 @@ import {
   IonIcon,
 } from "@ionic/vue";
 const props = defineProps<{ demand: Demand; isAsker: boolean }>();
-const { demand, isAsker } = toRefs(props);
-const name = ref(demand.value.user.fname);
 
+const name = ref(props.demand.user.fname);
+console.log(props.demand);
 interface Label {
   status: Status;
   icon?: string;
@@ -66,7 +66,7 @@ const labels: Label[] = [
 
 let label = ref({} as Label);
 label.value = labels.find(
-  (l) => props.demand.status === l.status && isAsker.value === l.isAsker
+  (l) => props.demand.status === l.status && props.isAsker === l.isAsker
 ) as Label;
 
 const colorHeader = ref("primary");

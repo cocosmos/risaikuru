@@ -11,7 +11,11 @@ const demandTest = createDemand(
     { id: "S", number: 3, description: "Small" },
     { id: "M", number: 2, description: "Medium" },
   ],
-  "chemin de la fontaine 3, 1000 Lausanne",
+  {
+    name: "chemin de la fontaine 3, 1000 Lausanne",
+    lat: 46.519653,
+    long: 6.632273,
+  },
   userTest,
   5,
   new Date(),
@@ -36,6 +40,7 @@ export const store = reactive({
     ),
   ],
   demands: [
+    demandTest,
     /*createDemand(
           ["alu", "papier"],
           [

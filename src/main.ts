@@ -1,8 +1,10 @@
 import { createApp } from "vue";
+import { createPinia } from "pinia";
 import App from "./App.vue";
-import router from "./router";
+import router, { onlyLoggedIn, onlyLoggedOut } from "./router";
 import Maska from "maska";
 import { defineCustomElements } from "@ionic/pwa-elements/loader";
+import { useAuthStore } from "@/store/auth";
 
 import "./registerServiceWorker";
 import {
@@ -51,10 +53,25 @@ import "@ionic/vue/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 
-const app = createApp(App).use(IonicVue, { mode: "ios" }).use(router);
+const pinia = createPinia();
+
+const app = createApp(App)
+  .use(IonicVue, { mode: "ios" })
+  .use(router)
+  .use(pinia);
+
+const authStore = useAuthStore();
 
 router.isReady().then(() => {
   app.mount("#app");
+});
+
+router.beforeEach((to, from) => {
+  if (onlyLoggedOut.indexOf(to.path) >= 0 && authStore.isLoggedIn) {
+    router.replace("/profile");
+  } else if (onlyLoggedIn.indexOf(to.path) >= 0 && !authStore.isLoggedIn) {
+    router.push("/login");
+  }
 });
 
 /* Add your global components here to avoid the warn in console */

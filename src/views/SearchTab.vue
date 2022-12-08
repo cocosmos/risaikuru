@@ -16,6 +16,7 @@ import {computed, onMounted, reactive, ref} from "vue";
 import {createDemand, Demand} from "@/types/Demand";
 import {supabase} from "@/data/supabase";
 import {createUser} from "@/types/User";
+import CardDemandSkeleton from "@/components/Card/CardDemandSkeleton.vue";
 
 const PAGE_SIZE = 5;
 
@@ -36,10 +37,6 @@ const nextResultsMin = computed(() => {
 
 const nextResultsMax = computed(() => {
   return page.value * PAGE_SIZE - 1;
-})
-
-onMounted(() => {
-  getDemands();
 });
 
 onIonViewWillEnter(() => {
@@ -80,11 +77,13 @@ function getDemands() {
 }
 
 const handleScroll = (event: CustomEvent) => {
-  const scrollTriggerPos = scrollTriggerElement.value?.offsetTop;
-  const scrollBottomPos = event.detail.scrollTop + event.target?.scrollHeight;
-  if (scrollTriggerPos && scrollBottomPos && scrollBottomPos > scrollTriggerPos && !loading.value && hasMoreResults.value) {
-    loading.value = true;
-    getDemands();
+  if (!loading.value && hasMoreResults.value) {
+    const scrollTriggerPos = scrollTriggerElement.value?.offsetTop;
+    const scrollBottomPos = event.detail.scrollTop + event.target?.scrollHeight;
+    if (scrollTriggerPos && scrollBottomPos && scrollBottomPos > scrollTriggerPos) {
+      loading.value = true;
+      getDemands();
+    }
   }
 }
 </script>
@@ -117,6 +116,7 @@ const handleScroll = (event: CustomEvent) => {
             :demand="demand"
             :card-of-current-user="false"
         ></card-demand>
+        <card-demand-skeleton v-if="loading"></card-demand-skeleton>
       </div>
       <div ref="scrollTriggerElement"></div>
     </ion-content>

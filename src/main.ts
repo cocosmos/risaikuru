@@ -25,6 +25,7 @@ import {
   IonNote,
   IonRow,
   IonSearchbar,
+  IonSkeletonText,
   IonText,
   IonTextarea,
 } from "@ionic/vue";
@@ -76,6 +77,7 @@ app
   .component("ion-textarea", IonTextarea)
   .component("ion-buttons", IonButtons)
   .component("ion-note", IonNote)
-  .component("ion-card-content", IonCardContent);
+  .component("ion-card-content", IonCardContent)
+  .component("ion-skeleton-text", IonSkeletonText);
 
 defineCustomElements(window);

@@ -148,6 +148,7 @@ const handleScroll = (event: CustomEvent) => {
             :card-of-current-user="false"
         ></card-demand>
         <card-demand-skeleton v-if="loading"></card-demand-skeleton>
+        <card-demand-skeleton v-if="loading"></card-demand-skeleton>
       </div>
       <div ref="scrollTriggerElement"></div>
     </ion-content>

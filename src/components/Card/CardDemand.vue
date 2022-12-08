@@ -203,7 +203,7 @@ ion-card-content {
 
   &--closed {
     max-height: 0;
-    
+
     & * {
       display: none;
     }

@@ -12,43 +12,73 @@ import CardDemand from "../components/Card/CardDemand.vue";
 import {Geolocation} from "@capacitor/geolocation";
 import {store} from "@/data/store";
 import LocationSearch from "@/components/LocationSearch.vue";
-import {onMounted, ref} from "vue";
+import {computed, onMounted, reactive, ref} from "vue";
 import {createDemand, Demand} from "@/types/Demand";
 import {supabase} from "@/data/supabase";
 import {createUser} from "@/types/User";
+
+const PAGE_SIZE = 5;
 
 const pinFormatter = (value: number) => `${value}km`;
 const printPosition = async (coordinates: any) => {
   console.log("Position:", coordinates);
 };
 
+const loading = ref(true);
+const hasMoreResults = ref(true);
 const demands = ref<Demand[]>([]);
+const page = ref(1);
+const scrollTriggerElement = ref<HTMLElement>();
 
-onMounted(getDemands);
+const nextResultsMin = computed(() => {
+  return (page.value - 1) * PAGE_SIZE;
+});
 
-// TODO : trier dans le bon ordre
+const nextResultsMax = computed(() => {
+  return page.value * PAGE_SIZE - 1;
+})
+
+onMounted(() => {
+  getDemands();
+});
+
 // TODO : afficher que ce qui correspond au rayon décidé
-// TODO : Pagination (infinite scroll)
 function getDemands() {
-  demands.value = [];
-  supabase.from("demands").select("*, user(*)").then(({data}) => {
-    data?.forEach((demand) => {
-      const location = {lat: demand.lat, long: demand.long, name: demand.address};
-      const dateBegin = new Date(demand.dateBegin);
-      const dateEnd = new Date(demand.dateEnd);
-      const user = {
-        id: demand.user.id,
-        fname: demand.user.fname,
-        lname: demand.user.lname,
-        email: demand.user.email,
-        adress: demand.user.adress,
-        profilePicture: demand.user.avatar,
-        iban: undefined,
-        balance: 0
-      }
-      demands.value.push(createDemand(demand.wastes, demand.quantity, location, user, demand.reward, dateBegin, dateEnd));
-    })
-  });
+  supabase.from("demands")
+      .select("*, user(*)")
+      .filter('dateEnd', 'not.lt', new Date().toISOString())
+      .order('dateBegin')
+      .range(nextResultsMin.value, nextResultsMax.value)
+      .then(({data}) => {
+        data?.forEach((demand) => {
+          const location = {lat: demand.lat, long: demand.long, name: demand.address};
+          const dateBegin = new Date(demand.dateBegin);
+          const dateEnd = new Date(demand.dateEnd);
+          const user = {
+            id: demand.user.id,
+            fname: demand.user.fname,
+            lname: demand.user.lname,
+            email: demand.user.email,
+            adress: demand.user.adress,
+            profilePicture: demand.user.avatar,
+            iban: undefined,
+            balance: 0
+          }
+          demands.value.push(createDemand(demand.wastes, demand.quantity, location, user, demand.reward, dateBegin, dateEnd));
+        });
+        page.value += 1;
+        loading.value = false;
+        hasMoreResults.value = data?.length === PAGE_SIZE;
+      });
+}
+
+const handleScroll = (event: CustomEvent) => {
+  const scrollTriggerPos = scrollTriggerElement.value?.offsetTop;
+  const scrollBottomPos = event.detail.scrollTop + event.target?.scrollHeight;
+  if (scrollTriggerPos && scrollBottomPos && scrollBottomPos > scrollTriggerPos && !loading.value && hasMoreResults.value) {
+    loading.value = true;
+    getDemands();
+  }
 }
 </script>
 
@@ -59,7 +89,7 @@ function getDemands() {
         <ion-title>Rechercher</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content :fullscreen="true" class="ion-padding">
+    <ion-content :fullscreen="true" class="ion-padding" :scroll-events="true" @ion-scroll="handleScroll">
       <location-search @locationUpdated="printPosition"></location-search>
       <div class="range">
         <ion-text class="text__bold"> Rayon</ion-text>
@@ -81,6 +111,7 @@ function getDemands() {
             :card-of-current-user="false"
         ></card-demand>
       </div>
+      <div ref="scrollTriggerElement"></div>
     </ion-content>
   </ion-page>
 </template>

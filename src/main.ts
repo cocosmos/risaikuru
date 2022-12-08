@@ -16,6 +16,7 @@ import {
   IonCardSubtitle,
   IonCardTitle,
   IonCol,
+  IonContent,
   IonGrid,
   IonIcon,
   IonicVue,
@@ -23,6 +24,7 @@ import {
   IonItem,
   IonLabel,
   IonNote,
+  IonPopover,
   IonRow,
   IonSearchbar,
   IonText,
@@ -76,6 +78,7 @@ app
   .component("ion-textarea", IonTextarea)
   .component("ion-buttons", IonButtons)
   .component("ion-note", IonNote)
-  .component("ion-card-content", IonCardContent);
-
+  .component("ion-card-content", IonCardContent)
+  .component("ion-popover", IonPopover)
+  .component("ion-content", IonContent);
 defineCustomElements(window);

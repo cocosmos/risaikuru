@@ -142,7 +142,7 @@ export const store = reactive({
       ],
     },
     {
-      id: "2",
+      id: "3",
       sender: userTest2,
       demand: demandTest,
       receiver: userTest,
@@ -175,7 +175,7 @@ export const store = reactive({
       ],
     },
     {
-      id: "2",
+      id: "4",
       sender: userTest,
       demand: demandTest,
       receiver: userTest2,
@@ -208,7 +208,7 @@ export const store = reactive({
       ],
     },
     {
-      id: "2",
+      id: "5",
       sender: userTest2,
       demand: demandTest,
       receiver: userTest,
@@ -241,7 +241,7 @@ export const store = reactive({
       ],
     },
     {
-      id: "2",
+      id: "6",
       sender: userTest,
       demand: demandTest,
       receiver: userTest2,
@@ -274,7 +274,7 @@ export const store = reactive({
       ],
     },
     {
-      id: "2",
+      id: "7",
       sender: userTest2,
       demand: demandTest,
       receiver: userTest,

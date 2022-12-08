@@ -2,6 +2,19 @@ import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
 import TabsPage from "@/views/TabsPage.vue";
 
+export const onlyLoggedOut: string[] = ["/login", "/signup"];
+export const onlyLoggedIn: string[] = [
+  "/add",
+  "/add/type",
+  "/profile",
+  "/profile/my-demands",
+  "/profile/my-demands/:id",
+  "/profile/payment",
+  "/profile/payment/confirmed",
+  "/messages",
+  "/messages/:id",
+];
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",

@@ -1,34 +1,45 @@
 <script lang="ts" setup>
-import { defineProps, ref } from "vue";
+import { defineProps, onMounted, ref } from "vue";
 import { Conversation, Message } from "@/types/Message";
-import { IonAvatar, IonBadge, IonItem, IonLabel, IonText } from "@ionic/vue";
+import {
+  IonAvatar,
+  IonBadge,
+  IonChip,
+  IonContent,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonPopover,
+  IonText,
+} from "@ionic/vue";
 import { trashBinOutline } from "ionicons/icons";
 import { useRouter } from "vue-router";
 import moment from "moment";
 import "moment/src/locale/fr-ch";
+import { getImage, getMessages } from "@/utils/fetch";
+import { useAuthStore } from "@/store/auth";
+import { supabase } from "@/data/supabase";
+import { computed } from "@vue/reactivity";
 
 const props = defineProps<{
   conversation: Conversation;
 }>();
-
+const { user } = useAuthStore();
+const messages = ref<Message[]>([]);
 const messagesUnread = ref(0);
-const lastMessage = ref<Message>();
+const lastMessage = ref("");
 
 const router = useRouter();
 
 const goToConversation = () => {
+  makeMessagesRead();
   router.push("/messages/" + props.conversation.id);
 };
 
-/* onMounted(() => {
-  messagesUnread.value = props.conversation.messages.filter(
-    (message) => !message.isRead
-  ).length;
-  lastMessage.value =
-    props.conversation.messages[props.conversation.messages.length - 1];
-  isAsked.value =
-    props.conversation.demand.user === props.conversation.receiver;
-}); */
+onMounted(() => {
+  checkUnreads();
+  subscribeMessage();
+});
 
 const dateTakeAway = moment(props.conversation.demand.dateBegin)
   .locale("fr-ch")
@@ -37,22 +48,65 @@ const dateTakeAway = moment(props.conversation.demand.dateBegin)
 const dateTakePopOver = moment(props.conversation.demand.dateBegin)
   .locale("fr-ch")
   .format("dddd D MMMM YYYY");
+
+const checkUnreads = async () => {
+  messages.value = await getMessages(props.conversation.id, user);
+
+  if (messages.value.length > 0) {
+    messagesUnread.value = messages.value.filter(
+      (message) => !message.isRead && !message.isSender
+    ).length;
+
+    lastMessage.value = label(messages.value[messages.value.length - 1]);
+  }
+};
+
+const makeMessagesRead = async () => {
+  const { error } = await supabase
+    .from("messages")
+    .update({ is_read: true })
+    .eq("conversation", props.conversation.id)
+    .neq("user", user.id);
+
+  if (error) {
+    console.log(error);
+  }
+};
+
+const subscribeMessage = () => {
+  supabase
+    .channel("messages")
+    .on("postgres_changes", { event: "INSERT", schema: "public" }, () => {
+      checkUnreads();
+    })
+    .subscribe();
+};
+
+const label = (message: Message) => {
+  if (message.user.id === user.id) {
+    return "Vous: " + message.content;
+  } else {
+    return message.user.fname + ": " + message.content;
+  }
+};
+
+const colorStatus = computed(() => {
+  if (props.conversation.demand.status === "pending") {
+    return "warning";
+  } else if (props.conversation.demand.status === "accepted") {
+    return "success";
+  } else if (props.conversation.demand.status === "rejected") {
+    return "danger";
+  }
+});
 </script>
 
 <template>
   <div class="card__badge ion-padding-right">
-    <ion-item
-      button
-      lines="none"
-      :detail="false"
-      @click="goToConversation"
-      :data-before="3"
-    >
+    <ion-item button lines="none" :detail="false" @click="goToConversation">
       <ion-avatar slot="start">
         <img
-          :src="
-            props.conversation.receiver.profilePicture || '/assets/avatar.svg'
-          "
+          :src="getImage(props.conversation.receiver.avatar)"
           :alt="props.conversation.receiver.fname"
         />
       </ion-avatar>
@@ -64,7 +118,7 @@ const dateTakePopOver = moment(props.conversation.demand.dateBegin)
 
           <ion-chip
             class="conversation__date"
-            color="warning"
+            :color="colorStatus"
             :id="conversation.id"
           >
             <ion-icon :icon="trashBinOutline"></ion-icon>
@@ -78,7 +132,7 @@ const dateTakePopOver = moment(props.conversation.demand.dateBegin)
           >
         </ion-popover>
 
-        <p>{{ lastMessage?.content }}</p>
+        <p>{{ lastMessage }}</p>
       </ion-label>
     </ion-item>
     <ion-badge v-if="messagesUnread > 0" slot="end">{{

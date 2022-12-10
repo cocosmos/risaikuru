@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { defineProps, ref } from "vue";
+import { defineProps, ref, computed } from "vue";
 import { fDay, formatMoney } from "@/utils/format";
 import { checkmarkCircleOutline, closeCircleOutline } from "ionicons/icons";
 import {
@@ -11,27 +11,91 @@ import {
   IonButton,
   IonIcon,
 } from "@ionic/vue";
-import { Conversation, Label } from "@/types/Message";
+import { Conversation } from "@/types/Message";
+import { supabase } from "@/data/supabase";
 const props = defineProps<{
   conversation: Conversation;
-  label: Label;
 }>();
 
 const isAsker = ref(props.conversation.isAsker);
+
+const label = computed(() => {
+  switch (props.conversation.demand.status) {
+    case "pending":
+      if (props.conversation.isAsker) {
+        return {
+          text: `${props.conversation.receiver.fname} n'a pas encore validé votre demande.`,
+          color: "warning",
+        };
+      } else {
+        return {
+          text: `${props.conversation.receiver.fname} veux récupérer vos déchets.`,
+          color: "warning",
+        };
+      }
+    case "accepted":
+      if (!props.conversation.isAsker) {
+        return {
+          text: `Prise en charge acceptée.`,
+          color: "success",
+        };
+      } else {
+        return {
+          text: `${props.conversation.receiver.fname} a accepté votre demande.`,
+          color: "success",
+        };
+      }
+    case "rejected":
+      if (props.conversation.isAsker) {
+        return {
+          text: `Prise en charge refusée.`,
+          color: "danger",
+        };
+      } else {
+        return {
+          text: `${props.conversation.receiver.fname} a refusé de prendre vos déchets.`,
+          color: "danger",
+        };
+      }
+    default:
+      return {
+        text: ``,
+        color: "warning",
+      };
+  }
+});
+
+const acceptDemand = async () => {
+  const { error } = await supabase
+    .from("demands")
+    .update({ status: "accepted" })
+    .eq("id", props.conversation.demand.id);
+
+  if (error) {
+    console.log(error);
+  }
+};
+
+const cancelDemand = async () => {
+  const { error } = await supabase
+    .from("demands")
+    .update({ status: "rejected" })
+    .eq("id", props.conversation.demand.id);
+
+  if (error) {
+    console.log(error);
+  }
+};
 </script>
 
 <template>
   <ion-card class="ion-no-margin">
-    <ion-card-header :color="props.label.color">
+    <ion-card-header :color="label.color">
       <ion-card-subtitle
-        >{{ fDay(props.conversation.demand.dateBegin) }}
+        >{{ fDay(conversation.demand.dateBegin) }}
       </ion-card-subtitle>
-      <ion-text v-if="!isAsker && props.label.status === 'pending'">
-        {{
-          formatMoney(
-            props.conversation.demand.reward + props.conversation.demand.fees
-          )
-        }}
+      <ion-text v-if="!isAsker && conversation.demand.status === 'pending'">
+        {{ formatMoney(conversation.demand.reward + conversation.demand.fees) }}
         <span class="price__fees"> (Frais inclus)</span>
       </ion-text>
     </ion-card-header>
@@ -39,14 +103,16 @@ const isAsker = ref(props.conversation.isAsker);
     <ion-card-content>
       <ion-text class="text__label"
         ><p>
-          <span v-if="label.showFname">{{
-            props.conversation.receiver.fname
-          }}</span
-          >{{ label.text }}
+          {{ label.text }}
         </p></ion-text
       >
 
-      <ion-button shape="round" :color="isAsker ? 'danger' : 'success'">
+      <ion-button
+        shape="round"
+        :color="isAsker ? 'danger' : 'success'"
+        v-if="conversation.demand.status === 'pending'"
+        @click="isAsker ? cancelDemand() : acceptDemand()"
+      >
         <ion-icon
           slot="start"
           :icon="isAsker ? closeCircleOutline : checkmarkCircleOutline"
@@ -55,10 +121,7 @@ const isAsker = ref(props.conversation.isAsker);
           {{ !isAsker ? "Accepter et payer" : "Annuler la demande" + " " }}
           <ion-text v-if="!isAsker">
             {{
-              formatMoney(
-                props.conversation.demand.reward +
-                  props.conversation.demand.fees
-              )
+              formatMoney(conversation.demand.reward + conversation.demand.fees)
             }}
           </ion-text>
         </ion-text>

@@ -1,15 +1,17 @@
 import { defineStore } from "pinia";
 import { useStorage } from "@vueuse/core";
-import { computed, ref, watch, watchEffect, onMounted } from "vue";
-import { Session, User } from "@supabase/supabase-js";
+import { computed, ref, watch } from "vue";
+import { Session } from "@supabase/supabase-js";
 import { UserType } from "@/types/User";
 import { supabase } from "@/data/supabase";
-import { Conversation } from "@/types/Message";
+import { Conversation, makeMessage, Message } from "@/types/Message";
+import moment from "moment";
 
 export const useAuthStore = defineStore("auth", () => {
   const session = ref(useStorage<Session>("risaikuru-session", {} as Session));
   const user = ref(useStorage<UserType>("risaikuru-user", {} as UserType));
   const conversations = ref<Conversation[]>([]);
+  const messages = ref<Message[]>([]);
 
   const isLoggedIn = computed(() => {
     return (
@@ -28,14 +30,14 @@ export const useAuthStore = defineStore("auth", () => {
       .select(`lname, fname, avatar, balance, adress, iban`)
       .eq("id", session.value.user.id)
       .single()
-      .then(({ data, error, status }) => {
+      .then(({ data }) => {
         if (data) {
           user.value = {
             id: session.value.user.id,
             lname: data.lname,
             fname: data.fname,
             email: "",
-            profilePicture: data.avatar,
+            avatar: data.avatar,
             balance: data.balance,
             adress: data.adress,
             iban: data.iban,
@@ -45,6 +47,7 @@ export const useAuthStore = defineStore("auth", () => {
   };
 
   const updateConversations = () => {
+    //TODO : BUG: when the page is refreshed, the conversations is duplicated
     if (user.value.id) {
       supabase
         .from("conversations")
@@ -54,6 +57,7 @@ export const useAuthStore = defineStore("auth", () => {
         .or(`requester.eq.${user.value.id},needer.eq.${user.value.id}`)
         .then(({ data }) => {
           if (data) {
+            console.log(data);
             data?.forEach((conversation) => {
               const sender =
                 conversation.requester.id === user.value.id
@@ -63,26 +67,47 @@ export const useAuthStore = defineStore("auth", () => {
                 conversation.requester.id === user.value.id
                   ? conversation.needer
                   : conversation.requester;
+              const createdAt = moment(conversation.demand.created_at);
 
-              conversations.value.push({
-                id: conversation.id,
-                sender: sender,
-                receiver: receiver,
-                demand: conversation.demand,
-                isAsker: conversation.requester.id === user.value.id,
-              });
+              const isPassedTheeDays = moment
+                .duration(moment().startOf("day").diff(createdAt))
+                .asDays();
+              if (isPassedTheeDays < 4) {
+                conversations.value.push({
+                  id: conversation.id,
+                  sender: sender,
+                  receiver: receiver,
+                  demand: conversation.demand,
+                  isAsker: conversation.requester.id === user.value.id,
+                });
+              }
             });
           }
         });
     }
   };
 
+  const getAllMessages = () => {
+    messages.value = [];
+    supabase
+      .from("messages")
+      .select(`*, user!inner(*)`)
+      .then(({ data }) => {
+        if (data) {
+          data.forEach((message) => {
+            messages.value.push(makeMessage(message, user.value));
+          });
+        }
+      });
+  };
+
   const subscribeConversation = () => {
     supabase
       .channel("conversations")
-      .on("postgres_changes", { event: "*", schema: "public" }, () =>
-        updateConversations()
-      )
+      .on("postgres_changes", { event: "*", schema: "public" }, () => {
+        conversations.value = [];
+        updateConversations();
+      })
       .subscribe();
   };
   // Save the user when the session is set
@@ -91,6 +116,7 @@ export const useAuthStore = defineStore("auth", () => {
       updateUser();
       updateConversations();
       subscribeConversation();
+      getAllMessages();
     }
   });
 
@@ -101,5 +127,8 @@ export const useAuthStore = defineStore("auth", () => {
     conversations,
     updateConversations,
     logout,
+    updateUser,
+    messages,
+    getAllMessages,
   };
 });

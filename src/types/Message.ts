@@ -1,3 +1,4 @@
+import moment from "moment";
 import { Demand, Status } from "./Demand";
 import { UserType } from "./User";
 
@@ -28,3 +29,22 @@ export interface Label {
   showFname?: boolean;
   text: string;
 }
+
+interface MessageSupabase {
+  id: string;
+  user: UserType;
+  content: string;
+  created_at: string;
+  is_read: boolean;
+}
+
+export const makeMessage = (message: MessageSupabase, user: UserType) => {
+  return {
+    id: message.id,
+    user: message.user,
+    content: message.content,
+    createdAt: moment(message.created_at).toDate(),
+    isRead: message.is_read,
+    isSender: message.user.id === user.id,
+  };
+};

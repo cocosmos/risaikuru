@@ -13,7 +13,7 @@ const props = defineProps<{
   <div class="message" :class="message.isSender ? 'sender' : 'receiver'">
     <div class="message__header">
       <avatar-name
-        :user="props.message.user"
+        :user="message.user"
         size="medium"
         :show-lname="false"
         v-if="!message.isSender"

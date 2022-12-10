@@ -8,7 +8,8 @@ import {
   IonButton,
 } from "@ionic/vue";
 import { ref, watch } from "vue";
-import { supabase } from "../../data/supabase";
+import { supabase } from "@/supabase";
+
 import router from "@/router";
 import PasswordShowHide from "@/components/Input/PasswordShowHide.vue";
 

@@ -9,11 +9,18 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding relative">
-      <h2 class="ion-text-center">Choisis la quantité de déchêts que tu dois débarrasser</h2>
+      <h2 class="ion-text-center">
+        Choisis la quantité de déchêts que tu dois débarrasser
+      </h2>
       <stack-list>
-        <quantity-stepper v-for="quantity in newDemand.quantities.value" v-model="quantity.number" :size="quantity.id"
-                          :icon="cube" :key="quantity.id"
-                          :description="quantity.description"></quantity-stepper>
+        <quantity-stepper
+          v-for="quantity in newDemand.quantities.value"
+          v-model="quantity.number"
+          :size="quantity.id"
+          :icon="cube"
+          :key="quantity.id"
+          :description="quantity.description"
+        ></quantity-stepper>
         <!--
         <quantity-stepper v-model="quantities.s" size="s" :icon="cube"
                           description="Équivalent d'une boite à chaussures"></quantity-stepper>
@@ -45,16 +52,16 @@ import {
   IonButtons,
   IonBackButton,
   IonIcon,
-  IonPage
+  IonPage,
 } from "@ionic/vue";
-import {chevronForwardOutline} from "ionicons/icons";
-import {useRouter} from "vue-router";
-import {computed} from "vue";
+import { chevronForwardOutline } from "ionicons/icons";
+import { useRouter } from "vue-router";
+import { computed } from "vue";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
-import QuantityStepper from '@/components/QuantityStepper.vue';
+import QuantityStepper from "@/components/Add/QuantityStepper.vue";
 import StackList from "@/components/StackList.vue";
-import {cube, logoDropbox, bag, car} from "ionicons/icons"
-import {useNewDemand} from "@/composables/newDemand";
+import { cube, logoDropbox, bag, car } from "ionicons/icons";
+import { useNewDemand } from "@/composables/newDemand";
 
 const router = useRouter();
 const newDemand = useNewDemand();
@@ -64,9 +71,8 @@ const valid = computed(() => {
 });
 
 const validate = () => {
-  if (valid.value) router.push('/add/moment');
-}
+  if (valid.value) router.push("/add/moment");
+};
 </script>
 
-<style>
-</style>
+<style></style>

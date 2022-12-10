@@ -3,7 +3,7 @@ import { useStorage } from "@vueuse/core";
 import { computed, ref, watch } from "vue";
 import { Session } from "@supabase/supabase-js";
 import { UserType } from "@/types/User";
-import { supabase } from "@/data/supabase";
+import { supabase } from "@/supabase";
 import { Conversation, makeMessage, Message } from "@/types/Message";
 import moment from "moment";
 

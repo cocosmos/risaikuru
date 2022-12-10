@@ -12,14 +12,14 @@ import {
 } from "@ionic/vue";
 import { Demand } from "@/types/Demand";
 import { fDate } from "../../utils/format";
-import QuantityOnCard from "../QuantityOnCard.vue";
-import AvatarName from "../AvatarName.vue";
+import QuantityOnCard from "./Demand/QuantityOnCard.vue";
+import AvatarName from "../Profile/AvatarName.vue";
 import router from "@/router";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { ACCESS_TOKEN } from "@/services/mapbox";
 import { useAuthStore } from "@/store/auth";
-import { createConversation } from "../../utils/fetch";
+import { createConversation } from "@/supabase";
 
 const props = defineProps<{
   demand: Demand;

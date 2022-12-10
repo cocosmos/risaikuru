@@ -9,15 +9,22 @@
       <template v-if="newDemand.published">
         <h2 class="ion-text-center">Félicitations, ton annonce est publiée</h2>
         <div class="wastes">
-          <IconInfo v-for="wasteType in newDemand.wasteTypes.value" :waste="wasteType" :key="wasteType"
-                    size="50px"></IconInfo>
+          <IconInfo
+            v-for="wasteType in newDemand.wasteTypes.value"
+            :waste="wasteType"
+            :key="wasteType"
+            size="50px"
+          ></IconInfo>
         </div>
         <div class="infos">
           <div class="infos__volume">
             <p>Volume</p>
             <div class="infos__quantities">
-              <quantity-on-card v-for="quantity in quantities" :quantity="quantity"
-                                :key="quantity.id"></quantity-on-card>
+              <quantity-on-card
+                v-for="quantity in quantities"
+                :quantity="quantity"
+                :key="quantity.id"
+              ></quantity-on-card>
             </div>
           </div>
           <div class="infos__line">
@@ -26,14 +33,18 @@
           </div>
           <div class="infos__line">
             <ion-icon :icon="Icons.location" color="primary"></ion-icon>
-            <span>{{ newDemand.location.value !== undefined ? newDemand.location.value.name : "" }}</span>
+            <span>{{
+              newDemand.location.value !== undefined
+                ? newDemand.location.value.name
+                : ""
+            }}</span>
           </div>
           <div class="infos__line">
             <ion-icon :icon="Icons.trophy" color="primary"></ion-icon>
             <span class="infos__reward">
-            {{ newDemand.reward.value }} CHF
-            <span class="infos__reward__fees">+ {{ fees }} CHF (frais)</span>
-          </span>
+              {{ newDemand.reward.value }} CHF
+              <span class="infos__reward__fees">+ {{ fees }} CHF (frais)</span>
+            </span>
           </div>
         </div>
       </template>
@@ -57,17 +68,17 @@ import {
   IonContent,
   IonButton,
   IonPage,
-  IonIcon
+  IonIcon,
 } from "@ionic/vue";
 import * as Icons from "ionicons/icons";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
-import IonButtonSecondary from "@/components/IonButtonSecondary.vue";
+import IonButtonSecondary from "@/components/Buttons/IonButtonSecondary.vue";
 import IconInfo from "@/components/IconInfo.vue";
-import QuantityOnCard from "@/components/QuantityOnCard.vue";
-import {useNewDemand} from "@/composables/newDemand";
-import {computed, onMounted, watchEffect} from "vue";
+import QuantityOnCard from "@/components/Card/Demand/QuantityOnCard.vue";
+import { useNewDemand } from "@/composables/newDemand";
+import { computed, onMounted, watchEffect } from "vue";
 import moment from "moment";
-import {useRouter} from "vue-router";
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 const newDemand = useNewDemand();
@@ -80,24 +91,28 @@ onMounted(() => {
 const quantities = computed(() => {
   return newDemand.quantities.value.filter((quantity) => {
     return quantity.number > 0;
-  })
+  });
 });
 
 const momentStr = computed(() => {
   moment.locale("fr");
-  return moment(newDemand.dateBegin.value).format("dddd D MMMM [entre] HH:mm [et] ") + moment(newDemand.dateEnd.value).format("HH:mm");
+  return (
+    moment(newDemand.dateBegin.value).format(
+      "dddd D MMMM [entre] HH:mm [et] "
+    ) + moment(newDemand.dateEnd.value).format("HH:mm")
+  );
 });
 
 const fees = computed(() => {
-  return newDemand.reward.value * .25;
+  return newDemand.reward.value * 0.25;
 });
-
 </script>
 
 <style lang="scss" scoped>
 .background {
   --background: none;
-  background: white url("../../assets/summary-background.png") center 105% no-repeat;
+  background: white url("../../assets/summary-background.png") center 105%
+    no-repeat;
   background-size: 125%;
 }
 
@@ -131,7 +146,7 @@ const fees = computed(() => {
 
   &__quantities {
     display: flex;
-    gap: .5rem;
+    gap: 0.5rem;
   }
 
   &__line {
@@ -159,7 +174,7 @@ const fees = computed(() => {
       position: absolute;
       top: calc(100% + 10px);
       left: 0;
-      font-size: .75rem;
+      font-size: 0.75rem;
       color: var(--ion-color-text);
     }
   }

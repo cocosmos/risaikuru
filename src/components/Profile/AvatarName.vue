@@ -2,10 +2,10 @@
 import { defineProps, ref, onMounted } from "vue";
 import { IonAvatar, IonLabel } from "@ionic/vue";
 import { toRefs } from "vue";
-import { supabase } from "@/data/supabase";
+import { supabase, getImage } from "@/supabase";
+
 import { Camera, CameraResultType } from "@capacitor/camera";
 import { UserType } from "@/types/User";
-import { getImage } from "../utils/fetch";
 const props = defineProps<{
   user: UserType;
   size: "small" | "medium" | "large";

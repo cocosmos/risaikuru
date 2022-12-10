@@ -12,7 +12,7 @@ import CardDemand from "../components/Card/CardDemand.vue";
 import LocationSearch from "@/components/LocationSearch.vue";
 import { computed, onMounted, ref, watch } from "vue";
 import { Demand } from "@/types/Demand";
-import { supabase } from "@/data/supabase";
+import { supabase } from "@/supabase";
 import CardDemandSkeleton from "@/components/Card/CardDemandSkeleton.vue";
 import Location from "@/types/Location";
 import { LngLatBounds, MercatorCoordinate } from "mapbox-gl";

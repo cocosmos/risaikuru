@@ -16,9 +16,8 @@ import { trashBinOutline } from "ionicons/icons";
 import { useRouter } from "vue-router";
 import moment from "moment";
 import "moment/src/locale/fr-ch";
-import { getImage, getMessages } from "@/utils/fetch";
 import { useAuthStore } from "@/store/auth";
-import { supabase } from "@/data/supabase";
+import { supabase, getImage, getMessages } from "@/supabase";
 import { computed } from "@vue/reactivity";
 
 const props = defineProps<{

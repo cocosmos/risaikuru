@@ -9,7 +9,7 @@ import {
   loadingController,
 } from "@ionic/vue";
 import { ref } from "vue";
-import { supabase } from "../../data/supabase";
+import { supabase } from "@/supabase";
 import TextField from "@/components/Input/TextField.vue";
 import router from "@/router";
 

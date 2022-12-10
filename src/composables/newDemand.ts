@@ -12,7 +12,7 @@ import { Waste } from "@/types/Demand";
 import Location from "@/types/Location";
 import { Quantity } from "@/types/Demand";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
-import { supabase } from "@/data/supabase";
+import { supabase } from "@/supabase";
 import { onIonViewDidEnter } from "@ionic/vue";
 
 const wasteTypes = ref<Waste[]>([]);

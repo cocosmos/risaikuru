@@ -1,4 +1,4 @@
-import { supabase } from "@/data/supabase";
+import { supabase } from "@/supabase";
 import { Demand } from "@/types/Demand";
 import { defineStore } from "pinia";
 import { ref } from "vue";

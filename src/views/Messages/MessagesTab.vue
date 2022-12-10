@@ -21,9 +21,15 @@ import { send } from "ionicons/icons";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
 import { returnMessagesByDay } from "@/utils/helper";
 import { useRoute } from "vue-router";
-import { supabase } from "../../data/supabase";
+import {
+  supabase,
+  getMessages,
+  getConversation,
+  insertMessage,
+} from "@/supabase";
+
 import { useAuthStore } from "@/store/auth";
-import { getMessages } from "@/utils/fetch";
+
 const route = useRoute();
 const conversationId = route.params.id as string;
 const { user, updateConversations, getAllMessages } = useAuthStore();
@@ -44,59 +50,13 @@ onMounted(() => {
 const handleMessage = () => {
   if (message.value === "") return;
 
-  supabase
-    .from("messages")
-    .insert([
-      {
-        content: message.value,
-        conversation: conversationId,
-        user: user.id,
-      },
-    ])
-    .then(({ data, error }) => {
-      if (error) {
-        console.error(error);
-      } else {
-        console.log(data);
-      }
-    });
-  message.value = "";
+  insertMessage(conversationId, user.id, message.value);
   updateConversations();
   getAllMessages();
 };
 
-const getConversation = () => {
-  supabase
-    .from("conversations")
-    .select(
-      `*, requester!inner(*), needer!inner(*), demand!inner(*, user!inner(*))`
-    )
-    .eq("id", conversationId)
-    .single()
-    .then(({ data, error }) => {
-      if (error) {
-        console.error(error);
-      } else {
-        if (data) {
-          const sender =
-            data.requester.id === user.id ? data.requester : data.needer;
-          const receiver =
-            data.requester.id === user.id ? data.needer : data.requester;
-
-          conversation.value = {
-            id: data.id,
-            sender: sender,
-            receiver: receiver,
-            demand: data.demand,
-            isAsker: data.requester.id === user.id,
-          };
-        }
-      }
-    });
-};
-
 const messages = async () => {
-  getConversation();
+  conversation.value = await getConversation(conversationId, user.id);
   days.value = returnMessagesByDay(await getMessages(conversationId, user));
   scrollBottom();
 };

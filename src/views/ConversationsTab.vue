@@ -7,15 +7,13 @@ import {
   IonContent,
   IonText,
 } from "@ionic/vue";
-import ConversationCard from "@/components/Messages/ConversationCard.vue";
+import ConversationCard from "@/components/Card/CardConversation.vue";
 import { onMounted } from "vue";
 import { useAuthStore } from "@/store/auth";
 const { conversations, updateConversations } = useAuthStore();
 
 onMounted(() => {
   updateConversations();
-
-  console.log(conversations);
 });
 </script>
 

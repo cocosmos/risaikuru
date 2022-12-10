@@ -38,11 +38,11 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: "messages",
-        component: () => import("@/views/MessagesTab.vue"),
+        component: () => import("@/views/ConversationsTab.vue"),
       },
       {
         path: "messages/:id",
-        component: () => import("@/views/Conversation/ConversationTab.vue"),
+        component: () => import("@/views/Messages/MessagesTab.vue"),
       },
       {
         path: "profile",

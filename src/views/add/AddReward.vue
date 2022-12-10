@@ -9,7 +9,9 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding relative">
-      <h2 class="ion-text-center">Choisis le montant de la récompense pour le trieur</h2>
+      <h2 class="ion-text-center">
+        Choisis le montant de la récompense pour le trieur
+      </h2>
       <div class="inner-content">
         <reward-toggle-list v-model="rewardAmount"></reward-toggle-list>
         <section class="summary">
@@ -26,8 +28,8 @@
             <span>Total* :</span>
             <span>{{ total }} CHF</span>
             <span class="summary__line--indication">
-            *Facturé au momement de la prise en charge
-          </span>
+              *Facturé au momement de la prise en charge
+            </span>
           </p>
         </section>
       </div>
@@ -49,14 +51,14 @@ import {
   IonButton,
   IonButtons,
   IonBackButton,
-  IonPage
+  IonPage,
 } from "@ionic/vue";
-import {useRouter} from "vue-router";
-import {computed, ref} from "vue";
+import { useRouter } from "vue-router";
+import { computed, ref } from "vue";
 
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
-import RewardToggleList from '@/components/RewardToggleList.vue';
-import {useNewDemand} from "@/composables/newDemand";
+import RewardToggleList from "@/components/Add/RewardToggleList.vue";
+import { useNewDemand } from "@/composables/newDemand";
 
 const router = useRouter();
 const newDemand = useNewDemand();
@@ -65,17 +67,17 @@ const rewardAmount = ref(5);
 
 // TODO: Mettre ça dans le composable pour povoir le réutiliser dans l'écran de résumé
 const fees = computed(() => {
-  return rewardAmount.value * .25;
+  return rewardAmount.value * 0.25;
 });
 
 const total = computed(() => {
   return rewardAmount.value + fees.value;
-})
+});
 
 const validate = () => {
   newDemand.reward.value = rewardAmount.value;
-  router.push('/add/published');
-}
+  router.push("/add/published");
+};
 </script>
 
 <style lang="scss" scoped>
@@ -90,7 +92,7 @@ const validate = () => {
 .summary {
   display: flex;
   flex-direction: column;
-  gap: .5rem;
+  gap: 0.5rem;
 
   &__line {
     position: relative;
@@ -102,14 +104,14 @@ const validate = () => {
     &--indication {
       position: absolute;
       bottom: -5px;
-      font-size: .75rem;
+      font-size: 0.75rem;
       transform: translateY(100%);
     }
   }
 
   &__total {
     font-weight: bold;
-    margin-top: .5rem;
+    margin-top: 0.5rem;
   }
 }
 </style>

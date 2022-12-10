@@ -18,7 +18,6 @@ const unReadMessages = computed(() => {
     (message) => message.isRead === false && message.isSender === false
   );
 });
-console.log(messages);
 
 onMounted(() => {
   getAllMessages();

@@ -12,7 +12,7 @@ import {
   IonIcon,
 } from "@ionic/vue";
 import { Conversation } from "@/types/Message";
-import { supabase } from "@/data/supabase";
+import { acceptDemand, cancelDemand } from "@/supabase";
 const props = defineProps<{
   conversation: Conversation;
 }>();
@@ -64,28 +64,6 @@ const label = computed(() => {
       };
   }
 });
-
-const acceptDemand = async () => {
-  const { error } = await supabase
-    .from("demands")
-    .update({ status: "accepted" })
-    .eq("id", props.conversation.demand.id);
-
-  if (error) {
-    console.log(error);
-  }
-};
-
-const cancelDemand = async () => {
-  const { error } = await supabase
-    .from("demands")
-    .update({ status: "rejected" })
-    .eq("id", props.conversation.demand.id);
-
-  if (error) {
-    console.log(error);
-  }
-};
 </script>
 
 <template>
@@ -111,7 +89,11 @@ const cancelDemand = async () => {
         shape="round"
         :color="isAsker ? 'danger' : 'success'"
         v-if="conversation.demand.status === 'pending'"
-        @click="isAsker ? cancelDemand() : acceptDemand()"
+        @click="
+          isAsker
+            ? cancelDemand(props.conversation.demand.id)
+            : acceptDemand(props.conversation.demand.id)
+        "
       >
         <ion-icon
           slot="start"

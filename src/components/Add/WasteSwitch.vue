@@ -9,7 +9,7 @@
 
 <script lang="ts" setup>
 import { defineProps, defineEmits } from "vue";
-import IconInfo from "./IconInfo.vue";
+import IconInfo from "../IconInfo.vue";
 import { Waste } from "@/types/Demand";
 
 const props = defineProps<{

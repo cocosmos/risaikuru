@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Message } from "@/types/Message";
 import { defineProps } from "vue";
-import AvatarName from "../AvatarName.vue";
+import AvatarName from "../Profile/AvatarName.vue";
 import { fHour } from "@/utils/format";
 
 const props = defineProps<{

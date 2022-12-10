@@ -10,7 +10,7 @@ import {
   IonItem,
   IonLabel,
 } from "@ionic/vue";
-import AvatarName from "@/components/AvatarName.vue";
+import AvatarName from "@/components/Profile/AvatarName.vue";
 import CardPot from "@/components/Card/CardPot.vue";
 import {
   cardOutline,

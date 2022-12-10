@@ -94,24 +94,6 @@ export const store = reactive({
       sender: userTest,
       demand: demandTest,
       receiver: userTest2,
-      messages: [
-        {
-          id: "1",
-          isSender: true,
-          user: userTest,
-          content: "Hello",
-          createdAt: new Date(),
-          isRead: false,
-        },
-        {
-          id: "2",
-          isSender: false,
-          user: userTest,
-          content: "Hi",
-          createdAt: new Date(),
-          isRead: false,
-        },
-      ],
     },
     {
       id: "2",

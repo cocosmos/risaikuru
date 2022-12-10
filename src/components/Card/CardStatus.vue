@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { Demand, Status } from "@/types/Demand";
 import { defineProps, ref } from "vue";
 import { fDay, formatMoney } from "@/utils/format";
 import { checkmarkCircleOutline, closeCircleOutline } from "ionicons/icons";
@@ -12,103 +11,55 @@ import {
   IonButton,
   IonIcon,
 } from "@ionic/vue";
-const props = defineProps<{ demand: Demand; isAsker: boolean }>();
+import { Conversation, Label } from "@/types/Message";
+const props = defineProps<{
+  conversation: Conversation;
+  label: Label;
+}>();
 
-const name = ref(props.demand.user.fname);
-console.log(props.demand);
-interface Label {
-  status: Status;
-  icon?: string;
-  text: string;
-  button?: string;
-  colorButton?: string;
-  isAsker: boolean;
-}
-
-const labels: Label[] = [
-  {
-    status: "pending",
-    icon: checkmarkCircleOutline,
-    colorButton: "success",
-    text: `${name.value} veut récupérer vos déchets.`,
-    button: "Accepter et payer",
-    isAsker: true,
-  },
-  {
-    status: "accepted",
-    text: "Prise en charge acceptée",
-    isAsker: true,
-  },
-  {
-    status: "rejected",
-    text: "Vous avez refusé la prise en charge",
-    isAsker: true,
-  },
-  {
-    status: "pending",
-    text: `${name.value} n'a pas encore validé votre demande.`,
-    icon: closeCircleOutline,
-    colorButton: "danger",
-    button: "Annuler",
-    isAsker: false,
-  },
-  {
-    status: "accepted",
-    text: `${name.value} a accepté votre demande.`,
-    isAsker: false,
-  },
-  {
-    status: "rejected",
-    text: "Prise en charge annulée",
-    isAsker: false,
-  },
-];
-
-let label = ref({} as Label);
-label.value = labels.find(
-  (l) => props.demand.status === l.status && props.isAsker === l.isAsker
-) as Label;
-
-const colorHeader = ref("primary");
-
-switch (label.value.status) {
-  case "pending":
-    colorHeader.value = "warning";
-    break;
-  case "accepted":
-    colorHeader.value = "success";
-    break;
-  case "rejected":
-    colorHeader.value = "danger";
-    break;
-
-  default:
-    colorHeader.value = "primary";
-    break;
-}
+const isAsker = ref(props.conversation.isAsker);
 </script>
 
 <template>
   <ion-card class="ion-no-margin">
-    <ion-card-header :color="colorHeader">
-      <ion-card-subtitle>{{ fDay(demand.dateBegin) }}</ion-card-subtitle>
-      <ion-text v-if="label.isAsker && label.status === 'pending'">
-        {{ formatMoney(props.demand.reward + props.demand.fees) }}
+    <ion-card-header :color="props.label.color">
+      <ion-card-subtitle
+        >{{ fDay(props.conversation.demand.dateBegin) }}
+      </ion-card-subtitle>
+      <ion-text v-if="!isAsker && props.label.status === 'pending'">
+        {{
+          formatMoney(
+            props.conversation.demand.reward + props.conversation.demand.fees
+          )
+        }}
         <span class="price__fees"> (Frais inclus)</span>
       </ion-text>
     </ion-card-header>
 
     <ion-card-content>
       <ion-text class="text__label"
-        ><p>{{ label.text }}</p></ion-text
+        ><p>
+          <span v-if="label.showFname">{{
+            props.conversation.receiver.fname
+          }}</span
+          >{{ label.text }}
+        </p></ion-text
       >
 
-      <ion-button shape="round" :color="label.colorButton" v-if="label.button">
-        <ion-icon slot="start" :icon="label.icon"></ion-icon>
+      <ion-button shape="round" :color="isAsker ? 'danger' : 'success'">
+        <ion-icon
+          slot="start"
+          :icon="isAsker ? closeCircleOutline : checkmarkCircleOutline"
+        ></ion-icon>
         <ion-text>
-          {{ label.button + " " }}
-          <ion-text v-if="label.isAsker && label.status === 'pending'">
-            {{ formatMoney(props.demand.reward + props.demand.fees) }}
+          {{ !isAsker ? "Accepter et payer" : "Annuler la demande" + " " }}
+          <ion-text v-if="!isAsker">
+            {{
+              formatMoney(
+                props.conversation.demand.reward +
+                  props.conversation.demand.fees
+              )
+            }}
           </ion-text>
         </ion-text>
       </ion-button>

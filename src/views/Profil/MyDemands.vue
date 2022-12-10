@@ -9,9 +9,9 @@ import {
   IonBackButton,
 } from "@ionic/vue";
 import CardDemand from "@/components/Card/CardDemand.vue";
-import { store } from "@/data/store";
+import { useDemandStore } from "@/store/demand";
 
-const demands = store.demands;
+const { demands } = useDemandStore();
 </script>
 
 <template>

@@ -7,15 +7,15 @@ import {
   IonContent,
   IonButton,
 } from "@ionic/vue";
-import { store } from "@/data/store";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { regexCheckIban } from "@/utils/helper";
+import { useAuthStore } from "@/store/auth";
 
 const isIbanValid = ref<null | boolean>(null);
 const ibanValue = ref("");
+const { user } = useAuthStore();
 
-const currentUser = store.user;
 const router = useRouter();
 
 const texts = [
@@ -34,7 +34,7 @@ const texts = [
     button: "Finaliser la demande de paiement",
   },
 ];
-const text = computed(() => texts[currentUser.iban ? 1 : 0]);
+const text = computed(() => texts[user.iban ? 1 : 0]);
 const useRoute = () => {
   router.push(text.value.link);
 };
@@ -78,7 +78,7 @@ const validateIban = (ev: any) => {
           type="text"
           placeholder="CH00 0000 0000 0000 0000 0"
           @ionInput="validateIban"
-          v-model="currentUser.iban"
+          v-model="user.iban"
           v-maska="'AA## #### #### #### #### #'"
         ></ion-input>
         <ion-note slot="error">IBAN Invalide</ion-note>
@@ -88,7 +88,7 @@ const validateIban = (ev: any) => {
         <ion-label position="floating">Adresse</ion-label>
         <ion-textarea
           placeholder="Chemin du petit Chevreuil 19, 1000 Lausanne"
-          v-model="currentUser.adress"
+          v-model="user.adress"
         ></ion-textarea>
       </ion-item>
 

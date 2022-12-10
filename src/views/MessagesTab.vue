@@ -14,6 +14,8 @@ const { conversations, updateConversations } = useAuthStore();
 
 onMounted(() => {
   updateConversations();
+
+  console.log(conversations);
 });
 </script>
 

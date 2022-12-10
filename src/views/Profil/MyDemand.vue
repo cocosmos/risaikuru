@@ -9,9 +9,10 @@ import {
   IonContent,
 } from "@ionic/vue";
 import { useRoute } from "vue-router";
-import { store } from "@/data/store";
 
-const demands = store.demands;
+import { useDemandStore } from "@/store/demand";
+
+const { demands } = useDemandStore();
 const route = useRoute();
 const demand = demands.find((demand) => demand.id === route.params.id);
 </script>

@@ -5,10 +5,16 @@ import {
   IonToolbar,
   IonTitle,
   IonContent,
+  IonText,
 } from "@ionic/vue";
 import ConversationCard from "@/components/Messages/ConversationCard.vue";
-import { store } from "@/data/store";
-const conversations = store.conversations;
+import { onMounted } from "vue";
+import { useAuthStore } from "@/store/auth";
+const { conversations, updateConversations } = useAuthStore();
+
+onMounted(() => {
+  updateConversations();
+});
 </script>
 
 <template>

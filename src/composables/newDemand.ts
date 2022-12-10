@@ -111,6 +111,7 @@ export const useNewDemand = () => {
           dateBegin: dateBegin.value,
           dateEnd: dateEnd.value,
           quantity: quantities.value,
+          status: "pending",
         })
         .select()
         .then(({ data, error }) => {

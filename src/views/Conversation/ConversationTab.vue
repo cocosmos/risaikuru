@@ -14,69 +14,30 @@ import {
   IonLabel,
 } from "@ionic/vue";
 import CardStatus from "@/components/Card/CardStatus.vue";
-import { onMounted, ref, computed, reactive } from "vue";
+import { onMounted, ref } from "vue";
 import MessagesByDay from "@/components/Messages/MessagesByDay.vue";
-import { Conversation, Day, Label } from "@/types/Message";
+import { Conversation, Day } from "@/types/Message";
 import { send } from "ionicons/icons";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
 import { returnMessagesByDay } from "@/utils/helper";
 import { useRoute } from "vue-router";
 import { supabase } from "../../data/supabase";
 import { useAuthStore } from "@/store/auth";
-import moment from "moment";
+import { getMessages } from "@/utils/fetch";
 const route = useRoute();
 const conversationId = route.params.id as string;
-const { user } = useAuthStore();
+const { user, updateConversations, getAllMessages } = useAuthStore();
 const content = ref();
 const message = ref("");
 const scrollBottom = () => {
   content.value.$el.scrollToBottom();
 };
+
 const days = ref<Day[]>([]);
 const conversation = ref<Conversation>();
-const label = reactive<Label>({
-  status: "pending",
-  showFname: true,
-  text: ` veut récupérer vos déchets.`,
-  color: "warning",
-});
-switch (conversation.value?.demand.status) {
-  case "pending":
-    if (conversation.value.isAsker) {
-      label.showFname = true;
-      label.text = ` veut récupérer vos déchets.`;
-      label.color = "warning";
-    } else {
-      label.showFname = true;
-      label.text = ` n'a pas encore validé votre demande.`;
-      label.color = "warning";
-    }
-    break;
-  case "accepted":
-    if (conversation.value.isAsker) {
-      label.showFname = false;
-      label.text = `Prise en charge acceptée.`;
-      label.color = "success";
-    } else {
-      label.showFname = true;
-      label.text = ` a accepté votre demande.`;
-      label.color = "success";
-    }
-    break;
-  case "rejected":
-    if (conversation.value.isAsker) {
-      label.showFname = false;
-      label.text = `Vous avez refusé la prise en charge.`;
-      label.color = "danger";
-    } else {
-      label.showFname = true;
-      label.text = ` a refusé votre demande.`;
-      label.color = "danger";
-    }
-    break;
-}
+
 onMounted(() => {
-  getMessages();
+  messages();
   subscribeMessages();
 });
 
@@ -100,6 +61,8 @@ const handleMessage = () => {
       }
     });
   message.value = "";
+  updateConversations();
+  getAllMessages();
 };
 
 const getConversation = () => {
@@ -127,47 +90,21 @@ const getConversation = () => {
             demand: data.demand,
             isAsker: data.requester.id === user.id,
           };
-          label.status = data.demand.status;
         }
       }
     });
 };
 
-const getMessages = async () => {
+const messages = async () => {
   getConversation();
-
-  const { data, error } = await supabase
-    .from("messages")
-    .select(
-      "*, conversation!inner(*,needer!inner(*),requester!inner(*), demand!inner(*,user!inner(*))), user!inner(*)"
-    )
-    .eq("conversation.id", conversationId);
-  console.log(data);
-  if (error) {
-    console.error(error);
-  } else {
-    const messages = data.map((message) => {
-      return {
-        id: message.id,
-        isSender: message.user.id === user.id,
-        user: message.user,
-        content: message.content,
-        createdAt: moment(message.created_at).toDate(),
-        isRead: false,
-      };
-    });
-
-    days.value = returnMessagesByDay(messages);
-    scrollBottom();
-  }
+  days.value = returnMessagesByDay(await getMessages(conversationId, user));
+  scrollBottom();
 };
 
 const subscribeMessages = () => {
   supabase
     .channel("messages")
-    .on("postgres_changes", { event: "*", schema: "public" }, () =>
-      getMessages()
-    )
+    .on("postgres_changes", { event: "*", schema: "public" }, () => messages())
     .subscribe();
 };
 </script>
@@ -187,7 +124,6 @@ const subscribeMessages = () => {
       <div class="conversation">
         <div class="conversation__fixed">
           <card-status
-            :label="label"
             :conversation="conversation"
             v-if="conversation"
           ></card-status>

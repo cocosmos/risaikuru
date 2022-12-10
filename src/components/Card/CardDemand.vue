@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { trophy, chevronDown, chevronUp } from "ionicons/icons";
 import IconInfo from "../IconInfo.vue";
-import { defineProps, ref } from "vue";
+import { computed, defineProps, ref } from "vue";
 import {
   IonCard,
   IonCardHeader,
@@ -18,11 +18,24 @@ import router from "@/router";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { ACCESS_TOKEN } from "@/services/mapbox";
+import { useAuthStore } from "@/store/auth";
+import { createConversation } from "../../utils/fetch";
 
 const props = defineProps<{
   demand: Demand;
   cardOfCurrentUser: boolean;
 }>();
+
+const { user, conversations, updateConversations } = useAuthStore();
+
+const checkConfirmationExist = computed(() => {
+  return conversations.find(
+    (conversation) =>
+      conversation.demand.id === props.demand.id && conversation.isAsker
+  );
+});
+
+const isAsker = ref(props.demand.user.id === user.id);
 
 const dateBegin = new Date(props.demand.dateBegin);
 const dateEnd = new Date(props.demand.dateEnd);
@@ -53,7 +66,7 @@ const showMap = () => {
     });
 
     map.on("load", () => {
-      map.resize();
+      if (map !== undefined) map.resize();
       showMarker();
     });
   }
@@ -65,6 +78,22 @@ const showMarker = () => {
       .setLngLat([props.demand.location.long, props.demand.location.lat])
       .addTo(map);
     console.log(marker);
+  }
+};
+
+const handleDiscussion = () => {
+  if (checkConfirmationExist.value) {
+    router.push(`/messages/${checkConfirmationExist.value.id}`);
+  } else {
+    const data = createConversation(
+      props.demand.id,
+      user.id,
+      props.demand.user.id
+    );
+    data.then((demand) => {
+      updateConversations();
+      router.push(`/messages/${demand.id}`);
+    });
   }
 };
 
@@ -125,7 +154,20 @@ const route = (id: string) => {
             size="large"
           ></ion-icon>
         </ion-button>
-        <ion-button>Contacter</ion-button>
+
+        <ion-button
+          @click="route(props.demand.id)"
+          v-if="isAsker"
+          color="warning"
+          >Modifier</ion-button
+        >
+        <ion-button
+          @click="handleDiscussion"
+          v-if="!isAsker"
+          :color="checkConfirmationExist ? 'warning' : 'primary'"
+        >
+          {{ checkConfirmationExist ? "Contacter" : "Récupérer les déchets" }}
+        </ion-button>
       </div>
 
       <div

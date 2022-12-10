@@ -27,6 +27,8 @@ const scrollTriggerElement = ref<HTMLElement>();
 const location = ref<Location>({ long: 0, lat: 0, name: "" });
 const range = ref(10);
 
+console.log(demands.value);
+
 onIonViewWillEnter(() => {
   resetDemandsList();
 });
@@ -86,7 +88,7 @@ function getDemands() {
   supabase
     .from("demands")
     .select("*, user(*)")
-    .filter("dateEnd", "not.lt", new Date().toISOString())
+    /*    .filter("dateEnd", "not.lt", new Date().toISOString()) */ //!TO TEST
     .gt("long", searchBoundsCoordinates.value.getWest())
     .lt("long", searchBoundsCoordinates.value.getEast())
     .gt("lat", searchBoundsCoordinates.value.getNorth())

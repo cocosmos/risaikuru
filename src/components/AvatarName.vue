@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import { defineProps, defineEmits } from "vue";
+import { defineProps, ref, onMounted } from "vue";
 import { IonAvatar, IonLabel } from "@ionic/vue";
-import { ref, toRefs, watch } from "vue";
+import { toRefs } from "vue";
 import { supabase } from "@/data/supabase";
 import { Camera, CameraResultType } from "@capacitor/camera";
 import { UserType } from "@/types/User";
+import { getImage } from "../utils/fetch";
 const props = defineProps<{
   user: UserType;
   size: "small" | "medium" | "large";
@@ -13,6 +14,8 @@ const props = defineProps<{
 }>();
 
 const { size, user, showLname } = toRefs(props);
+
+const avatar = ref("");
 
 const sizeClass = () => {
   switch (size.value) {
@@ -25,16 +28,9 @@ const sizeClass = () => {
   }
 };
 
-const emit = defineEmits(["upload", "update:path"]);
-
-const avatarUrl = ref<string | null>(null);
-
-const downloadImage = async (name: string) => {
-  if (name) {
-    const { data } = await supabase.storage.from("avatars").getPublicUrl(name);
-    avatarUrl.value = data.publicUrl;
-  }
-};
+onMounted(() => {
+  avatar.value = getImage(props.user.avatar);
+});
 
 const uploadAvatar = async () => {
   try {
@@ -52,15 +48,14 @@ const uploadAvatar = async () => {
       const fileName = `${Math.random()}-${new Date().getTime()}.${
         photo.format
       }`;
+
       let { error: uploadError } = await supabase.storage
         .from("avatars")
         .upload(fileName, file);
       if (uploadError) {
         throw uploadError;
       }
-      emit("update:path", fileName);
-      emit("upload");
-      console.log(fileName);
+
       const { error: updateError } = await supabase
         .from("profiles")
         .update({ avatar: fileName })
@@ -69,25 +64,18 @@ const uploadAvatar = async () => {
       if (updateError) {
         throw updateError;
       } else {
-        downloadImage(fileName);
+        avatar.value = getImage(fileName);
       }
     }
   } catch (error) {
     console.log(error);
   }
 };
-watch(user.value, () => {
-  if (user.value.profilePicture) downloadImage(user.value.profilePicture);
-});
 </script>
 <template>
   <div class="avatar" :class="sizeClass()">
     <ion-avatar @click="uploadAvatar">
-      <img
-        :src="avatarUrl ?? '../assets/avatar.svg'"
-        alt="Avatar"
-        class="avatar image"
-      />
+      <img :src="avatar" alt="Avatar" class="avatar image" />
     </ion-avatar>
     <ion-label class="text__bold avatar__name">
       {{ user.fname }} {{ showLname ? user.lname : "" }}

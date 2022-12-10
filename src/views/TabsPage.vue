@@ -1,3 +1,30 @@
+<script lang="ts" setup>
+import { useAuthStore } from "@/store/auth";
+import {
+  IonTabBar,
+  IonTabButton,
+  IonTabs,
+  IonLabel,
+  IonIcon,
+  IonPage,
+  IonRouterOutlet,
+  IonBadge,
+} from "@ionic/vue";
+import { search, mail, person, addCircle } from "ionicons/icons";
+import { computed, onMounted } from "vue";
+const { messages, getAllMessages } = useAuthStore();
+const unReadMessages = computed(() => {
+  return messages.filter(
+    (message) => message.isRead === false && message.isSender === false
+  );
+});
+console.log(messages);
+
+onMounted(() => {
+  getAllMessages();
+});
+</script>
+
 <template>
   <ion-page>
     <ion-tabs>
@@ -16,7 +43,9 @@
         <ion-tab-button tab="messages" href="/messages">
           <ion-icon :icon="mail" />
           <ion-label>Messages</ion-label>
-          <ion-badge color="danger">6</ion-badge>
+          <ion-badge color="danger" v-if="unReadMessages.length !== 0">{{
+            unReadMessages.length
+          }}</ion-badge>
         </ion-tab-button>
         <ion-tab-button tab="profil" href="/profile">
           <ion-icon :icon="person" />
@@ -26,53 +55,3 @@
     </ion-tabs>
   </ion-page>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-import {
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-  IonLabel,
-  IonIcon,
-  IonPage,
-  IonRouterOutlet,
-  IonBadge,
-} from "@ionic/vue";
-import {
-  ellipse,
-  square,
-  triangle,
-  add,
-  search,
-  mail,
-  person,
-  addCircle,
-} from "ionicons/icons";
-
-export default defineComponent({
-  name: "TabsPage",
-  components: {
-    IonLabel,
-    IonTabs,
-    IonTabBar,
-    IonTabButton,
-    IonIcon,
-    IonPage,
-    IonRouterOutlet,
-    IonBadge,
-  },
-  setup() {
-    return {
-      ellipse,
-      square,
-      triangle,
-      add,
-      search,
-      mail,
-      person,
-      addCircle,
-    };
-  },
-});
-</script>

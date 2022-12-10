@@ -6,7 +6,7 @@ export interface UserType {
   lname: string;
   email: string;
   adress?: string;
-  profilePicture: string;
+  avatar: string;
   iban?: string;
   balance: number;
 }
@@ -16,14 +16,14 @@ export const createUser = (
   lname: string,
   email: string,
   balance = 0,
-  profilePicture = "../assets/avatar.svg"
+  avatar = "../assets/avatar.svg"
 ): UserType => {
   return {
     id: nanoid(),
     fname,
     lname,
     email,
-    profilePicture,
+    avatar,
     balance,
   };
 };

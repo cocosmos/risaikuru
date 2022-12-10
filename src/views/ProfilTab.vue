@@ -8,7 +8,7 @@ import {
   IonButton,
   IonIcon,
   IonItem,
-  IonLabel, onIonViewWillEnter,
+  IonLabel,
 } from "@ionic/vue";
 import AvatarName from "@/components/AvatarName.vue";
 import CardPot from "@/components/Card/CardPot.vue";
@@ -17,18 +17,20 @@ import {
   fileTrayFullOutline,
   settingsOutline,
 } from "ionicons/icons";
-import {useRouter} from "vue-router";
-import {store} from "@/data/store";
-import {onMounted, watch} from "vue";
-import {supabase} from "@/data/supabase";
-import {useAuthStore} from "@/store/auth";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/store/auth";
+import { watch } from "vue";
 
 const router = useRouter();
-const authStore = useAuthStore();
+const { user, updateUser, logout } = useAuthStore();
 
 const useLocation = (link: string) => {
   router.push(link);
 };
+
+watch(user, () => {
+  updateUser();
+});
 </script>
 
 <template>
@@ -41,20 +43,19 @@ const useLocation = (link: string) => {
     <ion-content :fullscreen="true" class="ion-padding">
       <div class="profile">
         <avatar-name
-            :user="authStore.user"
-            :showLname="true"
-            :add="true"
-            size="large"
+          :user="user"
+          :showLname="true"
+          :add="true"
+          size="large"
         ></avatar-name>
 
-        <card-pot :balance="authStore.user.balance"></card-pot>
+        <card-pot :balance="user.balance"></card-pot>
         <ion-button
-            @click="useLocation('/profile/payment')"
-            :disabled="authStore.user.balance <= 20"
+          @click="useLocation('/profile/payment')"
+          :disabled="user.balance <= 20"
         >
           Demande de paiement
-        </ion-button
-        >
+        </ion-button>
         <div class="profile__line"></div>
 
         <div class="profile__menu">
@@ -67,18 +68,15 @@ const useLocation = (link: string) => {
             <ion-label>Informations de paiement</ion-label>
           </ion-item>
           <ion-item
-              button
-              lines="none"
-              @click="useLocation('/profile/settings')"
+            button
+            lines="none"
+            @click="useLocation('/profile/settings')"
           >
             <ion-icon :icon="settingsOutline"></ion-icon>
             <ion-label>Paramètre du profil</ion-label>
           </ion-item>
         </div>
-        <ion-button @click="store.signOut()" fill="outline"
-        >Déconnexion
-        </ion-button
-        >
+        <ion-button @click="logout()" fill="outline">Déconnexion </ion-button>
       </div>
     </ion-content>
   </ion-page>

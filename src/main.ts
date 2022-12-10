@@ -17,6 +17,7 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
+  IonChip,
   IonCol,
   IonContent,
   IonGrid,
@@ -98,7 +99,7 @@ app
   .component("ion-note", IonNote)
   .component("ion-card-content", IonCardContent)
   .component("ion-skeleton-text", IonSkeletonText)
-
+  .component("ion-chip", IonChip)
   .component("ion-popover", IonPopover)
   .component("ion-content", IonContent);
 defineCustomElements(window);

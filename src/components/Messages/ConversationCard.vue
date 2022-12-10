@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { defineProps, onMounted, ref } from "vue";
+import { defineProps, ref } from "vue";
 import { Conversation, Message } from "@/types/Message";
 import { IonAvatar, IonBadge, IonItem, IonLabel, IonText } from "@ionic/vue";
 import { trashBinOutline } from "ionicons/icons";
@@ -13,7 +13,6 @@ const props = defineProps<{
 
 const messagesUnread = ref(0);
 const lastMessage = ref<Message>();
-const isAsked = ref(false);
 
 const router = useRouter();
 
@@ -21,7 +20,7 @@ const goToConversation = () => {
   router.push("/messages/" + props.conversation.id);
 };
 
-onMounted(() => {
+/* onMounted(() => {
   messagesUnread.value = props.conversation.messages.filter(
     (message) => !message.isRead
   ).length;
@@ -29,7 +28,7 @@ onMounted(() => {
     props.conversation.messages[props.conversation.messages.length - 1];
   isAsked.value =
     props.conversation.demand.user === props.conversation.receiver;
-});
+}); */
 
 const dateTakeAway = moment(props.conversation.demand.dateBegin)
   .locale("fr-ch")
@@ -51,7 +50,9 @@ const dateTakePopOver = moment(props.conversation.demand.dateBegin)
     >
       <ion-avatar slot="start">
         <img
-          :src="props.conversation.receiver.profilePicture"
+          :src="
+            props.conversation.receiver.profilePicture || '/assets/avatar.svg'
+          "
           :alt="props.conversation.receiver.fname"
         />
       </ion-avatar>
@@ -80,7 +81,9 @@ const dateTakePopOver = moment(props.conversation.demand.dateBegin)
         <p>{{ lastMessage?.content }}</p>
       </ion-label>
     </ion-item>
-    <ion-badge slot="end">{{ messagesUnread }}</ion-badge>
+    <ion-badge v-if="messagesUnread > 0" slot="end">{{
+      messagesUnread
+    }}</ion-badge>
   </div>
 </template>
 

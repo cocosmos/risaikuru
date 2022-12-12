@@ -1,18 +1,21 @@
 import { defineStore } from "pinia";
 import { useStorage } from "@vueuse/core";
-import { computed, ref, watch } from "vue";
+import { computed, ref, watch, reactive } from "vue";
 import { Session } from "@supabase/supabase-js";
 import { UserType } from "@/types/User";
 import { supabase } from "@/supabase";
 import { Conversation, makeMessage, Message } from "@/types/Message";
 import moment from "moment";
+import { Demand } from "@/types/Demand";
 
 export const useAuthStore = defineStore("auth", () => {
   const session = ref(useStorage<Session>("risaikuru-session", {} as Session));
   const user = ref(useStorage<UserType>("risaikuru-user", {} as UserType));
-  const conversations = ref<Conversation[]>([]);
-  const messages = ref<Message[]>([]);
-
+  const dataOfUser = reactive({
+    myDemands: useStorage("risaikuru-", [] as Demand[]),
+    conversations: [] as Conversation[],
+    messages: [] as Message[],
+  });
   const isLoggedIn = computed(() => {
     return (
       Object.entries(session.value).length !== 0 && session.value !== undefined
@@ -47,7 +50,7 @@ export const useAuthStore = defineStore("auth", () => {
   };
 
   const updateConversations = () => {
-    //TODO : BUG: when the page is refreshed, the conversations is duplicated
+    dataOfUser.conversations = [];
     if (user.value.id) {
       supabase
         .from("conversations")
@@ -73,7 +76,7 @@ export const useAuthStore = defineStore("auth", () => {
                 .duration(moment().startOf("day").diff(createdAt))
                 .asDays();
               if (isPassedTheeDays < 4) {
-                conversations.value.push({
+                dataOfUser.conversations.push({
                   id: conversation.id,
                   sender: sender,
                   receiver: receiver,
@@ -86,16 +89,32 @@ export const useAuthStore = defineStore("auth", () => {
         });
     }
   };
+  const getMyDemands = () => {
+    dataOfUser.myDemands = [];
+    supabase
+      .from("demands")
+      .select(`*`)
+      .eq("user", user.value.id)
+      .order("created_at", { ascending: false })
+      .then(({ data }) => {
+        if (data) {
+          console.log(data);
+          data.forEach((demand) => {
+            dataOfUser.myDemands.push(demand);
+          });
+        }
+      });
+  };
 
   const getAllMessages = () => {
-    messages.value = [];
+    dataOfUser.messages = [];
     supabase
       .from("messages")
       .select(`*, user!inner(*)`)
       .then(({ data }) => {
         if (data) {
           data.forEach((message) => {
-            messages.value.push(makeMessage(message, user.value));
+            dataOfUser.messages.push(makeMessage(message, user.value));
           });
         }
       });
@@ -105,17 +124,27 @@ export const useAuthStore = defineStore("auth", () => {
     supabase
       .channel("conversations")
       .on("postgres_changes", { event: "*", schema: "public" }, () => {
-        conversations.value = [];
         updateConversations();
+        console.log("why 2");
       })
       .subscribe();
   };
+
+  const subscribeDemands = () => {
+    supabase
+      .channel("demands")
+      .on("postgres_changes", { event: "*", schema: "public" }, () => {
+        getMyDemands();
+        console.log("subscribed");
+      })
+      .subscribe();
+  };
+  console.log(dataOfUser.conversations);
+
   // Save the user when the session is set
   watch(session, async () => {
     if (isLoggedIn.value) {
       updateUser();
-      updateConversations();
-      subscribeConversation();
       getAllMessages();
     }
   });
@@ -124,11 +153,13 @@ export const useAuthStore = defineStore("auth", () => {
     session,
     user,
     isLoggedIn,
-    conversations,
+    dataOfUser,
     updateConversations,
     logout,
     updateUser,
-    messages,
     getAllMessages,
+    getMyDemands,
+    subscribeConversation,
+    subscribeDemands,
   };
 });

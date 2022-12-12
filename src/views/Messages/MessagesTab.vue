@@ -41,6 +41,7 @@ const scrollBottom = () => {
 
 const days = ref<Day[]>([]);
 const conversation = ref<Conversation>();
+//!TO REDO
 
 onMounted(() => {
   messages();

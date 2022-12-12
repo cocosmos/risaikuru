@@ -22,7 +22,7 @@ export interface Quantity {
 
 export interface Demand {
   id: string;
-  waste: Waste[];
+  wastes: Waste[];
   quantity: Quantity[];
   location: Location;
   status: Status;
@@ -35,7 +35,7 @@ export interface Demand {
 }
 
 export const createDemand = (
-  waste: Waste[],
+  wastes: Waste[],
   quantity: Quantity[],
   location: Location,
   user: UserType,
@@ -46,7 +46,7 @@ export const createDemand = (
   const fees = (reward * 20) / 100;
   return {
     id: nanoid(),
-    waste,
+    wastes,
     quantity,
     location,
     status: "pending",

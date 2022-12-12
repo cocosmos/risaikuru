@@ -32,7 +32,7 @@ import { useAuthStore } from "@/store/auth";
 
 const route = useRoute();
 const conversationId = route.params.id as string;
-const { user, updateConversations, getAllMessages } = useAuthStore();
+const { user, getAllMessages } = useAuthStore();
 const content = ref();
 const message = ref("");
 const scrollBottom = () => {
@@ -51,7 +51,8 @@ const handleMessage = () => {
   if (message.value === "") return;
 
   insertMessage(conversationId, user.id, message.value);
-  updateConversations();
+  message.value = "";
+
   getAllMessages();
 };
 

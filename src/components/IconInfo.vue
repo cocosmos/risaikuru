@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import {IonIcon, IonText} from "@ionic/vue";
-import {Waste} from "@/types/Demand";
-import {defineProps} from "vue";
-import {icons} from "../assets/icons/index";
+import { IonIcon, IonText } from "@ionic/vue";
+import { Waste } from "@/types/Demand";
+import { defineProps } from "vue";
+import { icons } from "../assets/icons/index";
 
 /**
  * Props
@@ -15,29 +15,25 @@ const props = defineProps<{
   inverted?: boolean;
 }>();
 
-let iconFinded = {path: "", name: "", description: ""};
+let iconFinded = { path: "", name: "", description: "" };
 icons.forEach((icon) => {
   if (icon.name === props.waste) {
     iconFinded = icon;
   }
 });
 </script>
-/**Template */
-
 <template>
-  <span class="icon"
-        :class="inverted ? 'inverted' : ''">
+  <span class="icon" :class="inverted ? 'inverted' : ''">
     <ion-icon
-        :src="iconFinded.path"
-        :color="inverted ? 'secondary' : 'primary'"
-        :style="{ width: props.size, height: props.size }"
+      :src="iconFinded.path"
+      :color="inverted ? 'secondary' : 'primary'"
+      :style="{ width: props.size, height: props.size }"
     ></ion-icon>
     <ion-text>{{ iconFinded.description }}</ion-text>
   </span>
 </template>
 
 <style scoped lang="scss">
-
 .icon.inverted ion-icon {
   border: 2px solid var(--ion-color-primary);
   background-color: var(--ion-color-primary);

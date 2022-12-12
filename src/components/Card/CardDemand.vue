@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { trophy, chevronDown, chevronUp } from "ionicons/icons";
-import IconInfo from "../IconInfo.vue";
+import IconInfo from "@/components/IconInfo.vue";
 import { computed, defineProps, ref } from "vue";
 import {
   IonCard,
@@ -130,7 +130,7 @@ const route = (id: string) => {
       </ion-text>
       <div class="icon__list">
         <icon-info
-          v-for="waste in props.demand.waste"
+          v-for="waste in props.demand.wastes"
           v-bind:key="waste"
           :waste="waste"
           :size="'40px'"

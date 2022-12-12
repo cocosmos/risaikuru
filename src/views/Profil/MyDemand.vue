@@ -10,11 +10,13 @@ import {
 } from "@ionic/vue";
 import { useRoute } from "vue-router";
 
-import { useDemandStore } from "@/store/demand";
+import { useAuthStore } from "../../store/auth";
 
-const { demands } = useDemandStore();
+const { dataOfUser } = useAuthStore();
 const route = useRoute();
-const demand = demands.find((demand) => demand.id === route.params.id);
+const demand = dataOfUser.myDemands.find(
+  (demand) => demand.id === route.params.id
+);
 </script>
 
 <template>

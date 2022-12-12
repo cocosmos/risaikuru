@@ -12,9 +12,9 @@ import {
 } from "@ionic/vue";
 import { search, mail, person, addCircle } from "ionicons/icons";
 import { computed, onMounted } from "vue";
-const { messages, getAllMessages } = useAuthStore();
+const { dataOfUser, getAllMessages } = useAuthStore();
 const unReadMessages = computed(() => {
-  return messages.filter(
+  return dataOfUser.messages.filter(
     (message) => message.isRead === false && message.isSender === false
   );
 });

@@ -14,6 +14,8 @@ import { Quantity } from "@/types/Demand";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import { supabase } from "@/supabase";
 import { onIonViewDidEnter } from "@ionic/vue";
+import { useAuthStore } from "@/store/auth";
+const { user } = useAuthStore();
 
 const wasteTypes = ref<Waste[]>([]);
 const quantities = ref<Quantity[]>([
@@ -102,7 +104,7 @@ export const useNewDemand = () => {
         .insert({
           // TODO : change hard-coded user
           // TODO : add a loading to the confirmation page
-          user: "7c8d5bd1-4e85-4424-918b-7a14cf316654",
+          user: user.id /* "7c8d5bd1-4e85-4424-918b-7a14cf316654" */,
           wastes: wasteTypes.value,
           address: location.value?.name,
           lat: location.value?.lat,

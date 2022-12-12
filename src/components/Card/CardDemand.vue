@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { trophy, chevronDown, chevronUp } from "ionicons/icons";
 import IconInfo from "@/components/IconInfo.vue";
-import { computed, defineProps, ref } from "vue";
+import { defineProps, ref, onMounted, reactive, watch, watchEffect } from "vue";
 import {
   IonCard,
   IonCardHeader,
@@ -26,13 +26,25 @@ const props = defineProps<{
   cardOfCurrentUser: boolean;
 }>();
 
-const { user, conversations, updateConversations } = useAuthStore();
+const { user, dataOfUser, getMyDemands } = useAuthStore();
 
-const checkConfirmationExist = computed(() => {
-  return conversations.find(
-    (conversation) =>
-      conversation.demand.id === props.demand.id && conversation.isAsker
+const demandFinded = reactive({ demand: {} as Demand });
+const rerender = ref(0);
+
+const findDemand = () => {
+  rerender.value++;
+  const finded = dataOfUser.myDemands.find(
+    (demand) => demand.id === props.demand.id
   );
+  console.log(finded);
+  if (finded !== undefined) {
+    demandFinded.demand = finded;
+  }
+};
+
+onMounted(() => {
+  // getMyDemands();
+  findDemand();
 });
 
 const isAsker = ref(props.demand.user.id === user.id);
@@ -82,8 +94,8 @@ const showMarker = () => {
 };
 
 const handleDiscussion = () => {
-  if (checkConfirmationExist.value) {
-    router.push(`/messages/${checkConfirmationExist.value.id}`);
+  if (demandFinded.demand) {
+    router.push(`/messages/${demandFinded.demand.id}`);
   } else {
     const data = createConversation(
       props.demand.id,
@@ -91,7 +103,6 @@ const handleDiscussion = () => {
       props.demand.user.id
     );
     data.then((demand) => {
-      updateConversations();
       router.push(`/messages/${demand.id}`);
     });
   }
@@ -164,9 +175,9 @@ const route = (id: string) => {
         <ion-button
           @click="handleDiscussion"
           v-if="!isAsker"
-          :color="checkConfirmationExist ? 'warning' : 'primary'"
+          :color="demandFinded.demand ? 'warning' : 'primary'"
         >
-          {{ checkConfirmationExist ? "Contacter" : "Récupérer les déchets" }}
+          {{ demandFinded.demand ? "Contacter" : "Récupérer les déchets" }}
         </ion-button>
       </div>
 

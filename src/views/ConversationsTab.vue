@@ -8,11 +8,23 @@ import {
   IonText,
 } from "@ionic/vue";
 import ConversationCard from "@/components/Card/CardConversation.vue";
-import { onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useAuthStore } from "@/store/auth";
-const { conversations, updateConversations } = useAuthStore();
+const { dataOfUser, subscribeConversation, updateConversations } =
+  useAuthStore();
+
+const toRerender = ref(0);
+
+watch(
+  dataOfUser.conversations,
+  () => {
+    toRerender.value++;
+  },
+  { deep: true }
+);
 
 onMounted(() => {
+  subscribeConversation();
   updateConversations();
 });
 </script>
@@ -26,12 +38,14 @@ onMounted(() => {
     </ion-header>
 
     <ion-content :fullscreen="true" class="ion-padding">
-      <div class="conversation__list">
-        <ion-text v-if="conversations.length === 0" class="ion-text-center"
+      <div class="conversation__list" :key="toRerender">
+        <ion-text
+          v-if="dataOfUser.conversations.length === 0"
+          class="ion-text-center"
           >Pas de mesages récents.</ion-text
         >
         <conversation-card
-          v-for="conversation in conversations"
+          v-for="conversation in dataOfUser.conversations"
           v-bind:key="conversation.id"
           :conversation="conversation"
         ></conversation-card>

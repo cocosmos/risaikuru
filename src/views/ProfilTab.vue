@@ -19,7 +19,7 @@ import {
 } from "ionicons/icons";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/store/auth";
-import { watch } from "vue";
+import { onMounted } from "vue";
 
 const router = useRouter();
 const { user, updateUser, logout } = useAuthStore();
@@ -28,7 +28,7 @@ const useLocation = (link: string) => {
   router.push(link);
 };
 
-watch(user, () => {
+onMounted(() => {
   updateUser();
 });
 </script>

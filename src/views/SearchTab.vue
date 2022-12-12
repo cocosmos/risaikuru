@@ -88,6 +88,7 @@ function getDemands() {
   supabase
     .from("demands")
     .select("*, user(*)")
+    .eq("status", "pending")
     /*    .filter("dateEnd", "not.lt", new Date().toISOString()) */ //!TO TEST
     .gt("long", searchBoundsCoordinates.value.getWest())
     .lt("long", searchBoundsCoordinates.value.getEast())

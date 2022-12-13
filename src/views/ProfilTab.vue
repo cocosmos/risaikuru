@@ -50,9 +50,9 @@ const disconnect = () => {
           size="large"
         ></avatar-name>
 
-        <card-pot :balance="authStore.user.balance"></card-pot>
+        <card-pot :balance="authStore.user.balance ?? 0"></card-pot>
         <ion-button
-          @click="useLocation('/profile/payment')"
+          @click="useLocation('/profile/payment/ask')"
           :disabled="authStore.user.balance <= 20"
         >
           Demande de paiement
@@ -66,7 +66,7 @@ const disconnect = () => {
           </ion-item>
           <ion-item
             button
-            @click="useLocation('/profile/payment')"
+            @click="useLocation('/profile/payment/infos')"
             lines="none"
           >
             <ion-icon :icon="cardOutline"></ion-icon>

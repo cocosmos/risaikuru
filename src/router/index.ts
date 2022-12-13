@@ -75,8 +75,12 @@ const routes: Array<RouteRecordRaw> = [
       },
 
       {
-        path: "/profile/payment",
-        component: () => import("@/views/Profil/PaymentAskOrVerify.vue"),
+        path: "/profile/payment/infos",
+        component: () => import("@/views/Profil/PaymentInfos.vue"),
+      },
+      {
+        path: "/profile/payment/ask",
+        component: () => import("@/views/Profil/PaymentAsk.vue"),
       },
       {
         path: "/profile/payment/confirmed",

@@ -4,21 +4,26 @@
       <ion-col class="ion-margin-end">
         <div class="location-search__searchbar-container">
           <ion-searchbar
-              class="location-search__searchbar"
-              show-cancel-button="never"
-              placeholder="Adresse"
-              v-model="address"
-              :debounce="300"
-              @ionChange="searchAdress"
+            class="location-search__searchbar"
+            show-cancel-button="never"
+            placeholder="Adresse"
+            v-model="address"
+            :debounce="300"
+            @ionChange="searchAdress"
           >
           </ion-searchbar>
           <div class="location-search__results" v-if="searching">
-            <span v-for="result in results" :key="result" @click="selectAdress(result)">{{ result.name }}</span>
+            <span
+              v-for="result in results"
+              :key="result.name"
+              @click="selectAdress(result)"
+              >{{ result.name }}</span
+            >
           </div>
         </div>
       </ion-col>
       <ion-col size="auto">
-        <ion-button class="location-search__btn" shape="circle" @click="getCurrentLocation">
+        <ion-button class="location-search__btn" @click="getCurrentLocation">
           <ion-icon :icon="locate"></ion-icon>
         </ion-button>
       </ion-col>
@@ -28,84 +33,91 @@
 
 <script lang="ts" setup>
 /*
-* TODO: Emettre la localisation quand une adresse est selectionnée... Pour l'instant le composant n'emmet la localisation que quand le bouton de localisation est cliqué
-* */
+ * TODO: Emettre la localisation quand une adresse est selectionnée... Pour l'instant le composant n'emmet la localisation que quand le bouton de localisation est cliqué
+ * */
 
-import {defineEmits, defineProps, onMounted, ref, watchEffect} from 'vue';
-import {IonGrid, IonCol, IonRow, IonSearchbar, IonButton, IonIcon} from "@ionic/vue";
-import {locate} from "ionicons/icons";
-import {Geolocation, Position} from "@capacitor/geolocation";
-import axios from "axios";
-import {geocodingClient} from "@/services/mapbox"
+import { defineEmits, defineProps, onMounted, ref, watchEffect } from "vue";
+import {
+  IonGrid,
+  IonCol,
+  IonRow,
+  IonSearchbar,
+  IonButton,
+  IonIcon,
+} from "@ionic/vue";
+import { locate } from "ionicons/icons";
+import { Geolocation } from "@capacitor/geolocation";
+import { geocodingClient } from "@/services/mapbox";
 import Location from "@/types/Location";
 import MapboxFeature from "@/types/MapboxFeature";
 
 const props = defineProps<{
-  getInitialLocation: boolean,
+  getInitialLocation: boolean;
 }>();
 
 const emit = defineEmits<{
-  (e: 'locationUpdated', value: Location): void
+  (e: "locationUpdated", value: Location): void;
 }>();
 
 const searching = ref(false);
 const address = ref("");
 const results = ref<Location[]>([]);
-const location = ref<Location>({lat: 0, long: 0, name: ""});
+const location = ref<Location>({ lat: 0, long: 0, name: "" });
 
 onMounted(() => {
   if (props.getInitialLocation) {
     getCurrentLocation().catch(() => {
-      location.value = {long: 6.14569, lat: 46.20222, name: "Genève"}
+      location.value = { long: 6.14569, lat: 46.20222, name: "Genève" };
     });
   }
-})
+});
 
 watchEffect(() => {
   address.value = location.value.name;
-  emit('locationUpdated', location.value);
+  emit("locationUpdated", location.value);
 });
 
 const getCurrentLocation = () => {
   return Geolocation.getCurrentPosition().then((position) => {
-    geocodingClient.get(`/${position.coords.longitude},${position.coords.latitude}.json`).then(result => {
-      location.value = {
-        lat: position.coords.latitude,
-        long: position.coords.longitude,
-        name: result.data.features[0].place_name
-      }
-    })
+    geocodingClient
+      .get(`/${position.coords.longitude},${position.coords.latitude}.json`)
+      .then((result) => {
+        location.value = {
+          lat: position.coords.latitude,
+          long: position.coords.longitude,
+          name: result.data.features[0].place_name,
+        };
+      });
     searching.value = false;
   });
-}
+};
 
 const searchAdress = () => {
   results.value = [];
   if (address.value !== "" && address.value !== location.value.name) {
-    geocodingClient.get(`/${address.value}.json`).then(result => {
+    geocodingClient.get(`/${address.value}.json`).then((result) => {
       searching.value = true;
       result.data.features.forEach((feature: MapboxFeature) => {
         results.value.push({
           name: feature.place_name,
           lat: feature.geometry.coordinates[1],
-          long: feature.geometry.coordinates[0]
+          long: feature.geometry.coordinates[0],
         });
       });
     });
   } else {
     searching.value = false;
   }
-}
+};
 
 const selectAdress = (newLocation: Location) => {
   address.value = newLocation.name;
   location.value = newLocation;
   searching.value = false;
-}
+};
 </script>
 
 <style lang="scss" scoped>
-
 .location-search {
   background: white;
 
@@ -115,7 +127,7 @@ const selectAdress = (newLocation: Location) => {
     border-radius: 10px;
     --placeholder-color: var(--ion-color-primary);
     margin-right: 20px;
-    z-index: 2;
+    z-index: 4;
   }
 
   &__searchbar-container {
@@ -132,8 +144,8 @@ const selectAdress = (newLocation: Location) => {
     border: 2px solid var(--ion-color-primary);
     border-top: none;
     border-radius: 0 0 10px 10px;
-    z-index: 1;
-    font-size: .9rem;
+    z-index: 3;
+    font-size: 0.9rem;
     width: 100%;
 
     & > * {

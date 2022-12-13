@@ -12,11 +12,7 @@ import {
 } from "@ionic/vue";
 import AvatarName from "@/components/Profile/AvatarName.vue";
 import CardPot from "@/components/Card/CardPot.vue";
-import {
-  cardOutline,
-  fileTrayFullOutline,
-  settingsOutline,
-} from "ionicons/icons";
+import { cardOutline, fileTrayFullOutline } from "ionicons/icons";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/store/auth";
 import { onMounted } from "vue";
@@ -68,17 +64,13 @@ const disconnect = () => {
             <ion-icon :icon="fileTrayFullOutline"></ion-icon>
             <ion-label>Mes annonces</ion-label>
           </ion-item>
-          <ion-item button @click="useLocation('/profile/payment')">
-            <ion-icon :icon="cardOutline"></ion-icon>
-            <ion-label>Informations de paiement</ion-label>
-          </ion-item>
           <ion-item
             button
+            @click="useLocation('/profile/payment')"
             lines="none"
-            @click="useLocation('/profile/settings')"
           >
-            <ion-icon :icon="settingsOutline"></ion-icon>
-            <ion-label>Paramètre du profil</ion-label>
+            <ion-icon :icon="cardOutline"></ion-icon>
+            <ion-label>Informations de paiement</ion-label>
           </ion-item>
         </div>
         <ion-button @click="disconnect" fill="outline">Déconnexion</ion-button>

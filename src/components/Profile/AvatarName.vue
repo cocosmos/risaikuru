@@ -33,6 +33,7 @@ onMounted(() => {
 });
 
 const uploadAvatar = async () => {
+  if (!props.add) return;
   try {
     const photo = await Camera.getPhoto({
       resultType: CameraResultType.DataUrl,
@@ -73,7 +74,7 @@ const uploadAvatar = async () => {
 };
 </script>
 <template>
-  <div class="avatar" :class="sizeClass()">
+  <div class="avatar" :class="(sizeClass(), add ? 'avatar__add' : '')">
     <ion-avatar @click="uploadAvatar">
       <img :src="avatar" alt="Avatar" class="avatar image" />
     </ion-avatar>
@@ -90,7 +91,11 @@ const uploadAvatar = async () => {
   ion-avatar {
     margin-right: 0.7rem;
     position: relative;
-    &:hover {
+  }
+  &__add {
+    cursor: pointer;
+
+    ion-avatar:hover {
       &::before {
         content: "";
         position: absolute;

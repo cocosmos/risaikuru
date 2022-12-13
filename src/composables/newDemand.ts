@@ -1,21 +1,11 @@
-import {
-  computed,
-  onActivated,
-  onBeforeMount,
-  onBeforeUnmount,
-  onBeforeUpdate,
-  onMounted,
-  reactive,
-  ref,
-} from "vue";
-import { Waste } from "@/types/Demand";
+import { computed, ref } from "vue";
+import { Demand, Waste } from "@/types/Demand";
 import Location from "@/types/Location";
 import { Quantity } from "@/types/Demand";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import { supabase } from "@/supabase";
 import { onIonViewDidEnter } from "@ionic/vue";
 import { useAuthStore } from "@/store/auth";
-const { user } = useAuthStore();
 
 const wasteTypes = ref<Waste[]>([]);
 const quantities = ref<Quantity[]>([
@@ -45,6 +35,7 @@ const dateEnd = ref<Date>();
 const location = ref<Location>();
 const reward = ref<number>(0);
 const published = ref(false);
+const savedDemand = ref<Demand>({} as Demand);
 
 export const useNewDemand = () => {
   const router = useRouter();
@@ -56,7 +47,7 @@ export const useNewDemand = () => {
     }
   });
 
-  onBeforeRouteLeave((to) => {
+  onBeforeRouteLeave(() => {
     if (published.value) {
       published.value = false;
       wasteTypes.value = [];
@@ -103,9 +94,8 @@ export const useNewDemand = () => {
       supabase
         .from("demands")
         .insert({
-          // TODO : change hard-coded user
           // TODO : add a loading to the confirmation page
-          user: user.id /* "7c8d5bd1-4e85-4424-918b-7a14cf316654" */,
+          user: authStore.user.id,
           wastes: wasteTypes.value,
           address: location.value?.name,
           lat: location.value?.lat,
@@ -114,12 +104,19 @@ export const useNewDemand = () => {
           dateBegin: dateBegin.value,
           dateEnd: dateEnd.value,
           quantity: quantities.value,
+          fees: reward.value * 0.3,
           status: "pending",
         })
-        .select()
+        .select("*, user!inner(*)")
+        .single()
         .then(({ data, error }) => {
           if (error === null) {
-            console.log("published", data);
+            const location = {
+              lat: data.lat,
+              long: data.long,
+              name: data.address,
+            };
+            savedDemand.value = { ...data, location: location };
             published.value = true;
           } else {
             console.log("error while publishing demand", error);
@@ -139,6 +136,7 @@ export const useNewDemand = () => {
     hasQuantity,
     hasMoment,
     hasLocation,
+    savedDemand,
     saveDemand,
   };
 };

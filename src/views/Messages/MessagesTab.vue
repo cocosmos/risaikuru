@@ -11,22 +11,20 @@ import {
   IonInput,
   IonItem,
   IonTitle,
-  IonLabel, onIonViewDidEnter,
+  IonLabel,
+  onIonViewDidEnter,
 } from "@ionic/vue";
 import CardStatus from "@/components/Card/CardStatus.vue";
-import {ref, watch} from "vue";
+import { ref, watch } from "vue";
 import MessagesByDay from "@/components/Messages/MessagesByDay.vue";
-import {send} from "ionicons/icons";
+import { send } from "ionicons/icons";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
-import {useRoute} from "vue-router";
-import {
-  getConversation,
-  insertMessage,
-} from "@/supabase";
+import { useRoute } from "vue-router";
+import { getConversation, insertMessage } from "@/supabase";
 
-import {useMessages} from "@/composables/messages";
+import { useMessages } from "@/composables/messages";
 
-import {useAuthStore} from "@/store/auth";
+import { useAuthStore } from "@/store/auth";
 
 const route = useRoute();
 const conversationId = route.params.id as string;
@@ -41,7 +39,10 @@ const scrollBottom = () => {
 
 onIonViewDidEnter(async () => {
   if (!messagesComp.conversation.value) {
-    messagesComp.conversation.value = await getConversation(conversationId, authStore.user.id);
+    messagesComp.conversation.value = await getConversation(
+      conversationId,
+      authStore.user.id
+    );
   }
 });
 
@@ -63,24 +64,30 @@ watch(messagesComp.messagesByDay, () => {
           <ion-back-button defaultHref="/profile"></ion-back-button>
         </ion-buttons>
         <ion-title
-        >Conversation avec {{
-            messagesComp.conversation.value ? messagesComp.conversation.value.receiver.fname : '...'
+          >Conversation avec
+          {{
+            messagesComp.conversation.value
+              ? messagesComp.conversation.value.receiver.fname
+              : "..."
           }}
-        </ion-title
-        >
+        </ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding" ref="content">
       <div class="conversation">
         <div class="conversation__fixed">
           <card-status
-              v-if="messagesComp.conversation.value"
-              :conversation="messagesComp.conversation.value"
+            v-if="messagesComp.conversation.value"
+            :conversation="messagesComp.conversation.value"
           ></card-status>
         </div>
 
         <div class="conversation__messages">
-          <messages-by-day v-for="day in messagesComp.messagesByDay.value" :key="day.date" :day="day"/>
+          <messages-by-day
+            v-for="day in messagesComp.messagesByDay.value"
+            :key="day.date"
+            :day="day"
+          />
         </div>
 
         <fixed-bottom-container>
@@ -89,14 +96,14 @@ watch(messagesComp.messagesByDay, () => {
               <ion-item fill="outline" mode="md">
                 <ion-label position="floating">Votre Message</ion-label>
                 <ion-input
-                    :name="message"
-                    type="text"
-                    required
-                    :maxlength="80"
-                    v-model="message"
+                  :name="message"
+                  type="text"
+                  required
+                  :maxlength="80"
+                  v-model="message"
                 ></ion-input>
                 <ion-button slot="end" fill="clear" type="submit">
-                  <ion-icon :icon="send"/>
+                  <ion-icon :icon="send" />
                 </ion-button>
               </ion-item>
             </form>

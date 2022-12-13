@@ -100,7 +100,12 @@ export const useAuthStore = defineStore("auth", () => {
         if (data) {
           console.log(data);
           data.forEach((demand) => {
-            dataOfUser.myDemands.push(demand);
+            const location = {
+              lat: demand.lat,
+              long: demand.long,
+              name: demand.address,
+            };
+            dataOfUser.myDemands.push({ ...demand, location });
           });
         }
       });

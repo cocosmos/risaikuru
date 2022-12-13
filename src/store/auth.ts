@@ -121,23 +121,26 @@ export const useAuthStore = defineStore("auth", () => {
   };
 
   const subscribeConversation = () => {
-    supabase
+    /*supabase
       .channel("conversations")
-      .on("postgres_changes", { event: "*", schema: "public" }, () => {
-        updateConversations();
-        console.log("why 2");
-      })
-      .subscribe();
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "messages" },
+        () => {
+          updateConversations();
+        }
+      )
+      .subscribe();*/
   };
 
   const subscribeDemands = () => {
-    supabase
+    /*supabase
       .channel("demands")
       .on("postgres_changes", { event: "*", schema: "public" }, () => {
         getMyDemands();
         console.log("subscribed");
       })
-      .subscribe();
+      .subscribe();*/
   };
   console.log(dataOfUser.conversations);
 

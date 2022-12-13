@@ -53,8 +53,6 @@ const handleMessage = () => {
 
   insertMessage(conversationId, user.id, message.value);
   message.value = "";
-
-  getAllMessages();
 };
 
 const messages = async () => {

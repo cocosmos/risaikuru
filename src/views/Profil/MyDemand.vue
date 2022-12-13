@@ -7,18 +7,45 @@ import {
   IonBackButton,
   IonTitle,
   IonContent,
+  IonButton,
 } from "@ionic/vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { ref, onMounted } from "vue";
 
-import { useAuthStore } from "../../store/auth";
 import MyDemandOrPublished from "@/components/MyDemandOrPublished.vue";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
+import { supabase } from "../../supabase/config";
+import { getDemand } from "../../supabase/demand";
+import { Demand } from "@/types/Demand";
+import LoaderFullPage from "@/components/LoaderFullPage.vue";
 
-const { dataOfUser } = useAuthStore();
 const route = useRoute();
-const demand = dataOfUser.myDemands.find(
-  (demand) => demand.id === route.params.id
-);
+const router = useRouter();
+const demand = ref<Demand>();
+
+onMounted(() => {
+  getDemand(route.params.id as string).then((res) => {
+    demand.value = res;
+  });
+});
+
+const deleteDemand = () => {
+  if (!demand.value) return;
+
+  supabase
+    .from("demands")
+    .delete()
+    .eq("id", demand.value.id)
+    .then((res) => {
+      if (res.error) {
+        console.log(res.error);
+      } else {
+        console.log("Demande supprimée");
+      }
+    });
+
+  router.push("/profile/my-demands");
+};
 </script>
 
 <template>
@@ -32,6 +59,7 @@ const demand = dataOfUser.myDemands.find(
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding relative background">
+      <LoaderFullPage v-if="!demand" :loading="!demand" />
       <MyDemandOrPublished :demand="demand" v-if="demand" />
       <fixed-bottom-container>
         <ion-button
@@ -41,7 +69,12 @@ const demand = dataOfUser.myDemands.find(
         >
           Retour à mes annonces
         </ion-button>
-        <ion-button expand="block" color="danger">
+        <ion-button
+          expand="block"
+          color="danger"
+          @click="deleteDemand"
+          v-if="demand"
+        >
           Supprimer cette annonce
         </ion-button>
       </fixed-bottom-container>
@@ -55,5 +88,11 @@ const demand = dataOfUser.myDemands.find(
   background: white url("../../assets/summary-background.png") center 105%
     no-repeat;
   background-size: 125%;
+}
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>

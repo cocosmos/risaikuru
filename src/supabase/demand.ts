@@ -15,7 +15,12 @@ export const getDemand = async (demandId: string) => {
 
   if (error) {
     console.log(error);
-  } else return data;
+  } else {
+    return {
+      ...data,
+      location: { lat: data.lat, long: data.long, name: data.address },
+    };
+  }
 };
 
 /**

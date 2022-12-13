@@ -30,9 +30,17 @@ export interface Label {
   text: string;
 }
 
-interface MessageSupabase {
+export interface MessageSupabase {
   id: string;
   user: UserType;
+  content: string;
+  created_at: string;
+  is_read: boolean;
+}
+
+export interface RealTimeMessageSupabase {
+  id: string;
+  user: string;
   content: string;
   created_at: string;
   is_read: boolean;

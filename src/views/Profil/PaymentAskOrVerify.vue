@@ -7,14 +7,14 @@ import {
   IonContent,
   IonButton,
 } from "@ionic/vue";
-import { computed, ref } from "vue";
-import { useRouter } from "vue-router";
-import { regexCheckIban } from "@/utils/helper";
-import { useAuthStore } from "@/store/auth";
+import {computed, ref} from "vue";
+import {useRouter} from "vue-router";
+import {regexCheckIban} from "@/utils/helper";
+import {useAuthStore} from "@/store/auth";
 
 const isIbanValid = ref<null | boolean>(null);
 const ibanValue = ref("");
-const { user } = useAuthStore();
+const authStore = useAuthStore();
 
 const router = useRouter();
 
@@ -34,7 +34,7 @@ const texts = [
     button: "Finaliser la demande de paiement",
   },
 ];
-const text = computed(() => texts[user.iban ? 1 : 0]);
+const text = computed(() => texts[authStore.user.iban ? 1 : 0]);
 const useRoute = () => {
   router.push(text.value.link);
 };
@@ -62,24 +62,24 @@ const validateIban = (ev: any) => {
         {{ text.text }}
       </p>
       <div class="ion-text-center">
-        <img src="../../assets/images/savings.svg" alt="cochon tirelire" />
+        <img src="../../assets/images/savings.svg" alt="cochon tirelire"/>
       </div>
 
       <ion-item
-        fill="outline"
-        mode="md"
-        class="ion-margin-top"
-        :class="{
+          fill="outline"
+          mode="md"
+          class="ion-margin-top"
+          :class="{
           'ion-invalid': isIbanValid === false,
         }"
       >
         <ion-label position="floating">IBAN</ion-label>
         <ion-input
-          type="text"
-          placeholder="CH00 0000 0000 0000 0000 0"
-          @ionInput="validateIban"
-          v-model="user.iban"
-          v-maska="'AA## #### #### #### #### #'"
+            type="text"
+            placeholder="CH00 0000 0000 0000 0000 0"
+            @ionInput="validateIban"
+            v-model="authStore.user.iban"
+            v-maska="'AA## #### #### #### #### #'"
         ></ion-input>
         <ion-note slot="error">IBAN Invalide</ion-note>
       </ion-item>
@@ -87,8 +87,8 @@ const validateIban = (ev: any) => {
       <ion-item fill="outline" mode="md" class="ion-margin-top">
         <ion-label position="floating">Adresse</ion-label>
         <ion-textarea
-          placeholder="Chemin du petit Chevreuil 19, 1000 Lausanne"
-          v-model="user.adress"
+            placeholder="Chemin du petit Chevreuil 19, 1000 Lausanne"
+            v-model="authStore.user.adress"
         ></ion-textarea>
       </ion-item>
 

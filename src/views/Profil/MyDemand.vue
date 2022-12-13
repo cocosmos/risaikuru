@@ -12,9 +12,9 @@ import { useRoute } from "vue-router";
 
 import { useAuthStore } from "../../store/auth";
 
-const { dataOfUser } = useAuthStore();
+const authStore = useAuthStore();
 const route = useRoute();
-const demand = dataOfUser.myDemands.find(
+const demand = authStore.dataOfUser.myDemands.find(
   (demand) => demand.id === route.params.id
 );
 </script>

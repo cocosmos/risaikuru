@@ -12,7 +12,7 @@ import CardDemand from "@/components/Card/CardDemand.vue";
 import { ref, onMounted, watch } from "vue";
 import { useAuthStore } from "../../store/auth";
 
-const { dataOfUser, getMyDemands, subscribeDemands } = useAuthStore();
+const { dataOfUser, getMyDemands /* subscribeDemands */ } = useAuthStore();
 const toRerender = ref(0);
 
 watch(
@@ -24,7 +24,7 @@ watch(
 );
 
 onMounted(() => {
-  subscribeDemands();
+  /*   subscribeDemands(); */
   getMyDemands();
 });
 </script>

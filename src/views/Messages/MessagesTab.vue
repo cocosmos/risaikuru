@@ -45,7 +45,6 @@ const conversation = ref<Conversation>();
 
 onMounted(() => {
   messages();
-  subscribeMessages();
 });
 
 const handleMessage = () => {
@@ -59,13 +58,6 @@ const messages = async () => {
   conversation.value = await getConversation(conversationId, user.id);
   days.value = returnMessagesByDay(await getMessages(conversationId, user));
   scrollBottom();
-};
-
-const subscribeMessages = () => {
-  supabase
-    .channel("messages")
-    .on("postgres_changes", { event: "*", schema: "public" }, () => messages())
-    .subscribe();
 };
 </script>
 <template>

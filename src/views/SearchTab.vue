@@ -35,7 +35,7 @@ onIonViewWillEnter(() => {
 
 watch([location, range], () => {
   resetDemandsList();
-  subscribeDemands();
+  /*   subscribeDemands(); */
 });
 
 const nextResultsMin = computed(() => {
@@ -137,18 +137,6 @@ const handleScroll = (event: CustomEvent | any) => {
     }
   }
 };
-
-const subscribeDemands = () => {
-  supabase
-    .channel("demands")
-    .on("postgres_changes", { event: "*", schema: "public" }, () =>
-      getDemands()
-    )
-    .subscribe();
-};
-onMounted(() => {
-  subscribeDemands();
-});
 </script>
 
 <template>

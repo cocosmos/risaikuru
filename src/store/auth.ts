@@ -125,7 +125,7 @@ export const useAuthStore = defineStore("auth", () => {
       });
   };
 
-  const subscribeConversation = () => {
+  /*   const subscribeConversation = () => {
     supabase
       .channel("conversations")
       .on("postgres_changes", { event: "*", schema: "public" }, () => {
@@ -134,8 +134,8 @@ export const useAuthStore = defineStore("auth", () => {
       })
       .subscribe();
   };
-
-  const subscribeDemands = () => {
+ */
+  /*   const subscribeDemands = () => {
     supabase
       .channel("demands")
       .on("postgres_changes", { event: "*", schema: "public" }, () => {
@@ -143,8 +143,7 @@ export const useAuthStore = defineStore("auth", () => {
         console.log("subscribed");
       })
       .subscribe();
-  };
-  console.log(dataOfUser.conversations);
+  } */
 
   // Save the user when the session is set
   watch(session, async () => {
@@ -164,7 +163,7 @@ export const useAuthStore = defineStore("auth", () => {
     updateUser,
     getAllMessages,
     getMyDemands,
-    subscribeConversation,
-    subscribeDemands,
+    /*   subscribeConversation, */
+    /*   subscribeDemands, */
   };
 });

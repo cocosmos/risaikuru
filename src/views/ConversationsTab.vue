@@ -10,7 +10,7 @@ import {
 import ConversationCard from "@/components/Card/CardConversation.vue";
 import { ref, onMounted, watch } from "vue";
 import { useAuthStore } from "@/store/auth";
-const { dataOfUser, subscribeConversation, updateConversations } =
+const { dataOfUser, /* subscribeConversation,  */ updateConversations } =
   useAuthStore();
 
 const toRerender = ref(0);
@@ -24,7 +24,7 @@ watch(
 );
 
 onMounted(() => {
-  subscribeConversation();
+  /*   subscribeConversation(); */
   updateConversations();
 });
 </script>

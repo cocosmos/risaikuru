@@ -37,7 +37,7 @@ const goToConversation = () => {
 
 onMounted(() => {
   checkUnreads();
-  subscribeMessage();
+  /*  subscribeMessage(); */
 });
 
 const dateTakeAway = moment(props.conversation.demand.dateBegin)
@@ -72,14 +72,14 @@ const makeMessagesRead = async () => {
   }
 };
 
-const subscribeMessage = () => {
+/* const subscribeMessage = () => {
   supabase
     .channel("messages")
     .on("postgres_changes", { event: "INSERT", schema: "public" }, () => {
       checkUnreads();
     })
     .subscribe();
-};
+}; */
 
 const label = (message: Message) => {
   if (message.user.id === user.id) {

@@ -9,23 +9,14 @@ import {
   IonBackButton,
 } from "@ionic/vue";
 import CardDemand from "@/components/Card/CardDemand.vue";
-import { ref, onMounted, watch } from "vue";
-import { useAuthStore } from "../../store/auth";
+import {ref, onMounted, watch} from "vue";
+import {useAuthStore} from "../../store/auth";
 
-const { dataOfUser, getMyDemands, subscribeDemands } = useAuthStore();
-const toRerender = ref(0);
-
-watch(
-  dataOfUser.myDemands,
-  () => {
-    toRerender.value++;
-  },
-  { deep: true }
-);
+const authStore = useAuthStore();
 
 onMounted(() => {
-  subscribeDemands();
-  getMyDemands();
+  authStore.subscribeDemands();
+  authStore.getMyDemands();
 });
 </script>
 
@@ -40,19 +31,19 @@ onMounted(() => {
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding">
-      <div class="cards__list" :key="toRerender">
+      <div class="cards__list">
         <ion-text
-          v-if="dataOfUser.myDemands.length === 0"
-          class="ion-text-center"
+            v-if="authStore.dataOfUser.myDemands.length === 0"
+            class="ion-text-center"
         >
           Vous n'avez pas encore d'annonces.
         </ion-text>
 
         <card-demand
-          v-for="demand in dataOfUser.myDemands"
-          v-bind:key="demand.id"
-          :demand="demand"
-          :card-of-current-user="true"
+            v-for="demand in authStore.dataOfUser.myDemands"
+            v-bind:key="demand.id"
+            :demand="demand"
+            :card-of-current-user="true"
         ></card-demand>
       </div>
     </ion-content>

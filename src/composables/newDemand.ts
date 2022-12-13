@@ -48,6 +48,7 @@ const published = ref(false);
 
 export const useNewDemand = () => {
   const router = useRouter();
+  const authStore = useAuthStore();
 
   onIonViewDidEnter(() => {
     if (!hasWasteTypes.value) {

@@ -4,7 +4,7 @@ export const regexCheckIban = (iban: string) => {
   const ibanRegex = new RegExp(
     "^[A-Z]{2}[0-9]{2}[A-Z0-9]{4}[0-9]{7}([A-Z0-9]?){0,16}$"
   );
-  return ibanRegex.test(iban);
+  return ibanRegex.test(iban.replace(/\s/g, ""));
 };
 
 export const regexCheckEmail = (email: string) => {

@@ -29,7 +29,6 @@ const props = defineProps<{
 const authStore = useAuthStore();
 
 //const demandFinded = reactive({demand: {} as Demand});
-const rerender = ref(0);
 
 const conversation = computed(() => {
   //rerender.value++;
@@ -91,6 +90,8 @@ const showMarker = () => {
 };
 
 const handleDiscussion = () => {
+  if (!authStore.user.id) return router.push("/login");
+
   if (conversation.value) {
     router.push(`/messages/${conversation.value.id}`);
   } else {

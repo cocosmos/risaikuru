@@ -2,7 +2,6 @@ import { createApp } from "vue";
 import { createPinia } from "pinia";
 import App from "./App.vue";
 import router, { onlyLoggedIn, onlyLoggedOut } from "./router";
-import Maska from "maska";
 import { defineCustomElements } from "@ionic/pwa-elements/loader";
 import { useAuthStore } from "@/store/auth";
 
@@ -77,7 +76,7 @@ router.beforeEach((to, from) => {
 
 /* Add your global components here to avoid the warn in console */
 app
-  .use(Maska)
+  /*   .use(Maska) */
   .component("ion-icon", IonIcon)
   .component("ion-badge", IonBadge)
   .component("ion-grid", IonGrid)

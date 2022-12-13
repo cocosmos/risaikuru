@@ -17,9 +17,9 @@ import {
   fileTrayFullOutline,
   settingsOutline,
 } from "ionicons/icons";
-import {useRouter} from "vue-router";
-import {useAuthStore} from "@/store/auth";
-import {onMounted} from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/store/auth";
+import { onMounted } from "vue";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -31,6 +31,11 @@ const useLocation = (link: string) => {
 onMounted(() => {
   authStore.updateUser();
 });
+
+const disconnect = () => {
+  authStore.logout();
+  router.push("/login");
+};
 </script>
 
 <template>
@@ -43,16 +48,16 @@ onMounted(() => {
     <ion-content :fullscreen="true" class="ion-padding">
       <div class="profile">
         <avatar-name
-            :user="authStore.user"
-            :showLname="true"
-            :add="true"
-            size="large"
+          :user="authStore.user"
+          :showLname="true"
+          :add="true"
+          size="large"
         ></avatar-name>
 
         <card-pot :balance="authStore.user.balance"></card-pot>
         <ion-button
-            @click="useLocation('/profile/payment')"
-            :disabled="authStore.user.balance <= 20"
+          @click="useLocation('/profile/payment')"
+          :disabled="authStore.user.balance <= 20"
         >
           Demande de paiement
         </ion-button>
@@ -68,15 +73,15 @@ onMounted(() => {
             <ion-label>Informations de paiement</ion-label>
           </ion-item>
           <ion-item
-              button
-              lines="none"
-              @click="useLocation('/profile/settings')"
+            button
+            lines="none"
+            @click="useLocation('/profile/settings')"
           >
             <ion-icon :icon="settingsOutline"></ion-icon>
             <ion-label>Paramètre du profil</ion-label>
           </ion-item>
         </div>
-        <ion-button @click="authStore.logout()" fill="outline">Déconnexion</ion-button>
+        <ion-button @click="disconnect" fill="outline">Déconnexion</ion-button>
       </div>
     </ion-content>
   </ion-page>

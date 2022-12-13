@@ -20,7 +20,7 @@ export interface Conversation {
 }
 
 export interface Day {
-  date: string;
+  date: Date;
   messages: Message[];
 }
 export interface Label {

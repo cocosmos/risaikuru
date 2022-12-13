@@ -85,7 +85,7 @@ watch(messagesComp.messagesByDay, () => {
         <div class="conversation__messages">
           <messages-by-day
             v-for="day in messagesComp.messagesByDay.value"
-            :key="day.date"
+            :key="day.date.toISOString()"
             :day="day"
           />
         </div>

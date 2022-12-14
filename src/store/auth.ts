@@ -85,48 +85,6 @@ export const useAuthStore = defineStore("auth", () => {
       });
   };
 
-  const updateConversations = () => {
-    dataOfUser.conversations = [];
-    if (user.value.id) {
-      supabase
-        .from("conversations")
-        .select(
-          `*, requester!inner(*), needer!inner(*), demand!inner(*, user!inner(*))`
-        )
-        .or(`requester.eq.${user.value.id},needer.eq.${user.value.id}`)
-        .order("updated_at", { ascending: true })
-        .then(({ data }) => {
-          if (data) {
-            console.log(data);
-            data?.forEach((conversation) => {
-              const sender =
-                conversation.requester.id === user.value.id
-                  ? conversation.requester
-                  : conversation.needer;
-              const receiver =
-                conversation.requester.id === user.value.id
-                  ? conversation.needer
-                  : conversation.requester;
-              const createdAt = moment(conversation.demand.created_at);
-
-              const isPassedTheeDays = moment
-                .duration(moment().startOf("day").diff(createdAt))
-                .asDays();
-              if (isPassedTheeDays < 4) {
-                dataOfUser.conversations.push({
-                  id: conversation.id,
-                  sender: sender,
-                  receiver: receiver,
-                  demand: conversation.demand,
-                  isAsker: conversation.requester.id === user.value.id,
-                  canceled: conversation.canceled,
-                });
-              }
-            });
-          }
-        });
-    }
-  };
   const getMyDemands = () => {
     dataOfUser.myDemands = [];
     supabase
@@ -163,30 +121,6 @@ export const useAuthStore = defineStore("auth", () => {
       });
   };
 
-  const subscribeConversation = () => {
-    /*supabase
-                                  .channel("conversations")
-                                  .on(
-                                    "postgres_changes",
-                                    { event: "*", schema: "public", table: "messages" },
-                                    () => {
-                                      updateConversations();
-                                    }
-                                  )
-                                  .subscribe();*/
-  };
-
-  const subscribeDemands = () => {
-    /*supabase
-                                  .channel("demands")
-                                  .on("postgres_changes", { event: "*", schema: "public" }, () => {
-                                    getMyDemands();
-                                    console.log("subscribed");
-                                  })
-                                  .subscribe();*/
-  };
-  console.log(dataOfUser.conversations);
-
   // Save the user when the session is set
   watch(session, async () => {
     if (isLoggedIn.value) {
@@ -201,12 +135,9 @@ export const useAuthStore = defineStore("auth", () => {
     isLoggedIn,
     dataOfUser,
     getConversations,
-    updateConversations,
     logout,
     updateUser,
     getAllMessages,
     getMyDemands,
-    subscribeConversation,
-    subscribeDemands,
   };
 });

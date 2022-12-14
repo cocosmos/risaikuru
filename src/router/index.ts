@@ -65,25 +65,25 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/Auth/ResetPassword.vue"),
       },
       {
-        path: "/profile/my-demands",
+        path: "profile/my-demands",
         component: () => import("@/views/Profil/MyDemands.vue"),
       },
 
       {
-        path: "/profile/my-demands/:id",
+        path: "profile/my-demands/:id",
         component: () => import("@/views/Profil/MyDemand.vue"),
       },
 
       {
-        path: "/profile/payment/infos",
+        path: "profile/payment/infos",
         component: () => import("@/views/Profil/PaymentInfos.vue"),
       },
       {
-        path: "/profile/payment/ask",
+        path: "profile/payment/ask",
         component: () => import("@/views/Profil/PaymentAsk.vue"),
       },
       {
-        path: "/profile/payment/confirmed",
+        path: "profile/payment/confirmed",
         component: () => import("@/views/Profil/PaymentConfirmed.vue"),
       },
       {

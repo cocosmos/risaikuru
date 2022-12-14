@@ -10,7 +10,7 @@ import {
 } from "@ionic/vue";
 import CardDemand from "../components/Card/CardDemand.vue";
 import LocationSearch from "@/components/LocationSearch.vue";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { Demand } from "@/types/Demand";
 import { supabase } from "@/supabase";
 import CardDemandSkeleton from "@/components/Card/CardDemandSkeleton.vue";
@@ -137,6 +137,13 @@ const handleScroll = (event: CustomEvent | any) => {
     }
   }
 };
+
+const handleRefresh = (event: CustomEvent) => {
+  resetDemandsList();
+  setTimeout(() => {
+    event.detail.complete();
+  }, 100);
+};
 </script>
 
 <template>
@@ -152,6 +159,10 @@ const handleScroll = (event: CustomEvent | any) => {
       :scroll-events="true"
       @ion-scroll="handleScroll"
     >
+      <ion-refresher slot="fixed" @ionRefresh="handleRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
+
       <location-search
         @locationUpdated="updatePosition"
         get-initial-location

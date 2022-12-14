@@ -27,6 +27,11 @@ onMounted(() => {
   authStore.subscribeConversation();
   authStore.updateConversations();
 });
+
+const handleRefresh = async (event: CustomEvent) => {
+  await authStore.updateConversations();
+  event.detail.complete();
+};
 </script>
 
 <template>
@@ -38,6 +43,9 @@ onMounted(() => {
     </ion-header>
 
     <ion-content :fullscreen="true" class="ion-padding">
+      <ion-refresher slot="fixed" @ionRefresh="handleRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
       <div class="conversation__list" :key="toRerender">
         <ion-text
           v-if="authStore.dataOfUser.conversations.length === 0"

@@ -135,7 +135,7 @@ const selectAdress = (newLocation: Location) => {
   }
 
   &__results {
-    background: white;
+    background: var(--ion-background-color);
     position: absolute;
     top: calc(100% - 10px);
     display: flex;

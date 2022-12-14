@@ -63,6 +63,7 @@ http://ionicframework.com/docs/theming/ */
   /* Set the font family of the entire app */
   --ion-font-family: "Roboto", "Helvetica Neue", sans-serif;
   --ion-text-color: #46483e;
+  --ion-background-color: #ffffff;
 }
 
 /*

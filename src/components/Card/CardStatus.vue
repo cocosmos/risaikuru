@@ -96,8 +96,6 @@ const handleAction = () => {
         conversation.value.demand.id,
         conversation.value.receiver.id
       );
-      conversation.value.demand.status = "accepted";
-
       window.location.href = stripeFinded.value.link;
     }
   }

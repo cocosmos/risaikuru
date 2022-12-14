@@ -27,7 +27,7 @@ const toggle = () => {
 
 <style lang="scss" scoped>
 .reward-toggle {
-  font-size: 24px;
+  font-size: 1.2em;
   padding: 24px 10px;
   border-radius: 10px;
   border: 2px solid transparent;

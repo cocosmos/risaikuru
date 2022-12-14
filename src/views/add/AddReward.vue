@@ -18,15 +18,15 @@
           <h3>Récapitulatif:</h3>
           <p class="summary__line">
             <span>Récompense :</span>
-            <span>{{ rewardAmount }} CHF</span>
+            <span>{{ formatMoney(rewardAmount) }}</span>
           </p>
           <p class="summary__line">
             <span>TVA & Frais de fonctionnement :</span>
-            <span>{{ fees }} CHF</span>
+            <span>{{ formatMoney(fees) }}</span>
           </p>
           <p class="summary__line summary__total">
             <span>Total* :</span>
-            <span>{{ total }} CHF</span>
+            <span>{{ formatMoney(total) }}</span>
             <span class="summary__line--indication">
               *Facturé au momement de la prise en charge
             </span>
@@ -59,6 +59,7 @@ import { computed, ref } from "vue";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
 import RewardToggleList from "@/components/Add/RewardToggleList.vue";
 import { useNewDemand } from "@/composables/newDemand";
+import { formatMoney } from "@/utils/format";
 
 const router = useRouter();
 const newDemand = useNewDemand();

@@ -58,6 +58,7 @@ export const useAuthStore = defineStore("auth", () => {
           `*, requester!inner(*), needer!inner(*), demand!inner(*, user!inner(*))`
         )
         .or(`requester.eq.${user.value.id},needer.eq.${user.value.id}`)
+        .order("updated_at", { ascending: true })
         .then(({ data }) => {
           if (data) {
             console.log(data);

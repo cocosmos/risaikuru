@@ -38,16 +38,16 @@ import {
   IonPage,
   onIonViewWillEnter,
 } from "@ionic/vue";
-import { chevronForwardOutline } from "ionicons/icons";
-import { useRouter } from "vue-router";
+import {chevronForwardOutline} from "ionicons/icons";
+import {useRouter} from "vue-router";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
 import LocationSearch from "@/components/LocationSearch.vue";
-import { computed, onMounted, ref, watchEffect } from "vue";
+import {computed, onMounted, ref, watchEffect} from "vue";
 import Location from "@/types/Location";
-import { ACCESS_TOKEN } from "@/services/mapbox";
+import {ACCESS_TOKEN, theme} from "@/services/mapbox";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { useNewDemand } from "@/composables/newDemand";
+import {useNewDemand} from "@/composables/newDemand";
 import LoaderFullPage from "@/components/LoaderFullPage.vue";
 
 const router = useRouter();
@@ -58,14 +58,14 @@ let map: mapboxgl.Map | undefined;
 let marker: mapboxgl.Marker | undefined;
 const loading = ref(true);
 
-const location = ref<Location>({ lat: 0, long: 0, name: "" });
+const location = ref<Location>({lat: 0, long: 0, name: ""});
 
 onMounted(() => {
   mapboxgl.accessToken = ACCESS_TOKEN;
 
   map = new mapboxgl.Map({
     container: "map", // container ID
-    style: "mapbox://styles/mapbox/streets-v12", // style URL
+    style: theme(), // style URL
     center: [6.14569, 46.20222], // starting position [lng, lat]
     zoom: 9, // starting zoom
   });
@@ -80,7 +80,7 @@ onMounted(() => {
 
 onIonViewWillEnter(() => {
   if (!newDemand.hasLocation.value && valid.value) {
-    location.value = { lat: 0, long: 0, name: "" };
+    location.value = {lat: 0, long: 0, name: ""};
   }
 });
 
@@ -90,14 +90,14 @@ watchEffect(() => {
   }
 
   marker = new mapboxgl.Marker()
-    .setLngLat([location.value.long, location.value.lat])
-    .addTo(map as mapboxgl.Map);
+      .setLngLat([location.value.long, location.value.lat])
+      .addTo(map as mapboxgl.Map);
 
   if (map && valid.value) {
-    map.setCenter({ lat: location.value.lat, lon: location.value.long });
+    map.setCenter({lat: location.value.lat, lon: location.value.long});
     map.zoomTo(16);
   } else if (map) {
-    map.setCenter({ lon: 6.14569, lat: 46.20222 });
+    map.setCenter({lon: 6.14569, lat: 46.20222});
     map.zoomTo(9);
   }
 });

@@ -15,7 +15,6 @@ import { useAuthStore } from "../../store/auth";
 const authStore = useAuthStore();
 
 onMounted(() => {
-  authStore.subscribeDemands();
   authStore.getMyDemands();
 });
 

@@ -36,7 +36,6 @@ import {
   IonButton,
   IonIcon,
   IonPage,
-  onIonViewDidEnter,
   onIonViewWillEnter,
 } from "@ionic/vue";
 import { chevronForwardOutline } from "ionicons/icons";
@@ -45,7 +44,7 @@ import WasteSwitch from "@/components/Add/WasteSwitch.vue";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
 import { icons } from "../../assets/icons/index";
 import { Waste } from "@/types/Demand";
-import { computed, onBeforeMount, onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useNewDemand } from "@/composables/newDemand";
 
 const router = useRouter();
@@ -80,10 +79,7 @@ const valid = computed(() => {
 });
 
 const validate = () => {
-  console.log(newDemand.wasteTypes.value);
   newDemand.wasteTypes.value = selectedWaste.value;
-  console.log(selectedWaste.value);
-  console.log(newDemand.wasteTypes.value);
   if (valid.value) router.push("/add/quantity");
 };
 </script>

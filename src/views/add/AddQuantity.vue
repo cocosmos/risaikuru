@@ -17,20 +17,9 @@
           v-for="quantity in newDemand.quantities.value"
           v-model="quantity.number"
           :size="quantity.id"
-          :icon="cube"
           :key="quantity.id"
           :description="quantity.description"
         ></quantity-stepper>
-        <!--
-        <quantity-stepper v-model="quantities.s" size="s" :icon="cube"
-                          description="Équivalent d'une boite à chaussures"></quantity-stepper>
-        <quantity-stepper v-model="quantities.m" size="m" :icon="bag"
-                          description="Équivalent d'un sac de courses"></quantity-stepper>
-        <quantity-stepper v-model="quantities.l" size="l" :icon="logoDropbox"
-                          description="Équivalent d'un carton de déménagement"></quantity-stepper>
-        <quantity-stepper v-model="quantities.xl" size="xl" :icon="car"
-                          description="Environ 200 litres"></quantity-stepper>
-                          -->
       </stack-list>
       <fixed-bottom-container>
         <ion-button expand="block" @click="validate()" :disabled="!valid">
@@ -60,7 +49,6 @@ import { computed } from "vue";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
 import QuantityStepper from "@/components/Add/QuantityStepper.vue";
 import StackList from "@/components/StackList.vue";
-import { cube, logoDropbox, bag, car } from "ionicons/icons";
 import { useNewDemand } from "@/composables/newDemand";
 
 const router = useRouter();

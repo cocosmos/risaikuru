@@ -7,17 +7,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import { ref, onMounted } from "vue";
-const size = ref();
-
-onMounted(() => {
-  size.value.addEventListener("rezize", () => console.log("test"));
-  if (size.value) {
-    console.log(size.value.clientHeight);
-  }
-});
-</script>
+<script lang="ts" setup></script>
 
 <style scoped lang="scss">
 .fixed-top {

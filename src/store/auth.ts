@@ -94,7 +94,6 @@ export const useAuthStore = defineStore("auth", () => {
       .order("created_at", { ascending: false })
       .then(({ data }) => {
         if (data) {
-          console.log(data);
           data.forEach((demand) => {
             const location = {
               lat: demand.lat,

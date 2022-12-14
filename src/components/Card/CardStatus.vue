@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import {defineProps, ref, computed} from "vue";
-import {fDay, formatMoney} from "@/utils/format";
-import {checkmarkCircleOutline, closeCircleOutline} from "ionicons/icons";
+import { defineProps, ref, computed } from "vue";
+import { fDay, formatMoney } from "@/utils/format";
+import { checkmarkCircleOutline, closeCircleOutline } from "ionicons/icons";
 import {
   IonCard,
   IonCardHeader,
@@ -11,10 +11,11 @@ import {
   IonButton,
   IonIcon,
 } from "@ionic/vue";
-import {Conversation} from "@/types/Message";
-import {acceptDemand} from "@/supabase";
-import {cancelDemand} from "@/supabase/conversation";
-import {useAuthStore} from "@/store/auth";
+import { Conversation } from "@/types/Message";
+import { acceptDemand } from "@/supabase";
+import { cancelDemand } from "@/supabase/conversation";
+import { useAuthStore } from "@/store/auth";
+import { stripe } from "@/utils/stripe";
 
 const props = defineProps<{
   conversation: Conversation;
@@ -23,6 +24,12 @@ const props = defineProps<{
 const authStore = useAuthStore();
 const isAsker = ref(props.conversation.isAsker);
 const conversation = ref(props.conversation);
+
+const stripeFinded = computed(() => {
+  return stripe.find(
+    ({ reward }) => reward === props.conversation.demand.reward
+  );
+});
 
 const label = computed(() => {
   switch (conversation.value.demand.status) {
@@ -68,7 +75,7 @@ const label = computed(() => {
           return {
             text: `${conversation.value.receiver.fname} a attribué le rammassage à une autre personne`,
             color: "danger",
-          }
+          };
         }
       }
     default:
@@ -84,17 +91,24 @@ const handleAction = () => {
     cancelDemand(conversation.value.id);
     conversation.value.canceled = true;
   } else {
-    acceptDemand(conversation.value.demand.id, conversation.value.receiver.id)
-    conversation.value.demand.status = "accepted";
+    if (stripeFinded.value) {
+      acceptDemand(
+        conversation.value.demand.id,
+        conversation.value.receiver.id
+      );
+      conversation.value.demand.status = "accepted";
+
+      window.location.href = stripeFinded.value.link;
+    }
   }
-}
+};
 </script>
 
 <template>
   <ion-card class="ion-no-margin">
     <ion-card-header :color="label.color">
       <ion-card-subtitle
-      >{{ fDay(conversation.demand.dateBegin) }}
+        >{{ fDay(conversation.demand.dateBegin) }}
       </ion-card-subtitle>
       <ion-text v-if="!isAsker && conversation.demand.status === 'pending'">
         {{ formatMoney(conversation.demand.reward + conversation.demand.fees) }}
@@ -104,22 +118,22 @@ const handleAction = () => {
 
     <ion-card-content>
       <ion-text class="text__label"
-      ><p>
-        {{ label.text }}
-      </p></ion-text
+        ><p>
+          {{ label.text }}
+        </p></ion-text
       >
 
       <ion-button
-          shape="round"
-          :color="isAsker ? 'danger' : 'success'"
-          v-if="!conversation.canceled && conversation.demand.status === 'pending'"
-          @click="handleAction()
-
+        shape="round"
+        :color="isAsker ? 'danger' : 'success'"
+        v-if="
+          !conversation.canceled && conversation.demand.status === 'pending'
         "
+        @click="handleAction()"
       >
         <ion-icon
-            slot="start"
-            :icon="isAsker ? closeCircleOutline : checkmarkCircleOutline"
+          slot="start"
+          :icon="isAsker ? closeCircleOutline : checkmarkCircleOutline"
         ></ion-icon>
         <ion-text>
           {{ !isAsker ? "Accepter et payer" : "Annuler la demande" + " " }}

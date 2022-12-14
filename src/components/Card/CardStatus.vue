@@ -171,7 +171,7 @@ const handleFinishTransactions = () => {
       >
         <ion-icon slot="start" :icon="checkmarkCircleOutline"></ion-icon>
         <ion-text>
-          {{ conversation.receiver.fname }} est venu chercher vos déchets.
+          Confirme la récupération de {{ conversation.receiver.fname }}
         </ion-text>
       </ion-button>
     </ion-card-content>

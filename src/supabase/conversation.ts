@@ -86,11 +86,20 @@ export const getConversation = async (
       const receiver =
         data.requester.id === userId ? data.needer : data.requester;
 
+      const location = {
+        lat: data.demand.lat,
+        long: data.demand.long,
+        name: data.demand.address,
+      };
+
       conversation = {
         id: data.id,
         sender: sender,
         receiver: receiver,
-        demand: data.demand,
+        demand: {
+          ...data.demand,
+          location: location,
+        },
         isAsker: data.requester.id === userId,
         canceled: data.canceled,
       };

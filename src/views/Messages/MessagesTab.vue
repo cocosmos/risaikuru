@@ -13,6 +13,7 @@ import {
   IonTitle,
   IonLabel,
   onIonViewDidEnter,
+  IonModal,
 } from "@ionic/vue";
 import CardStatus from "@/components/Card/CardStatus.vue";
 import { ref, watch } from "vue";
@@ -21,6 +22,7 @@ import { send } from "ionicons/icons";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
 import { useRoute } from "vue-router";
 import { getConversation, insertMessage } from "@/supabase";
+import MyDemandOrPublished from "@/components/MyDemandOrPublished.vue";
 
 import { useMessages } from "@/composables/messages";
 
@@ -32,6 +34,7 @@ const authStore = useAuthStore();
 const content = ref();
 const message = ref("");
 const messagesComp = useMessages();
+const isOpen = ref(false);
 
 const scrollBottom = () => {
   content.value.$el.scrollToBottom();
@@ -55,6 +58,10 @@ const handleMessage = () => {
 watch(messagesComp.messagesByDay, () => {
   scrollBottom();
 });
+
+const setOpen = (open: boolean) => {
+  isOpen.value = open;
+};
 </script>
 <template>
   <ion-page>
@@ -71,6 +78,9 @@ watch(messagesComp.messagesByDay, () => {
               : "..."
           }}
         </ion-title>
+        <ion-buttons slot="end">
+          <ion-button @click="setOpen(true)">Détail</ion-button>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding" ref="content">
@@ -110,6 +120,30 @@ watch(messagesComp.messagesByDay, () => {
           </div>
         </fixed-bottom-container>
       </div>
+      <ion-modal :is-open="isOpen">
+        <ion-header>
+          <ion-toolbar>
+            <ion-title
+              >Annonce de
+              {{
+                messagesComp.conversation.value
+                  ? messagesComp.conversation.value.demand.user.fname
+                  : "..."
+              }}</ion-title
+            >
+            <ion-buttons slot="end">
+              <ion-button @click="setOpen(false)">Fermer</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding background">
+          <my-demand-or-published
+            v-if="messagesComp.conversation.value?.demand"
+            :demand="messagesComp.conversation.value?.demand"
+            :isCreator="messagesComp.conversation.value.isAsker"
+          />
+        </ion-content>
+      </ion-modal>
     </ion-content>
   </ion-page>
 </template>
@@ -141,5 +175,12 @@ watch(messagesComp.messagesByDay, () => {
       opacity: 0.8;
     }
   }
+}
+.background {
+  --background: none;
+
+  background: var(--ion-background-color)
+    url("../../assets/summary-background.png") center 105% no-repeat;
+  background-size: 125%;
 }
 </style>

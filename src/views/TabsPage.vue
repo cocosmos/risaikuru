@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { useAuthStore } from "@/store/auth";
 import {
   IonTabBar,
   IonTabButton,
@@ -8,20 +7,8 @@ import {
   IonIcon,
   IonPage,
   IonRouterOutlet,
-  IonBadge,
 } from "@ionic/vue";
 import { search, mail, person, addCircle } from "ionicons/icons";
-import { computed, onMounted } from "vue";
-const { dataOfUser, getAllMessages } = useAuthStore();
-const unReadMessages = computed(() => {
-  return dataOfUser.messages.filter(
-    (message) => message.isRead === false && message.isSender === false
-  );
-});
-
-onMounted(() => {
-  getAllMessages();
-});
 </script>
 
 <template>
@@ -42,9 +29,6 @@ onMounted(() => {
         <ion-tab-button tab="messages" href="/messages">
           <ion-icon :icon="mail" />
           <ion-label>Messages</ion-label>
-          <ion-badge color="danger" v-if="unReadMessages.length !== 0">{{
-            unReadMessages.length
-          }}</ion-badge>
         </ion-tab-button>
         <ion-tab-button tab="profil" href="/profile">
           <ion-icon :icon="person" />

@@ -17,7 +17,7 @@ import AvatarName from "../Profile/AvatarName.vue";
 import router from "@/router";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import {ACCESS_TOKEN} from "@/services/mapbox";
+import {ACCESS_TOKEN, theme} from "@/services/mapbox";
 import {useAuthStore} from "@/store/auth";
 import {createConversation} from "@/supabase";
 
@@ -35,11 +35,11 @@ const conversation = computed(() => {
 });
 
 onMounted(() => {
-  // getMyDemands();
-  //findDemand();
+  showMap();
 });
 
 const isAsker = ref(props.demand.user.id === authStore.user.id);
+const mapLoading = ref(true);
 
 const dateBegin = new Date(props.demand.dateBegin);
 const dateEnd = new Date(props.demand.dateEnd);
@@ -53,7 +53,6 @@ const isOpen = ref(false);
 
 const toggleOpen = () => {
   isOpen.value = !isOpen.value;
-  showMap();
 };
 
 // TODO : charger la map et afficher le marker à la première ouverture de la carte
@@ -63,16 +62,19 @@ const showMap = () => {
 
     map = new mapboxgl.Map({
       container: `map-${props.demand.id}`, // container ID
-      style: "mapbox://styles/mapbox/streets-v12", // style URL
+      style: theme(), // style URL
       center: [props.demand.location.long, props.demand.location.lat], // starting position [lng, lat]
       zoom: 14, // starting zoom
       interactive: false,
     });
 
     map.on("load", () => {
-      if (map !== undefined) map.resize();
+      mapLoading.value = false;
+      if (map && map?.loaded()) map.resize();
       showMarker();
     });
+
+    if (map && map?.loaded()) map.resize();
   }
 };
 
@@ -158,6 +160,7 @@ const route = (id: string) => {
               :icon="isOpen ? chevronUp : chevronDown"
               size="large"
           ></ion-icon>
+          Plan
         </ion-button>
 
         <ion-button
@@ -179,6 +182,7 @@ const route = (id: string) => {
           :id="`map-${demand.id}`"
           class="map"
           :class="{ 'map--closed': !isOpen }"
+          :style="{ opacity: mapLoading ? 0 : 1 }"
       ></div>
     </ion-card-content>
   </ion-card>
@@ -248,6 +252,9 @@ ion-card-content {
   height: 200px;
   max-height: 200px;
   transition: 0.5s ease-in;
+  border-radius: 10px;
+  overflow: hidden;
+
 
   &--closed {
     max-height: 0;

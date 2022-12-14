@@ -9,16 +9,14 @@ import {
   IonBackButton,
 } from "@ionic/vue";
 import CardDemand from "@/components/Card/CardDemand.vue";
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 import { useAuthStore } from "../../store/auth";
 
 const authStore = useAuthStore();
-const loading = ref(true);
 
 onMounted(() => {
   authStore.subscribeDemands();
   authStore.getMyDemands();
-  loading.value = false;
 });
 
 const handleRefresh = async (event: CustomEvent) => {
@@ -41,8 +39,7 @@ const handleRefresh = async (event: CustomEvent) => {
       <ion-refresher slot="fixed" @ionRefresh="handleRefresh($event)">
         <ion-refresher-content></ion-refresher-content>
       </ion-refresher>
-      <loader-full-page v-if="loading"></loader-full-page>
-      <div class="cards__list" v-if="!loading">
+      <div class="cards__list">
         <ion-text
           v-if="authStore.dataOfUser.myDemands.length === 0"
           class="ion-text-center"

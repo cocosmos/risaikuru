@@ -27,6 +27,8 @@ import {
   IonLabel,
   IonNote,
   IonPopover,
+  IonRefresher,
+  IonRefresherContent,
   IonRow,
   IonSearchbar,
   IonSkeletonText,
@@ -66,7 +68,7 @@ router.isReady().then(() => {
   app.mount("#app");
 });
 
-router.beforeEach((to, from) => {
+router.beforeEach((to) => {
   if (onlyLoggedOut.indexOf(to.path) >= 0 && authStore.isLoggedIn) {
     router.replace("/profile");
   } else if (onlyLoggedIn.indexOf(to.path) >= 0 && !authStore.isLoggedIn) {
@@ -100,5 +102,8 @@ app
   .component("ion-skeleton-text", IonSkeletonText)
   .component("ion-chip", IonChip)
   .component("ion-popover", IonPopover)
+  .component("ion-refresher", IonRefresher)
+  .component("ion-refresher-content", IonRefresherContent)
   .component("ion-content", IonContent);
+
 defineCustomElements(window);

@@ -28,10 +28,10 @@ export const getDemand = async (demandId: string) => {
  * @param demandId
  */
 
-export const acceptDemand = async (demandId: string) => {
+export const acceptDemand = async (demandId: string, userId: string) => {
   const { error } = await supabase
     .from("demands")
-    .update({ status: "accepted" })
+    .update({ status: "accepted", attributedTo: userId })
     .eq("id", demandId);
 
   if (error) {

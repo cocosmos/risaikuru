@@ -5,33 +5,45 @@ import {
   IonToolbar,
   IonTitle,
   IonContent,
-  IonText,
+  IonText, onIonViewWillEnter,
 } from "@ionic/vue";
 import ConversationCard from "@/components/Card/CardConversation.vue";
-import { ref, onMounted, watch } from "vue";
-import { useAuthStore } from "@/store/auth";
+import {ref, onMounted, watch} from "vue";
+import {useAuthStore} from "@/store/auth";
+import {Conversation} from "@/types/Message";
+import LoaderFullPage from '@/components/LoaderFullPage.vue';
 
 const authStore = useAuthStore();
 
 const toRerender = ref(0);
+const loading = ref(true);
+const conversations = ref<Conversation[]>([])
 
 watch(
-  authStore.dataOfUser.conversations,
-  () => {
-    toRerender.value++;
-  },
-  { deep: true }
+    authStore.dataOfUser.conversations,
+    () => {
+      toRerender.value++;
+    },
+    {deep: true}
 );
 
-onMounted(() => {
-  authStore.subscribeConversation();
-  authStore.updateConversations();
-});
+onIonViewWillEnter(() => {
+  loading.value = true;
+  loadConversations(() => {
+    loading.value = false
+  });
+})
 
 const handleRefresh = async (event: CustomEvent) => {
-  await authStore.updateConversations();
-  event.detail.complete();
+  loadConversations(event.detail.complete);
 };
+
+const loadConversations = (cb: () => void | undefined) => {
+  authStore.getConversations().then((fetchedConversations) => {
+    conversations.value = fetchedConversations;
+    if (cb) cb();
+  });
+}
 </script>
 
 <template>
@@ -43,21 +55,25 @@ const handleRefresh = async (event: CustomEvent) => {
     </ion-header>
 
     <ion-content :fullscreen="true" class="ion-padding">
-      <ion-refresher slot="fixed" @ionRefresh="handleRefresh($event)">
-        <ion-refresher-content></ion-refresher-content>
-      </ion-refresher>
-      <div class="conversation__list" :key="toRerender">
-        <ion-text
-          v-if="authStore.dataOfUser.conversations.length === 0"
-          class="ion-text-center"
+
+      <loader-full-page :loading="loading"></loader-full-page>
+      <template v-if="!loading">
+        <ion-refresher slot="fixed" @ionRefresh="handleRefresh($event)">
+          <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
+        <div class="conversation__list">
+          <ion-text
+              v-if="conversations.length < 1"
+              class="ion-text-center"
           >Pas de mesages récents.
-        </ion-text>
-        <conversation-card
-          v-for="conversation in authStore.dataOfUser.conversations"
-          v-bind:key="conversation.id"
-          :conversation="conversation"
-        ></conversation-card>
-      </div>
+          </ion-text>
+          <conversation-card
+              v-for="conversation in conversations"
+              v-bind:key="conversation.id"
+              :conversation="conversation"
+          ></conversation-card>
+        </div>
+      </template>
     </ion-content>
   </ion-page>
 </template>

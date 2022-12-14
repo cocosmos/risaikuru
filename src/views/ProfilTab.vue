@@ -32,6 +32,10 @@ const disconnect = () => {
   authStore.logout();
   router.push("/login");
 };
+const handleRefresh = async (event: CustomEvent) => {
+  await authStore.updateUser();
+  event.detail.complete();
+};
 </script>
 
 <template>
@@ -42,6 +46,9 @@ const disconnect = () => {
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding">
+      <ion-refresher slot="fixed" @ionRefresh="handleRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
       <div class="profile">
         <avatar-name
           :user="authStore.user"
@@ -107,14 +114,6 @@ const disconnect = () => {
       ion-icon {
         margin-right: $padding;
       }
-
-      /*    &:first-child {
-        padding-bottom: 0;
-      }
-
-      &:last-child {
-        padding-top: 0;
-      } */
     }
   }
 }

@@ -19,6 +19,7 @@ import { stripe } from "@/utils/stripe";
 import { paidDemand } from "../../supabase/demand";
 import { useRouter } from "vue-router";
 import { inscreasePot } from "@/supabase/profile";
+import { apresentToast } from "@/utils/helper";
 
 const props = defineProps<{
   conversation: Conversation;
@@ -112,6 +113,12 @@ const handleFinishTransactions = () => {
     paidDemand(conversation.value.demand.id);
     inscreasePot(id, total);
     router.push("/messages");
+    apresentToast(
+      "Félicitations, n'hésites pas à poster d'autres annonces",
+      "success",
+      2500,
+      "top"
+    );
   }
 };
 </script>

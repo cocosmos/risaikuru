@@ -17,8 +17,8 @@ import CardDemandSkeleton from "@/components/Card/CardDemandSkeleton.vue";
 import Location from "@/types/Location";
 import { LngLatBounds, MercatorCoordinate } from "mapbox-gl";
 import { useAuthStore } from "@/store/auth";
-import { Conversation } from "@/types/Message";
-
+import { add } from "ionicons/icons";
+import { useRouter } from "vue-router";
 const PAGE_SIZE = 5;
 
 const authStore = useAuthStore();
@@ -30,8 +30,7 @@ const page = ref(1);
 const scrollTriggerElement = ref<HTMLElement>();
 const location = ref<Location>({ long: 0, lat: 0, name: "" });
 const range = ref(10);
-
-console.log(demands.value);
+const router = useRouter();
 
 onIonViewWillEnter(() => {
   resetDemandsList();
@@ -181,6 +180,13 @@ const handleRefresh = (event: CustomEvent) => {
         ></ion-range>
       </div>
 
+      <div class="no-demands" v-if="demands.length === 0 && !loading">
+        <ion-text>Il n'y a pas d'annonces dans ce rayon.</ion-text>
+        <ion-button @click="router.push('/add')" class="ion-margin-top"
+          ><ion-icon :icon="add" />Ajoutes en une !</ion-button
+        >
+      </div>
+
       <div class="cards">
         <card-demand
           v-for="demand in demands"
@@ -207,6 +213,10 @@ const handleRefresh = (event: CustomEvent) => {
 
 ion-content {
   margin: 5px;
+  .no-demands {
+    text-align: center;
+    margin-top: 50%;
+  }
 }
 
 ion-range {

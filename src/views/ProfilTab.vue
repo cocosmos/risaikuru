@@ -60,7 +60,7 @@ const handleRefresh = async (event: CustomEvent) => {
         <card-pot :balance="authStore.user.balance ?? 0"></card-pot>
         <ion-button
           @click="useLocation('/profile/payment/ask')"
-          :disabled="authStore.user.balance <= 20"
+          :disabled="authStore.user.balance < 20"
         >
           Demande de paiement
         </ion-button>

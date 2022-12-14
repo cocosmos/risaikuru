@@ -7,7 +7,6 @@ import {
   IonContent,
   IonText,
   onIonViewWillEnter,
-  toastController,
 } from "@ionic/vue";
 import ConversationCard from "@/components/Card/CardConversation.vue";
 import { ref, onMounted, watch } from "vue";
@@ -15,6 +14,7 @@ import { useAuthStore } from "@/store/auth";
 import { Conversation } from "@/types/Message";
 import LoaderFullPage from "@/components/LoaderFullPage.vue";
 import { useRouter } from "vue-router";
+import { apresentToast } from "@/utils/helper";
 
 const authStore = useAuthStore();
 
@@ -33,7 +33,7 @@ watch(
 
 onMounted(() => {
   if (router.currentRoute.value.query.success === "true") {
-    apresentToast();
+    apresentToast("Paiement effectué !", "success", 1500, "top");
   }
 });
 
@@ -53,17 +53,6 @@ const loadConversations = (cb: () => void | undefined) => {
     conversations.value = fetchedConversations;
     if (cb) cb();
   });
-};
-
-const apresentToast = async () => {
-  const toast = await toastController.create({
-    message: "Paiement effectué !",
-    color: "success",
-    duration: 1500,
-    position: "top",
-  });
-
-  await toast.present();
 };
 </script>
 

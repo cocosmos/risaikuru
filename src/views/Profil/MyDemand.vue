@@ -18,6 +18,7 @@ import { supabase } from "../../supabase/config";
 import { getDemand } from "../../supabase/demand";
 import { Demand } from "@/types/Demand";
 import LoaderFullPage from "@/components/LoaderFullPage.vue";
+import { apresentToast } from "@/utils/helper";
 
 const route = useRoute();
 const router = useRouter();
@@ -39,8 +40,14 @@ const deleteDemand = () => {
     .then((res) => {
       if (res.error) {
         console.log(res.error);
+        apresentToast(
+          "Annonce non supprimée, vous avez des messages.",
+          "danger",
+          2000,
+          "top"
+        );
       } else {
-        console.log("Demande supprimée");
+        apresentToast("Annonce supprimée", "success", 1500, "top");
       }
     });
 

@@ -1,4 +1,5 @@
 import { Day, Message } from "@/types/Message";
+import { toastController } from "@ionic/vue";
 
 export const regexCheckIban = (iban: string) => {
   const ibanRegex = new RegExp(
@@ -35,4 +36,20 @@ export const returnMessagesByDay = (messages: Message[]) => {
   });
 
   return days;
+};
+
+export const apresentToast = async (
+  message: string,
+  color: string,
+  duration: number,
+  position: "top" | "bottom" | "middle"
+) => {
+  const toast = await toastController.create({
+    message: message,
+    color: color,
+    duration: duration,
+    position: position,
+  });
+
+  await toast.present();
 };

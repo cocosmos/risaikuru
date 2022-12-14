@@ -85,7 +85,9 @@ const deleteDemand = () => {
 <style lang="scss">
 .background {
   --background: none;
-  background: url("../../assets/summary-background.png") center 105% no-repeat;
+
+  background: var(--ion-background-color)
+    url("../../assets/summary-background.png") center 105% no-repeat;
   background-size: 125%;
 }
 .loader {

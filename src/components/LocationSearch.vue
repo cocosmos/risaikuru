@@ -52,7 +52,7 @@ import Location from "@/types/Location";
 import MapboxFeature from "@/types/MapboxFeature";
 
 const props = defineProps<{
-  getInitialLocation: boolean;
+  getInitialLocation?: boolean;
 }>();
 
 const emit = defineEmits<{

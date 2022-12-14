@@ -15,10 +15,10 @@ defineProps<{
 
 <style lang="scss" scoped>
 .loader {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   ion-spinner {
     width: 50px;
     height: 50px;

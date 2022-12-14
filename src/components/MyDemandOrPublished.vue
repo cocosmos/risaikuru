@@ -1,19 +1,20 @@
 <script setup lang="ts">
-import { Demand } from "@/types/Demand";
-import { computed, defineProps } from "vue";
-import { calendarOutline, location, trophy } from "ionicons/icons";
+import {Demand} from "@/types/Demand";
+import {computed, defineProps} from "vue";
+import {calendarOutline, location, trophy} from "ionicons/icons";
 import QuantityOnCard from "@/components/Card/Demand/QuantityOnCard.vue";
 import IconInfo from "@/components/IconInfo.vue";
 
 import moment from "moment";
+
 const props = defineProps<{
   demand: Demand;
 }>();
 const momentStr = computed(() => {
   moment.locale("fr");
   return (
-    moment(props.demand.dateBegin).format("dddd D MMMM [entre] HH:mm [et] ") +
-    moment(props.demand.dateEnd).format("HH:mm")
+      moment(props.demand.dateBegin).format("dddd D MMMM [entre] HH:mm [et] ") +
+      moment(props.demand.dateEnd).format("HH:mm")
   );
 });
 console.log(props.demand);
@@ -22,10 +23,10 @@ console.log(props.demand);
 <template>
   <div class="wastes">
     <IconInfo
-      v-for="wasteType in demand.wastes"
-      :waste="wasteType"
-      :key="wasteType"
-      size="50px"
+        v-for="wasteType in demand.wastes"
+        :waste="wasteType"
+        :key="wasteType"
+        size="50px"
     ></IconInfo>
   </div>
   <div class="infos">
@@ -33,9 +34,9 @@ console.log(props.demand);
       <p>Volume</p>
       <div class="infos__quantities">
         <quantity-on-card
-          v-for="quantity in demand.quantity"
-          :quantity="quantity"
-          :key="quantity.id"
+            v-for="quantity in demand.quantity"
+            :quantity="quantity"
+            :key="quantity.id"
         ></quantity-on-card>
       </div>
     </div>
@@ -46,8 +47,8 @@ console.log(props.demand);
     <div class="infos__line">
       <ion-icon :icon="location" color="primary"></ion-icon>
       <span>{{
-        demand.location !== undefined ? demand.location.name : ""
-      }}</span>
+          demand.location !== undefined ? demand.location.name : ""
+        }}</span>
     </div>
     <div class="infos__line">
       <ion-icon :icon="trophy" color="primary"></ion-icon>
@@ -112,10 +113,11 @@ console.log(props.demand);
     color: var(--ion-color-primary);
     font-size: 1.5rem;
     font-weight: bold;
+    margin-bottom: 2rem;
 
     &__fees {
       position: absolute;
-      top: calc(100% + 10px);
+      top: calc(100%);
       left: 0;
       font-size: 0.75rem;
       color: var(--ion-color-text);

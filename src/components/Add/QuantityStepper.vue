@@ -5,7 +5,7 @@
   >
     <div class="quantity-stepper__infos">
       <span>{{ props.size.toUpperCase() }}</span>
-      <ion-icon :icon="props.icon" color="primary" size="large"></ion-icon>
+      <ion-icon :icon="icon" color="primary" size="large"></ion-icon>
     </div>
     <div class="quantity-stepper__content">
       <p class="quantity-stepper__label">{{ props.description }}</p>
@@ -26,14 +26,29 @@
 
 <script lang="ts" setup>
 import { IonFabButton, IonIcon } from "@ionic/vue";
+import { bag, car, cube, logoDropbox } from "ionicons/icons";
 import { computed, defineEmits, defineProps } from "vue";
 
 const props = defineProps<{
   modelValue: number;
   size: string;
-  icon: string;
   description: string;
 }>();
+
+const icon = computed(() => {
+  switch (props.size) {
+    case "S":
+      return cube;
+    case "M":
+      return bag;
+    case "L":
+      return logoDropbox;
+    case "XL":
+      return car;
+    default:
+      return cube;
+  }
+});
 
 const emit = defineEmits(["update:modelValue"]);
 

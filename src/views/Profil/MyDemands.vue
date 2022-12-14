@@ -9,8 +9,9 @@ import {
   IonBackButton,
 } from "@ionic/vue";
 import CardDemand from "@/components/Card/CardDemand.vue";
-import { onMounted } from "vue";
-import { useAuthStore } from "../../store/auth";
+
+import {onMounted, ref} from "vue";
+import {useAuthStore} from "../../store/auth";
 
 const authStore = useAuthStore();
 
@@ -40,17 +41,17 @@ const handleRefresh = async (event: CustomEvent) => {
       </ion-refresher>
       <div class="cards__list">
         <ion-text
-          v-if="authStore.dataOfUser.myDemands.length === 0"
-          class="ion-text-center"
+            v-if="authStore.dataOfUser.myDemands.length === 0"
+            class="ion-text-center"
         >
           Vous n'avez pas encore d'annonces.
         </ion-text>
 
         <card-demand
-          v-for="demand in authStore.dataOfUser.myDemands"
-          v-bind:key="demand.id"
-          :demand="demand"
-          :card-of-current-user="true"
+            v-for="demand in authStore.dataOfUser.myDemands"
+            v-bind:key="demand.id"
+            :demand="demand"
+            :card-of-current-user="true"
         ></card-demand>
       </div>
     </ion-content>

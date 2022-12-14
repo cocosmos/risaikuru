@@ -22,50 +22,51 @@ const props = defineProps<{
 
 const authStore = useAuthStore();
 const isAsker = ref(props.conversation.isAsker);
+const conversation = ref(props.conversation);
 
 const label = computed(() => {
-  switch (props.conversation.demand.status) {
+  switch (conversation.value.demand.status) {
     case "pending":
-      if (props.conversation.isAsker) {
-        if (props.conversation.canceled) {
+      if (conversation.value.isAsker) {
+        if (conversation.value.canceled) {
           return {
             text: `Prise en charge refusée.`,
             color: "danger",
           };
         } else {
           return {
-            text: `${props.conversation.receiver.fname} n'a pas encore validé votre demande.`,
+            text: `${conversation.value.receiver.fname} n'a pas encore validé votre demande.`,
             color: "warning",
           };
         }
       } else {
-        if (props.conversation.canceled) {
+        if (conversation.value.canceled) {
           return {
-            text: `${props.conversation.receiver.fname} a refusé de prendre vos déchets.`,
+            text: `${conversation.value.receiver.fname} a refusé de prendre vos déchets.`,
             color: "danger",
           };
         } else {
           return {
-            text: `${props.conversation.receiver.fname} veux récupérer vos déchets.`,
+            text: `${conversation.value.receiver.fname} veux récupérer vos déchets.`,
             color: "warning",
           };
         }
       }
     case "accepted":
-      if (!props.conversation.isAsker) {
+      if (!conversation.value.isAsker) {
         return {
           text: `Prise en charge acceptée.`,
           color: "success",
         };
       } else {
-        if (props.conversation.demand.attributedTo === authStore.user.id) {
+        if (conversation.value.demand.attributedTo === authStore.user.id) {
           return {
-            text: `${props.conversation.receiver.fname} a accepté votre demande.`,
+            text: `${conversation.value.receiver.fname} a accepté votre demande.`,
             color: "success",
           };
         } else {
           return {
-            text: `${props.conversation.receiver.fname} a attribué le rammassage à une autre personne`,
+            text: `${conversation.value.receiver.fname} a attribué le rammassage à une autre personne`,
             color: "danger",
           }
         }
@@ -77,6 +78,16 @@ const label = computed(() => {
       };
   }
 });
+
+const handleAction = () => {
+  if (isAsker.value) {
+    cancelDemand(conversation.value.id);
+    conversation.value.canceled = true;
+  } else {
+    acceptDemand(conversation.value.demand.id, conversation.value.receiver.id)
+    conversation.value.demand.status = "accepted";
+  }
+}
 </script>
 
 <template>
@@ -101,11 +112,9 @@ const label = computed(() => {
       <ion-button
           shape="round"
           :color="isAsker ? 'danger' : 'success'"
-          v-if="!conversation.canceled"
-          @click="
-          isAsker
-            ? cancelDemand(props.conversation.id)
-            : acceptDemand(props.conversation.demand.id, props.conversation.receiver.id)
+          v-if="!conversation.canceled && conversation.demand.status === 'pending'"
+          @click="handleAction()
+
         "
       >
         <ion-icon

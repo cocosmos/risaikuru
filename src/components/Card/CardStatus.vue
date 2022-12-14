@@ -16,11 +16,14 @@ import { acceptDemand } from "@/supabase";
 import { cancelDemand } from "@/supabase/conversation";
 import { useAuthStore } from "@/store/auth";
 import { stripe } from "@/utils/stripe";
+import { paidDemand } from "../../supabase/demand";
+import { useRouter } from "vue-router";
+import { inscreasePot } from "@/supabase/profile";
 
 const props = defineProps<{
   conversation: Conversation;
 }>();
-
+const router = useRouter();
 const authStore = useAuthStore();
 const isAsker = ref(props.conversation.isAsker);
 const conversation = ref(props.conversation);
@@ -100,13 +103,24 @@ const handleAction = () => {
     }
   }
 };
+
+const handleFinishTransactions = () => {
+  const id = conversation.value.receiver.id;
+  const total =
+    conversation.value.demand.reward + conversation.value.receiver.balance;
+  if (conversation.value) {
+    paidDemand(conversation.value.demand.id);
+    inscreasePot(id, total);
+    router.push("/messages");
+  }
+};
 </script>
 
 <template>
   <ion-card class="ion-no-margin">
     <ion-card-header :color="label.color">
-      <ion-card-subtitle
-        >{{ fDay(conversation.demand.dateBegin) }}
+      <ion-card-subtitle>
+        {{ fDay(conversation.demand.dateBegin) }}
       </ion-card-subtitle>
       <ion-text v-if="!isAsker && conversation.demand.status === 'pending'">
         {{ formatMoney(conversation.demand.reward + conversation.demand.fees) }}
@@ -140,6 +154,17 @@ const handleAction = () => {
               formatMoney(conversation.demand.reward + conversation.demand.fees)
             }}
           </ion-text>
+        </ion-text>
+      </ion-button>
+      <ion-button
+        shape="round"
+        color="success"
+        v-if="conversation.demand.status === 'accepted' && !isAsker"
+        @click="handleFinishTransactions()"
+      >
+        <ion-icon slot="start" :icon="checkmarkCircleOutline"></ion-icon>
+        <ion-text>
+          {{ conversation.receiver.fname }} est venu chercher vos déchets.
         </ion-text>
       </ion-button>
     </ion-card-content>

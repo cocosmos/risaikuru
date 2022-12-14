@@ -53,3 +53,18 @@ export const cancelDemand = async (demandId: string) => {
     console.log(error);
   }
 };
+
+/**
+ * Paid a demand
+ * @param demandId
+ */
+export const paidDemand = async (demandId: string) => {
+  const { error } = await supabase
+    .from("demands")
+    .update({ paid: true })
+    .eq("id", demandId);
+
+  if (error) {
+    console.log(error);
+  }
+};

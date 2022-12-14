@@ -34,6 +34,7 @@ export interface Demand {
   dateCreated: Date;
   conversationId?: string;
   attributedTo?: string;
+  paid?: boolean;
 }
 
 export const createDemand = (

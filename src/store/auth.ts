@@ -60,6 +60,7 @@ export const useAuthStore = defineStore("auth", () => {
       )
       .or(`requester.eq.${user.value.id},needer.eq.${user.value.id}`)
       .gt(`demand.dateEnd`, minDate)
+      .neq("demand.paid", true)
       .order("updated_at", { ascending: true })
       .then(({ data }): Conversation[] => {
         if (!data) return [];

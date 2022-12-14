@@ -50,7 +50,7 @@ export const useAuthStore = defineStore("auth", () => {
       });
   };
 
-  const conversations = computed(async (): Promise<Conversation[]> => {
+  const getConversations = async (): Promise<Conversation[]> => {
     if (!isLoggedIn.value) return [];
     const minDate = moment().startOf("day").subtract(4).toISOString();
     return supabase
@@ -83,7 +83,7 @@ export const useAuthStore = defineStore("auth", () => {
           };
         });
       });
-  });
+  };
 
   const updateConversations = () => {
     dataOfUser.conversations = [];
@@ -165,25 +165,25 @@ export const useAuthStore = defineStore("auth", () => {
 
   const subscribeConversation = () => {
     /*supabase
-                          .channel("conversations")
-                          .on(
-                            "postgres_changes",
-                            { event: "*", schema: "public", table: "messages" },
-                            () => {
-                              updateConversations();
-                            }
-                          )
-                          .subscribe();*/
+                                  .channel("conversations")
+                                  .on(
+                                    "postgres_changes",
+                                    { event: "*", schema: "public", table: "messages" },
+                                    () => {
+                                      updateConversations();
+                                    }
+                                  )
+                                  .subscribe();*/
   };
 
   const subscribeDemands = () => {
     /*supabase
-                          .channel("demands")
-                          .on("postgres_changes", { event: "*", schema: "public" }, () => {
-                            getMyDemands();
-                            console.log("subscribed");
-                          })
-                          .subscribe();*/
+                                  .channel("demands")
+                                  .on("postgres_changes", { event: "*", schema: "public" }, () => {
+                                    getMyDemands();
+                                    console.log("subscribed");
+                                  })
+                                  .subscribe();*/
   };
   console.log(dataOfUser.conversations);
 
@@ -200,7 +200,7 @@ export const useAuthStore = defineStore("auth", () => {
     user,
     isLoggedIn,
     dataOfUser,
-    conversations,
+    getConversations,
     updateConversations,
     logout,
     updateUser,

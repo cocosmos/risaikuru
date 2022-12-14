@@ -32,6 +32,7 @@ export interface Demand {
   dateBegin: Date;
   dateEnd: Date;
   dateCreated: Date;
+  conversationId?: string;
 }
 
 export const createDemand = (

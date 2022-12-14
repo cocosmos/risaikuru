@@ -10,21 +10,25 @@ import {
 } from "@ionic/vue";
 import CardDemand from "../components/Card/CardDemand.vue";
 import LocationSearch from "@/components/LocationSearch.vue";
-import { computed, ref, watch } from "vue";
-import { Demand } from "@/types/Demand";
-import { supabase } from "@/supabase";
+import {computed, ref, watch} from "vue";
+import {Demand} from "@/types/Demand";
+import {supabase} from "@/supabase";
 import CardDemandSkeleton from "@/components/Card/CardDemandSkeleton.vue";
 import Location from "@/types/Location";
-import { LngLatBounds, MercatorCoordinate } from "mapbox-gl";
+import {LngLatBounds, MercatorCoordinate} from "mapbox-gl";
+import {useAuthStore} from "@/store/auth";
+import {Conversation} from "@/types/Message";
 
 const PAGE_SIZE = 5;
+
+const authStore = useAuthStore();
 
 const loading = ref(false);
 const hasMoreResults = ref(true);
 const demands = ref<Demand[]>([]);
 const page = ref(1);
 const scrollTriggerElement = ref<HTMLElement>();
-const location = ref<Location>({ long: 0, lat: 0, name: "" });
+const location = ref<Location>({long: 0, lat: 0, name: ""});
 const range = ref(10);
 
 console.log(demands.value);
@@ -48,21 +52,21 @@ const nextResultsMax = computed(() => {
 
 const searchBoundsCoordinates = computed((): LngLatBounds => {
   const mercatorLocation = MercatorCoordinate.fromLngLat(
-    { lng: location.value.long, lat: location.value.lat },
-    0
+      {lng: location.value.long, lat: location.value.lat},
+      0
   );
   const rangeInMeters = range.value * 1000;
   const offsetInMercator =
-    rangeInMeters * mercatorLocation.meterInMercatorCoordinateUnits();
+      rangeInMeters * mercatorLocation.meterInMercatorCoordinateUnits();
   const swBound = new MercatorCoordinate(
-    mercatorLocation.x - offsetInMercator,
-    mercatorLocation.y - offsetInMercator,
-    0
+      mercatorLocation.x - offsetInMercator,
+      mercatorLocation.y - offsetInMercator,
+      0
   ).toLngLat();
   const neBound = new MercatorCoordinate(
-    mercatorLocation.x + offsetInMercator,
-    mercatorLocation.y + offsetInMercator,
-    0
+      mercatorLocation.x + offsetInMercator,
+      mercatorLocation.y + offsetInMercator,
+      0
   ).toLngLat();
   return new LngLatBounds(swBound, neBound);
 });
@@ -86,41 +90,36 @@ const resetDemandsList = () => {
 function getDemands() {
   searchBoundsCoordinates.value;
   supabase
-    .from("demands")
-    .select("*, user(*)")
-    .eq("status", "pending")
-    /*    .filter("dateEnd", "not.lt", new Date().toISOString()) */ //!TO TEST
-    .gt("long", searchBoundsCoordinates.value.getWest())
-    .lt("long", searchBoundsCoordinates.value.getEast())
-    .gt("lat", searchBoundsCoordinates.value.getNorth())
-    .lt("lat", searchBoundsCoordinates.value.getSouth())
-    .order("dateBegin")
-    .range(nextResultsMin.value, nextResultsMax.value)
-    .then(({ data }) => {
-      data?.forEach((demand) => {
-        const location = {
-          lat: demand.lat,
-          long: demand.long,
-          name: demand.address,
-        };
-        /*  const dateBegin = new Date(demand.dateBegin);
-        const dateEnd = new Date(demand.dateEnd);
-        const user = {
-          id: demand.user.id,
-          fname: demand.user.fname,
-          lname: demand.user.lname,
-          email: demand.user.email,
-          adress: demand.user.adress,
-          avatar: demand.user.avatar,
-          iban: undefined,
-          balance: 0,
-        }; */
-        demands.value.push({ ...demand, location });
+      .from("demands")
+      .select("*, user(*), conversations(*)")
+      .eq("status", "pending")
+      /*    .filter("dateEnd", "not.lt", new Date().toISOString()) */ //!TO TEST
+      .gt("long", searchBoundsCoordinates.value.getWest())
+      .lt("long", searchBoundsCoordinates.value.getEast())
+      .gt("lat", searchBoundsCoordinates.value.getNorth())
+      .lt("lat", searchBoundsCoordinates.value.getSouth())
+      .order("dateBegin")
+      .range(nextResultsMin.value, nextResultsMax.value)
+      .then(({data}) => {
+        data?.forEach((demand) => {
+          const location = {
+            lat: demand.lat,
+            long: demand.long,
+            name: demand.address,
+          };
+          if (!authStore.isLoggedIn) demand.conversationId = "";
+          else {
+            const conversation = demand.conversations.find((conversation) => {
+              return conversation.requester === authStore.user.id;
+            });
+            demand.conversationId = conversation ? conversation.id : "";
+          }
+          demands.value.push({...demand, location});
+        });
+        page.value += 1;
+        loading.value = false;
+        hasMoreResults.value = data?.length === PAGE_SIZE;
       });
-      page.value += 1;
-      loading.value = false;
-      hasMoreResults.value = data?.length === PAGE_SIZE;
-    });
 }
 
 const handleScroll = (event: CustomEvent | any) => {
@@ -128,9 +127,9 @@ const handleScroll = (event: CustomEvent | any) => {
     const scrollTriggerPos = scrollTriggerElement.value?.offsetTop;
     const scrollBottomPos = event.detail.scrollTop + event.target?.scrollHeight;
     if (
-      scrollTriggerPos &&
-      scrollBottomPos &&
-      scrollBottomPos > scrollTriggerPos
+        scrollTriggerPos &&
+        scrollBottomPos &&
+        scrollBottomPos > scrollTriggerPos
     ) {
       loading.value = true;
       getDemands();
@@ -154,38 +153,38 @@ const handleRefresh = (event: CustomEvent) => {
       </ion-toolbar>
     </ion-header>
     <ion-content
-      :fullscreen="true"
-      class="ion-padding"
-      :scroll-events="true"
-      @ion-scroll="handleScroll"
+        :fullscreen="true"
+        class="ion-padding"
+        :scroll-events="true"
+        @ion-scroll="handleScroll"
     >
       <ion-refresher slot="fixed" @ionRefresh="handleRefresh($event)">
         <ion-refresher-content></ion-refresher-content>
       </ion-refresher>
 
       <location-search
-        @locationUpdated="updatePosition"
-        get-initial-location
+          @locationUpdated="updatePosition"
+          get-initial-location
       ></location-search>
       <div class="range">
         <ion-text class="text__bold"> Rayon</ion-text>
         <ion-range
-          :min="0"
-          :max="20"
-          :value="10"
-          :pin="true"
-          :pin-formatter="pinFormatter"
-          v-model="range"
-          class="ion-no-padding"
+            :min="0"
+            :max="20"
+            :value="10"
+            :pin="true"
+            :pin-formatter="pinFormatter"
+            v-model="range"
+            class="ion-no-padding"
         ></ion-range>
       </div>
 
       <div class="cards">
         <card-demand
-          v-for="demand in demands"
-          v-bind:key="demand.id"
-          :demand="demand"
-          :card-of-current-user="false"
+            v-for="demand in demands"
+            v-bind:key="demand.id"
+            :demand="demand"
+            :card-of-current-user="false"
         ></card-demand>
         <card-demand-skeleton v-if="loading"></card-demand-skeleton>
         <card-demand-skeleton v-if="loading"></card-demand-skeleton>

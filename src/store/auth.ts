@@ -11,6 +11,7 @@ import { Demand } from "@/types/Demand";
 export const useAuthStore = defineStore("auth", () => {
   const session = ref(useStorage<Session>("risaikuru-session", {} as Session));
   const user = ref(useStorage<UserType>("risaikuru-user", {} as UserType));
+
   const dataOfUser = reactive({
     myDemands: useStorage("risaikuru-", [] as Demand[]),
     conversations: [] as Conversation[],
@@ -48,6 +49,40 @@ export const useAuthStore = defineStore("auth", () => {
         }
       });
   };
+
+  const conversations = computed(async (): Promise<Conversation[]> => {
+    if (!isLoggedIn.value) return [];
+    const minDate = moment().startOf("day").subtract(4).toISOString();
+    return supabase
+      .from("conversations")
+      .select(
+        `*, requester!inner(*), needer!inner(*), demand!inner(*, user!inner(*))`
+      )
+      .or(`requester.eq.${user.value.id},needer.eq.${user.value.id}`)
+      .gt(`demand.dateEnd`, minDate)
+      .order("updated_at", { ascending: true })
+      .then(({ data }): Conversation[] => {
+        if (!data) return [];
+        return data?.map((conversation) => {
+          const sender =
+            conversation.requester.id === user.value.id
+              ? conversation.requester
+              : conversation.needer;
+          const receiver =
+            conversation.requester.id === user.value.id
+              ? conversation.needer
+              : conversation.requester;
+
+          return {
+            id: conversation.id,
+            sender: sender,
+            receiver: receiver,
+            demand: conversation.demand,
+            isAsker: conversation.requester.id === user.value.id,
+          };
+        });
+      });
+  });
 
   const updateConversations = () => {
     dataOfUser.conversations = [];
@@ -128,25 +163,25 @@ export const useAuthStore = defineStore("auth", () => {
 
   const subscribeConversation = () => {
     /*supabase
-      .channel("conversations")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "messages" },
-        () => {
-          updateConversations();
-        }
-      )
-      .subscribe();*/
+                  .channel("conversations")
+                  .on(
+                    "postgres_changes",
+                    { event: "*", schema: "public", table: "messages" },
+                    () => {
+                      updateConversations();
+                    }
+                  )
+                  .subscribe();*/
   };
 
   const subscribeDemands = () => {
     /*supabase
-      .channel("demands")
-      .on("postgres_changes", { event: "*", schema: "public" }, () => {
-        getMyDemands();
-        console.log("subscribed");
-      })
-      .subscribe();*/
+                  .channel("demands")
+                  .on("postgres_changes", { event: "*", schema: "public" }, () => {
+                    getMyDemands();
+                    console.log("subscribed");
+                  })
+                  .subscribe();*/
   };
   console.log(dataOfUser.conversations);
 
@@ -163,6 +198,7 @@ export const useAuthStore = defineStore("auth", () => {
     user,
     isLoggedIn,
     dataOfUser,
+    conversations,
     updateConversations,
     logout,
     updateUser,

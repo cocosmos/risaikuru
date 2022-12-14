@@ -98,7 +98,7 @@ const dateEnd = computed(() => {
 });
 
 const valid = computed(() => {
-  return dateBegin.value < dateEnd.value;
+  return dateBegin.value < dateEnd.value && dateEnd.value > new Date();
 });
 
 const validate = () => {

@@ -81,7 +81,6 @@ const showMarker = () => {
     marker = new mapboxgl.Marker()
       .setLngLat([props.demand.location.long, props.demand.location.lat])
       .addTo(map);
-    console.log(marker);
   }
 };
 

@@ -90,7 +90,6 @@ export const useNewDemand = () => {
       hasLocation.value &&
       hasReward.value
     ) {
-      console.log("saving demand");
       supabase
         .from("demands")
         .insert({

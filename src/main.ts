@@ -78,7 +78,6 @@ router.beforeEach((to) => {
 
 /* Add your global components here to avoid the warn in console */
 app
-  /*   .use(Maska) */
   .component("ion-icon", IonIcon)
   .component("ion-badge", IonBadge)
   .component("ion-grid", IonGrid)

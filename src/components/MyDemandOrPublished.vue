@@ -16,7 +16,6 @@ const momentStr = computed(() => {
     moment(props.demand.dateEnd).format("HH:mm")
   );
 });
-console.log(props.demand);
 </script>
 
 <template>

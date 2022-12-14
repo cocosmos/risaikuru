@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { defineProps, ref, computed, onMounted } from "vue";
+import { defineProps, ref, computed } from "vue";
 import { fDay, formatMoney } from "@/utils/format";
 import { checkmarkCircleOutline, closeCircleOutline } from "ionicons/icons";
 import {
@@ -87,7 +87,6 @@ const label = computed(() => {
 
 const payDemand = () => {
   if (stripeFinded.value) {
-    console.log(stripeFinded.value.link);
     acceptDemand(props.conversation.demand.id, props.conversation.receiver.id);
 
     window.location.href = stripeFinded.value.link;

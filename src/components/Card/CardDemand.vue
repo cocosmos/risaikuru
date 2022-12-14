@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { trophy, chevronDown, chevronUp } from "ionicons/icons";
+import {trophy, chevronDown, chevronUp} from "ionicons/icons";
 import IconInfo from "@/components/IconInfo.vue";
-import { defineProps, ref, onMounted, computed } from "vue";
+import {defineProps, ref, onMounted, computed} from "vue";
 import {
   IonCard,
   IonCardHeader,
@@ -10,16 +10,16 @@ import {
   IonCardContent,
   IonButton,
 } from "@ionic/vue";
-import { Demand } from "@/types/Demand";
-import { fDate } from "../../utils/format";
+import {Demand} from "@/types/Demand";
+import {fDate} from "../../utils/format";
 import QuantityOnCard from "./Demand/QuantityOnCard.vue";
 import AvatarName from "../Profile/AvatarName.vue";
 import router from "@/router";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { ACCESS_TOKEN } from "@/services/mapbox";
-import { useAuthStore } from "@/store/auth";
-import { createConversation } from "@/supabase";
+import {ACCESS_TOKEN} from "@/services/mapbox";
+import {useAuthStore} from "@/store/auth";
+import {createConversation} from "@/supabase";
 
 const props = defineProps<{
   demand: Demand;
@@ -31,11 +31,7 @@ const authStore = useAuthStore();
 //const demandFinded = reactive({demand: {} as Demand});
 
 const conversation = computed(() => {
-  //rerender.value++;
-  const finded = authStore.dataOfUser.conversations.find((conversation) => {
-    return conversation.demand.id === props.demand.id;
-  });
-  return finded;
+  return props.demand.conversationId;
 });
 
 onMounted(() => {
@@ -83,8 +79,8 @@ const showMap = () => {
 const showMarker = () => {
   if (marker === undefined && map !== undefined) {
     marker = new mapboxgl.Marker()
-      .setLngLat([props.demand.location.long, props.demand.location.lat])
-      .addTo(map);
+        .setLngLat([props.demand.location.long, props.demand.location.lat])
+        .addTo(map);
     console.log(marker);
   }
 };
@@ -93,12 +89,12 @@ const handleDiscussion = () => {
   if (!authStore.user.id) return router.push("/login");
 
   if (conversation.value) {
-    router.push(`/messages/${conversation.value.id}`);
+    router.push(`/messages/${conversation.value}`);
   } else {
     const data = createConversation(
-      props.demand.id,
-      authStore.user.id,
-      props.demand.user.id
+        props.demand.id,
+        authStore.user.id,
+        props.demand.user.id
     );
     data.then((demand) => {
       router.push(`/messages/${demand.id}`);
@@ -112,22 +108,22 @@ const route = (id: string) => {
 </script>
 <template>
   <ion-card
-    color="light"
-    @click="cardOfCurrentUser ? route(props.demand.id) : null"
+      color="light"
+      @click="cardOfCurrentUser ? route(props.demand.id) : null"
   >
     <ion-card-header>
       <div class="card__header">
         <avatar-name
-          :user="props.demand.user"
-          :showLname="false"
-          size="small"
-          v-if="!props.cardOfCurrentUser"
+            :user="props.demand.user"
+            :showLname="false"
+            size="small"
+            v-if="!props.cardOfCurrentUser"
         ></avatar-name>
         <ion-text v-if="props.cardOfCurrentUser">{{ dateFormatted }}</ion-text>
         <div class="card__header-price">
-          <ion-icon :icon="trophy" color="primary" size="medium" />
+          <ion-icon :icon="trophy" color="primary" size="medium"/>
           <ion-text color="primary" class="text__bold"
-            >{{ props.demand.reward }} CHF
+          >{{ props.demand.reward }} CHF
           </ion-text>
         </div>
       </div>
@@ -135,23 +131,23 @@ const route = (id: string) => {
 
     <ion-card-content>
       <ion-text class="card__date" v-if="!props.cardOfCurrentUser"
-        >{{ dateFormatted }}
+      >{{ dateFormatted }}
       </ion-text>
       <div class="icon__list">
         <icon-info
-          v-for="waste in props.demand.wastes"
-          v-bind:key="waste"
-          :waste="waste"
-          :size="'40px'"
+            v-for="waste in props.demand.wastes"
+            v-bind:key="waste"
+            :waste="waste"
+            :size="'40px'"
         ></icon-info>
       </div>
       <div class="quantity">
         <ion-text class="text__bold">Quantité</ion-text>
         <div class="quantity__list">
           <quantity-on-card
-            v-for="quantity in props.demand.quantity"
-            v-bind:key="quantity.id"
-            :quantity="quantity"
+              v-for="quantity in props.demand.quantity"
+              v-bind:key="quantity.id"
+              :quantity="quantity"
           ></quantity-on-card>
         </div>
       </div>
@@ -159,30 +155,30 @@ const route = (id: string) => {
       <div class="buttons" v-if="!props.cardOfCurrentUser">
         <ion-button fill="clear" @click="toggleOpen">
           <ion-icon
-            :icon="isOpen ? chevronUp : chevronDown"
-            size="large"
+              :icon="isOpen ? chevronUp : chevronDown"
+              size="large"
           ></ion-icon>
         </ion-button>
 
         <ion-button
-          @click="route(props.demand.id)"
-          v-if="isAsker"
-          color="warning"
-          >Modifier
+            @click="route(props.demand.id)"
+            v-if="isAsker"
+            color="warning"
+        >Modifier
         </ion-button>
         <ion-button
-          @click="handleDiscussion"
-          v-if="!isAsker"
-          :color="conversation ? 'warning' : 'primary'"
+            @click="handleDiscussion"
+            v-if="!isAsker"
+            :color="conversation ? 'warning' : 'primary'"
         >
           {{ conversation ? "Contacter" : "Récupérer les déchets" }}
         </ion-button>
       </div>
 
       <div
-        :id="`map-${demand.id}`"
-        class="map"
-        :class="{ 'map--closed': !isOpen }"
+          :id="`map-${demand.id}`"
+          class="map"
+          :class="{ 'map--closed': !isOpen }"
       ></div>
     </ion-card-content>
   </ion-card>

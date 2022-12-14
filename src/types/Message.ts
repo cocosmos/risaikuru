@@ -17,12 +17,14 @@ export interface Conversation {
   receiver: UserType;
   isAsker: boolean;
   demand: Demand;
+  canceled: boolean;
 }
 
 export interface Day {
   date: Date;
   messages: Message[];
 }
+
 export interface Label {
   status: Status;
   color: string;

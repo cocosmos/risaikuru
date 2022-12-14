@@ -20,7 +20,7 @@ const props = defineProps<{
 const authStore = useAuthStore();
 
 const isIbanValid = ref<null | boolean>(
-  regexCheckIban(authStore.user.iban ?? "")
+  authStore.user.iban ? regexCheckIban(authStore.user.iban) : null
 );
 
 const ibanValue = ref(authStore.user.iban);

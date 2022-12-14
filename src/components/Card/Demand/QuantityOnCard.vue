@@ -13,8 +13,10 @@ const id = ref(nanoid());
 </script>
 
 <template>
-  <div class="quantity__list-chip" v-if="props.quantity.number !== 0" :id="id">
-    <ion-text class="text__bold">{{ props.quantity.id }}</ion-text>
+  <div class="quantity__list-chip" v-if="props.quantity.number !== 0">
+    <ion-text class="text__bold" color="primary" :id="id">{{
+      props.quantity.id
+    }}</ion-text>
     <ion-text color="secondary"> {{ props.quantity.number }}</ion-text>
   </div>
   <ion-popover :trigger="id" trigger-action="hover">

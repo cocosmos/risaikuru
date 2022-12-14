@@ -115,7 +115,7 @@ const label = computed(() => {
 <style lang="scss" scoped>
 ion-card {
   border-radius: 1.5em;
-  background-color: var(--ion-color-primary-contrast);
+  background-color: var(--ion-color-light);
   &-header {
     display: flex;
     align-items: center;
@@ -138,7 +138,7 @@ ion-card {
     padding-top: 3%;
     text-align: center;
     .text__label {
-      color: var(--ion-color-text);
+      color: var(--ion-text-color);
     }
   }
 

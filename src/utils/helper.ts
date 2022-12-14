@@ -21,7 +21,9 @@ export const returnMessagesByDay = (messages: Message[]) => {
 
   messages.forEach((message) => {
     const date = new Date(message.createdAt);
-    const dayIndex = days.findIndex((d) => d.date === date);
+    const dayIndex = days.findIndex(
+      (d) => d.date.toDateString() === date.toDateString()
+    );
     if (dayIndex === -1) {
       days.push({
         date: date,

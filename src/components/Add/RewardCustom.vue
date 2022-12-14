@@ -73,7 +73,7 @@ const updateValue = () => {
   padding: 24px 10px;
   border-radius: 10px;
   border: 2px solid transparent;
-  background: var(--ion-color-primary-light);
+  background: var(--ion-color-light);
 
   &__input {
     display: inline;

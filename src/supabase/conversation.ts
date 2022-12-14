@@ -92,6 +92,7 @@ export const getConversation = async (
         receiver: receiver,
         demand: data.demand,
         isAsker: data.requester.id === userId,
+        canceled: data.canceled,
       };
     }
   }
@@ -124,4 +125,15 @@ export const insertMessage = async (
 
   if (data) return data;
   if (error) return error;
+};
+
+export const cancelDemand = async (conversationId: string) => {
+  const { error } = await supabase
+    .from("conversations")
+    .update({ canceled: true })
+    .eq("id", conversationId);
+
+  if (error) {
+    console.log(error);
+  }
 };

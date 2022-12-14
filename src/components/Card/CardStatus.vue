@@ -12,7 +12,8 @@ import {
   IonIcon,
 } from "@ionic/vue";
 import {Conversation} from "@/types/Message";
-import {acceptDemand, cancelDemand} from "@/supabase";
+import {acceptDemand} from "@/supabase";
+import {cancelDemand} from "@/supabase/conversation";
 import {useAuthStore} from "@/store/auth";
 
 const props = defineProps<{
@@ -26,15 +27,29 @@ const label = computed(() => {
   switch (props.conversation.demand.status) {
     case "pending":
       if (props.conversation.isAsker) {
-        return {
-          text: `${props.conversation.receiver.fname} n'a pas encore validé votre demande.`,
-          color: "warning",
-        };
+        if (props.conversation.canceled) {
+          return {
+            text: `Prise en charge refusée.`,
+            color: "danger",
+          };
+        } else {
+          return {
+            text: `${props.conversation.receiver.fname} n'a pas encore validé votre demande.`,
+            color: "warning",
+          };
+        }
       } else {
-        return {
-          text: `${props.conversation.receiver.fname} veux récupérer vos déchets.`,
-          color: "warning",
-        };
+        if (props.conversation.canceled) {
+          return {
+            text: `${props.conversation.receiver.fname} a refusé de prendre vos déchets.`,
+            color: "danger",
+          };
+        } else {
+          return {
+            text: `${props.conversation.receiver.fname} veux récupérer vos déchets.`,
+            color: "warning",
+          };
+        }
       }
     case "accepted":
       if (!props.conversation.isAsker) {
@@ -43,7 +58,6 @@ const label = computed(() => {
           color: "success",
         };
       } else {
-        console.log(props.conversation.demand.attributedTo, authStore.user.id)
         if (props.conversation.demand.attributedTo === authStore.user.id) {
           return {
             text: `${props.conversation.receiver.fname} a accepté votre demande.`,
@@ -55,19 +69,6 @@ const label = computed(() => {
             color: "danger",
           }
         }
-
-      }
-    case "rejected":
-      if (props.conversation.isAsker) {
-        return {
-          text: `Prise en charge refusée.`,
-          color: "danger",
-        };
-      } else {
-        return {
-          text: `${props.conversation.receiver.fname} a refusé de prendre vos déchets.`,
-          color: "danger",
-        };
       }
     default:
       return {
@@ -100,10 +101,10 @@ const label = computed(() => {
       <ion-button
           shape="round"
           :color="isAsker ? 'danger' : 'success'"
-          v-if="conversation.demand.status === 'pending'"
+          v-if="!conversation.canceled"
           @click="
           isAsker
-            ? cancelDemand(props.conversation.demand.id)
+            ? cancelDemand(props.conversation.id)
             : acceptDemand(props.conversation.demand.id, props.conversation.receiver.id)
         "
       >

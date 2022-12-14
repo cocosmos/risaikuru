@@ -46,6 +46,7 @@ const props = defineProps<{
     align-items: flex-start;
     border-radius: 1rem;
     background-color: var(--ion-color-secondary);
+    color: var(--ion-color-secondary-contrast);
     padding: 0.75rem 0.75rem 0.5rem 0.75rem;
     min-width: 50px;
     &__date {

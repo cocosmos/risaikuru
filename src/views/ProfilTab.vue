@@ -94,27 +94,27 @@ const disconnect = () => {
   &__menu {
     $radius: 1rem;
     $padding: 0.5rem;
-    background-color: var(--ion-color-primary-contrast);
+    background-color: var(--ion-color-light);
     border-radius: $radius;
-
     ion-item {
-      padding: $padding;
-
+      --inner-padding-bottom: 0.5em;
+      --inner-padding-top: 0.5em;
+      border-radius: $radius;
       &::part(native) {
-        background-color: var(--ion-color-primary-contrast);
+        background-color: var(--ion-color-light);
       }
 
       ion-icon {
         margin-right: $padding;
       }
 
-      &:first-child {
+      /*    &:first-child {
         padding-bottom: 0;
       }
 
       &:last-child {
         padding-top: 0;
-      }
+      } */
     }
   }
 }

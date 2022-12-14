@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { defineProps } from "vue";
-import { fDay, formatMoney } from "@/utils/format";
+import { formatMoney } from "@/utils/format";
 import ProgressBar from "../Profile/ProgressBar.vue";
 const props = defineProps<{
   balance: number;
@@ -24,7 +24,7 @@ const props = defineProps<{
 <style lang="scss" scoped>
 ion-card {
   border-radius: 1.5em;
-  background-color: var(--ion-color-primary-contrast);
+
   &-header {
     display: flex;
     align-items: center;

@@ -207,7 +207,7 @@ ion-range {
 }
 
 ion-range::part(pin) {
-  color: var(--ion-color-text);
+  color: var(--ion-text-color);
   transform: scale(1.1);
   top: 55px;
   background: transparent;

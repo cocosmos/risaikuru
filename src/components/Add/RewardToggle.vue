@@ -32,7 +32,7 @@ const toggle = () => {
   border-radius: 10px;
   border: 2px solid transparent;
   color: var(--ion-color-text);
-  background: var(--ion-color-primary-light);
+  background: var(--ion-color-light);
 
   &--selected {
     border-color: var(--ion-color-primary);

@@ -119,7 +119,7 @@ const selectAdress = (newLocation: Location) => {
 
 <style lang="scss" scoped>
 .location-search {
-  background: white;
+  background: var(--ion-background-color);
 
   &__searchbar {
     --background: transparent;

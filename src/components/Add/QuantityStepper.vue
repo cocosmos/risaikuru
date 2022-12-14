@@ -1,5 +1,8 @@
 <template>
-  <div class="quantity-stepper" :class="{'quantity-stepper--selected': isSelected}">
+  <div
+    class="quantity-stepper"
+    :class="{ 'quantity-stepper--selected': isSelected }"
+  >
     <div class="quantity-stepper__infos">
       <span>{{ props.size.toUpperCase() }}</span>
       <ion-icon :icon="props.icon" color="primary" size="large"></ion-icon>
@@ -7,40 +10,42 @@
     <div class="quantity-stepper__content">
       <p class="quantity-stepper__label">{{ props.description }}</p>
       <div class="quantity-stepper__stepper">
-        <ion-fab-button size="small" @click="decrement()" :disabled="!isSelected">
+        <ion-fab-button
+          size="small"
+          @click="decrement()"
+          :disabled="!isSelected"
+        >
           -
         </ion-fab-button>
         <span>{{ props.modelValue }}</span>
-        <ion-fab-button size="small" @click="increment()">
-          +
-        </ion-fab-button>
+        <ion-fab-button size="small" @click="increment()"> + </ion-fab-button>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {IonFabButton, IonInput, IonIcon} from "@ionic/vue";
-import {computed, defineEmits, defineProps} from "vue";
+import { IonFabButton, IonIcon } from "@ionic/vue";
+import { computed, defineEmits, defineProps } from "vue";
 
 const props = defineProps<{
-  modelValue: number,
-  size: string,
-  icon: string,
-  description: string,
+  modelValue: number;
+  size: string;
+  icon: string;
+  description: string;
 }>();
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(["update:modelValue"]);
 
 const increment = () => {
-  emit('update:modelValue', props.modelValue + 1);
-}
+  emit("update:modelValue", props.modelValue + 1);
+};
 
 const decrement = () => {
   if (props.modelValue > 0) {
-    emit('update:modelValue', props.modelValue - 1);
+    emit("update:modelValue", props.modelValue - 1);
   }
-}
+};
 
 const isSelected = computed((): boolean => {
   return props.modelValue > 0;
@@ -49,7 +54,7 @@ const isSelected = computed((): boolean => {
 
 <style scoped lang="scss">
 .quantity-stepper {
-  background: var(--ion-color-primary-light);
+  background: var(--ion-color-light);
   border-radius: 10px;
   display: flex;
   align-items: center;

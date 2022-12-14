@@ -137,7 +137,7 @@ watch(messagesComp.messagesByDay, () => {
       left: 0;
       width: 100%;
       height: 100px;
-      background-color: white;
+      background-color: var(--ion-color-background);
       opacity: 0.8;
     }
   }

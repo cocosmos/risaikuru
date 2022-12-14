@@ -92,7 +92,7 @@ function getDemands() {
     .from("demands")
     .select("*, user(*), conversations(*)")
     .eq("status", "pending")
-    /*    .filter("dateEnd", "not.lt", new Date().toISOString()) */ //!TO TEST
+    .filter("dateEnd", "not.lt", new Date().toISOString())
     .gt("long", searchBoundsCoordinates.value.getWest())
     .lt("long", searchBoundsCoordinates.value.getEast())
     .gt("lat", searchBoundsCoordinates.value.getNorth())

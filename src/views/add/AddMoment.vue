@@ -9,15 +9,30 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" class="ion-padding relative">
-      <h2 class="ion-text-center">Choisis le moment auquel tu es disponible pour qu'on vienne chercher tes
-        déchêts</h2>
+      <h2 class="ion-text-center">
+        Choisis le moment auquel tu es disponible pour qu'on vienne chercher tes
+        déchêts
+      </h2>
       <div class="moment-selection">
-        <ion-datetime presentation="date" v-model="state.rawDate"></ion-datetime>
+        <ion-datetime
+          presentation="date"
+          v-model="state.rawDate"
+        ></ion-datetime>
         <div class="moment-selection__time">
           <ion-text>Entre</ion-text>
-          <ion-datetime presentation="time" minuteValues="0,15,30,45" v-model="state.rawStartTime"></ion-datetime>
+          <ion-datetime
+            presentation="time"
+            minuteValues="0,15,30,45"
+            v-model="state.rawStartTime"
+            hourCycle="h23"
+          ></ion-datetime>
           <ion-text>et</ion-text>
-          <ion-datetime presentation="time" minuteValues="0,15,30,45" v-model="state.rawEndTime"></ion-datetime>
+          <ion-datetime
+            presentation="time"
+            minuteValues="0,15,30,45"
+            v-model="state.rawEndTime"
+            hourCycle="h23"
+          ></ion-datetime>
         </div>
       </div>
 
@@ -43,29 +58,30 @@ import {
   IonIcon,
   IonPage,
   IonDatetime,
-  IonText, onIonViewWillEnter
+  IonText,
+  onIonViewWillEnter,
 } from "@ionic/vue";
-import {chevronForwardOutline} from "ionicons/icons";
-import {useRouter} from "vue-router";
+import { chevronForwardOutline } from "ionicons/icons";
+import { useRouter } from "vue-router";
 import FixedBottomContainer from "@/components/FixedBottomContainer.vue";
-import {computed, reactive} from "vue";
+import { computed, reactive } from "vue";
 import moment from "moment";
-import {useNewDemand} from "@/composables/newDemand";
+import { useNewDemand } from "@/composables/newDemand";
 
 const router = useRouter();
 const newDemand = useNewDemand();
 
 const state = reactive({
   rawDate: moment().format(),
-  rawStartTime: moment().startOf('hour').format(),
-  rawEndTime: moment().startOf('hour').format(),
+  rawStartTime: moment().startOf("hour").format(),
+  rawEndTime: moment().startOf("hour").format(),
 });
 
 onIonViewWillEnter(() => {
   if (!newDemand.hasMoment.value) {
     state.rawDate = moment().format();
-    state.rawStartTime = moment().startOf('hour').format();
-    state.rawEndTime = moment().startOf('hour').format();
+    state.rawStartTime = moment().startOf("hour").format();
+    state.rawEndTime = moment().startOf("hour").format();
   }
 });
 
@@ -83,13 +99,13 @@ const dateEnd = computed(() => {
 
 const valid = computed(() => {
   return dateBegin.value < dateEnd.value;
-})
+});
 
 const validate = () => {
   newDemand.dateBegin.value = dateBegin.value;
   newDemand.dateEnd.value = dateEnd.value;
-  if (valid.value) router.push('/add/location');
-}
+  if (valid.value) router.push("/add/location");
+};
 </script>
 
 <style lang="scss">
@@ -106,7 +122,7 @@ const validate = () => {
   &__time {
     display: flex;
     align-items: center;
-    gap: .5rem;
+    gap: 0.5rem;
   }
 }
 </style>

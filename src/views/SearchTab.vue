@@ -181,7 +181,7 @@ const handleRefresh = (event: CustomEvent) => {
       </div>
 
       <div class="no-demands" v-if="demands.length === 0 && !loading">
-        <ion-text>Il n'y a pas d'annonces dans ce rayon.</ion-text>
+        <p>Il n'y a pas d'annonces dans ce rayon.</p>
         <ion-button @click="router.push('/add')" class="ion-margin-top"
           ><ion-icon :icon="add" />Ajoutes en une !</ion-button
         >
